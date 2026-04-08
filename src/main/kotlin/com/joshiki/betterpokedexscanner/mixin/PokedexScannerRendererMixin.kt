@@ -30,6 +30,7 @@ import kotlin.math.roundToInt
 import com.joshiki.betterpokedexscanner.client.SlowpokeTailRegrowthClientState
 import com.joshiki.betterpokedexscanner.scanner.VariantDisplay
 import com.joshiki.betterpokedexscanner.client.RestorationTankScanState
+import com.joshiki.betterpokedexscanner.client.EnvironmentalScanState
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
 import com.joshiki.betterpokedexscanner.client.RestorationTankRegistrationState
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -46,6 +47,7 @@ import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
 import com.joshiki.betterpokedexscanner.scanner.VariantLabelRegistry
 import net.minecraft.client.resources.language.I18n
 import com.joshiki.betterpokedexscanner.scanner.VariantRenderState
+import com.joshiki.betterpokedexscanner.scanner.EnvironmentalScanSnapshot
 
 
 @Mixin(PokedexScannerRenderer::class)
@@ -74,7 +76,17 @@ abstract class PokedexScannerRendererMixin {
                 0F
             }
 
-        val effectiveScanningProgress = max(usageContext.scanningProgress, tankScanProgress)
+        val environmentScanProgress =
+            if (
+                EnvironmentalScanState.active &&
+                !EnvironmentalScanState.completed
+            ) {
+                EnvironmentalScanState.scanProgress
+            } else {
+                0F
+            }
+
+        val effectiveScanningProgress = max(max(usageContext.scanningProgress, tankScanProgress), environmentScanProgress)
 
         poseStack.pushPose()
         poseStack.translate(centerX.toFloat(), centerY.toFloat(), 0.0f)
@@ -153,7 +165,12 @@ abstract class PokedexScannerRendererMixin {
             RestorationTankRegistrationState.registerCompleted &&
                     RestorationTankRegistrationState.displayRegisterInfoIntervals > 0F
 
-        if (!showTankUnknown && !showTankRegister) return
+        val showEnvironmentUnknown =
+            EnvironmentalScanState.active &&
+                    !EnvironmentalScanState.completed &&
+                    EnvironmentalScanState.scanProgress > 0F
+
+        if (!showTankUnknown && !showTankRegister && !showEnvironmentUnknown) return
 
         val screenWidth = Minecraft.getInstance().window.guiScaledWidth
         val screenHeight = Minecraft.getInstance().window.guiScaledHeight
@@ -196,8 +213,19 @@ abstract class PokedexScannerRendererMixin {
                     centered = true
                 )
             }
-        } else if (showTankUnknown) {
-            val progress = RestorationTankRegistrationState.scanProgress
+        } else if (showTankUnknown || showEnvironmentUnknown) {
+            val progress =
+                if (showTankUnknown) RestorationTankRegistrationState.scanProgress
+                else EnvironmentalScanState.scanProgress
+            val unknownTexture =
+                if (showEnvironmentUnknown) ScannerRenderConstants.ENVIRONMENT_SCAN_MARK
+                else PokedexScannerRenderer.UNKNOWN_MARK
+            val unknownWidth =
+                if (showEnvironmentUnknown) ScannerRenderConstants.ENVIRONMENT_SCAN_MARK_WIDTH
+                else PokedexScannerRenderer.UNKNOWN_MARK_WIDTH
+            val unknownHeight =
+                if (showEnvironmentUnknown) ScannerRenderConstants.ENVIRONMENT_SCAN_MARK_HEIGHT
+                else PokedexScannerRenderer.UNKNOWN_MARK_HEIGHT
 
             val centerOpacity =
                 if (progress > (PokedexUsageContext.MAX_SCAN_PROGRESS - 10))
@@ -207,11 +235,11 @@ abstract class PokedexScannerRendererMixin {
 
             blitk(
                 matrixStack = matrices,
-                texture = PokedexScannerRenderer.UNKNOWN_MARK,
-                x = centerX - (PokedexScannerRenderer.UNKNOWN_MARK_WIDTH / 2),
-                y = centerY - (PokedexScannerRenderer.UNKNOWN_MARK_HEIGHT / 2) + 2,
-                width = PokedexScannerRenderer.UNKNOWN_MARK_WIDTH,
-                height = PokedexScannerRenderer.UNKNOWN_MARK_HEIGHT,
+                texture = unknownTexture,
+                x = centerX - (unknownWidth / 2),
+                y = centerY - (unknownHeight / 2) + 2,
+                width = unknownWidth,
+                height = unknownHeight,
                 alpha = max(0F, min(opacity, centerOpacity))
             )
 
@@ -293,12 +321,21 @@ abstract class PokedexScannerRendererMixin {
                     RestorationTankScanState.speciesId != null &&
                     RestorationTankScanState.focusIntervals > 0F
 
+        val environmentActive =
+            usageContext.scannableEntityInFocus == null &&
+                    !tankRegistrationActive &&
+                    !tankActive &&
+                    EnvironmentalScanState.active &&
+                    EnvironmentalScanState.snapshot != null &&
+                    EnvironmentalScanState.focusIntervals > 0F
+
         if (tankRegistrationActive && usageContext.scannableEntityInFocus == null) {
             return
         }
 
         val effectiveFocusIntervals =
-            if (tankActive) RestorationTankScanState.focusIntervals
+            if (environmentActive) EnvironmentalScanState.focusIntervals
+            else if (tankActive) RestorationTankScanState.focusIntervals
             else usageContext.focusIntervals
 
         if (effectiveFocusIntervals <= 0) return
@@ -325,10 +362,14 @@ abstract class PokedexScannerRendererMixin {
             }
 
             val shouldUseAnimatedPrimaryFrame =
-                index == 3 &&
-                        effectiveFocusIntervals >= PokedexUsageContext.FOCUS_INTERVALS &&
+                effectiveFocusIntervals >= PokedexUsageContext.FOCUS_INTERVALS &&
                         run {
-                            if (tankActive && !tankRegistrationActive) {
+                            if (environmentActive) {
+                                getEnvironmentalDisplaysForFrame(
+                                    EnvironmentalScanState.snapshot,
+                                    index
+                                ).size > 1
+                            } else if (index == 3 && tankActive && !tankRegistrationActive) {
                                 val progress = getTankProgressPercent(
                                     RestorationTankScanState.timeRemaining ?: FossilMultiblockStructure.TIME_TO_TAKE
                                 )
@@ -374,7 +415,7 @@ abstract class PokedexScannerRendererMixin {
                                 }
 
                                 primaryDisplays.size > 1
-                            } else if (usageContext.scannableEntityInFocus != null) {
+                            } else if (index == 3 && usageContext.scannableEntityInFocus != null) {
                                 val scanData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
                                 val focusedEntity = usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity
                                 val liveAspects = focusedEntity?.aspects
@@ -390,7 +431,6 @@ abstract class PokedexScannerRendererMixin {
                                             SlowpokeTailRegrowthClientState.activeEntityId == focusedEntity.id &&
                                             SlowpokeTailRegrowthClientState.percent != null
                                         ) 1 else 0
-
                                     (renderState.primaryDisplays.size + serverDisplaysCount) > 1
                                 }
                             } else {
@@ -427,11 +467,32 @@ abstract class PokedexScannerRendererMixin {
                 else -> 0
             }
 
-            if (effectiveFocusIntervals >= PokedexUsageContext.FOCUS_INTERVALS && (usageContext.scannableEntityInFocus != null || tankActive)) {
+            if (effectiveFocusIntervals >= PokedexUsageContext.FOCUS_INTERVALS &&
+                (usageContext.scannableEntityInFocus != null || tankActive || environmentActive)
+            ) {
                 val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
+                val environmentalSnapshot = EnvironmentalScanState.snapshot
 
                 if (infoDisplayedCounter == 1) {
-                    if (tankActive && !tankRegistrationActive) {
+                    if (environmentActive) {
+                        renderEnvironmentalInfoFrame(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            usageContext = usageContext,
+                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            index = index,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            xOffset = xOffset,
+                            yOffset = yOffset,
+                            xOffsetText = xOffsetText,
+                            yOffsetText = yOffsetText,
+                            frameHeight = frameHeight,
+                            effectiveFocusIntervals = effectiveFocusIntervals,
+                            opacity = opacity
+                        )
+                    } else if (tankActive && !tankRegistrationActive) {
                         val progress = getTankProgressPercent(
                             RestorationTankScanState.timeRemaining ?: FossilMultiblockStructure.TIME_TO_TAKE
                         )
@@ -460,7 +521,25 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (infoDisplayedCounter == 2) {
-                    if (tankActive && !tankRegistrationActive) {
+                    if (environmentActive) {
+                        renderEnvironmentalInfoFrame(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            usageContext = usageContext,
+                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            index = index,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            xOffset = xOffset,
+                            yOffset = yOffset,
+                            xOffsetText = xOffsetText,
+                            yOffsetText = yOffsetText,
+                            frameHeight = frameHeight,
+                            effectiveFocusIntervals = effectiveFocusIntervals,
+                            opacity = opacity
+                        )
+                    } else if (tankActive && !tankRegistrationActive) {
                         val speciesId = RestorationTankScanState.speciesId ?: return@forEachIndexed
                         val speciesName =
                             if (RestorationTankScanState.validSpecies) {
@@ -550,7 +629,25 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (infoDisplayedCounter == 3) {
-                    if (tankActive && !tankRegistrationActive) {
+                    if (environmentActive) {
+                        renderEnvironmentalInfoFrame(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            usageContext = usageContext,
+                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            index = index,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            xOffset = xOffset,
+                            yOffset = yOffset,
+                            xOffsetText = xOffsetText,
+                            yOffsetText = yOffsetText,
+                            frameHeight = frameHeight,
+                            effectiveFocusIntervals = effectiveFocusIntervals,
+                            opacity = opacity
+                        )
+                    } else if (tankActive && !tankRegistrationActive) {
                         val speciesId = RestorationTankScanState.speciesId ?: return@forEachIndexed
                         val typeText =
                             if (RestorationTankScanState.validSpecies) {
@@ -650,7 +747,35 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (infoDisplayedCounter == 4) {
-                    if (tankActive && !tankRegistrationActive) {
+                    if (environmentActive) {
+                        renderEnvironmentalInfoFrame(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            usageContext = usageContext,
+                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            index = index,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            xOffset = xOffset,
+                            yOffset = yOffset,
+                            xOffsetText = xOffsetText,
+                            yOffsetText = yOffsetText,
+                            frameHeight = frameHeight,
+                            effectiveFocusIntervals = effectiveFocusIntervals,
+                            opacity = opacity
+                        )
+                        renderEnvironmentalStructureTag(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            opacity = opacity,
+                            effectiveFocusIntervals = effectiveFocusIntervals
+                        )
+                    } else if (tankActive && !tankRegistrationActive) {
                         val progress = getTankProgressPercent(
                             RestorationTankScanState.timeRemaining ?: FossilMultiblockStructure.TIME_TO_TAKE
                         )
@@ -1191,6 +1316,272 @@ abstract class PokedexScannerRendererMixin {
                 }
             }
         }
+    }
+
+    private fun renderEnvironmentalInfoFrame(
+        graphics: GuiGraphics,
+        poseStack: PoseStack,
+        usageContext: PokedexUsageContext,
+        snapshot: EnvironmentalScanSnapshot,
+        index: Int,
+        isLeftSide: Boolean,
+        centerX: Int,
+        centerY: Int,
+        xOffset: Int,
+        yOffset: Int,
+        xOffsetText: Int,
+        yOffsetText: Int,
+        frameHeight: Int,
+        effectiveFocusIntervals: Float,
+        opacity: Float
+    ) {
+        val displays = getEnvironmentalDisplaysForFrame(snapshot, index)
+        if (displays.isEmpty()) return
+        renderCyclingInfoDisplay(
+            graphics = graphics,
+            poseStack = poseStack,
+            usageContext = usageContext,
+            displays = displays,
+            index = index,
+            schedulerIndex = index,
+            isLeftSide = isLeftSide,
+            centerX = centerX,
+            centerY = centerY,
+            xOffset = xOffset,
+            yOffset = yOffset,
+            xOffsetText = xOffsetText,
+            frameHeight = frameHeight,
+            effectiveFocusIntervals = effectiveFocusIntervals,
+            opacity = opacity
+        )
+    }
+
+    private fun getEnvironmentalDisplaysForFrame(
+        snapshot: EnvironmentalScanSnapshot?,
+        index: Int
+    ): List<VariantDisplay> {
+        return snapshot?.frameDisplays?.getOrNull(index).orEmpty()
+    }
+
+    private fun renderCyclingInfoDisplay(
+        graphics: GuiGraphics,
+        poseStack: PoseStack,
+        usageContext: PokedexUsageContext,
+        displays: List<VariantDisplay>,
+        index: Int,
+        schedulerIndex: Int,
+        isLeftSide: Boolean,
+        centerX: Int,
+        centerY: Int,
+        xOffset: Int,
+        yOffset: Int,
+        xOffsetText: Int,
+        frameHeight: Int,
+        effectiveFocusIntervals: Float,
+        opacity: Float
+    ) {
+        val isInnerFrame = index == 1 || index == 2
+        val frameWidth =
+            if (isInnerFrame) PokedexScannerRenderer.INNER_INFO_FRAME_WIDTH
+            else PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH
+        val slotState = (usageContext as VariantCycleAccess).getCarouselSlotState(schedulerIndex)
+        val transitionProgress = slotState.transitionProgress.coerceIn(0F, 1F)
+        val inTransition = transitionProgress > 0F
+        val basePageIndex = slotState.currentPage.coerceIn(0, max(0, displays.size - 1))
+        val nextPageIndex = slotState.nextPage.coerceIn(0, max(0, displays.size - 1))
+
+        val baseFrameIndex = ceil(effectiveFocusIntervals).toInt().coerceIn(0, 9)
+        val animatedFrameIndex =
+            if (displays.size > 1 && inTransition) {
+                val collapseAmount =
+                    if (transitionProgress < 0.5f) transitionProgress / 0.5f
+                    else (1f - transitionProgress) / 0.5f
+                val collapseStepRange =
+                    if (isInnerFrame) 4f
+                    else 2f
+                val collapseSteps = (collapseAmount * collapseStepRange).roundToInt()
+                (baseFrameIndex - collapseSteps).coerceIn(0, 9)
+            } else {
+                baseFrameIndex
+            }
+
+        if (displays.size > 1) {
+            blitk(
+                matrixStack = poseStack,
+                texture = PokedexScannerRenderer.infoFrameResource(isLeftSide, index),
+                x = centerX + xOffset,
+                y = centerY + yOffset,
+                width = frameWidth,
+                height = frameHeight,
+                textureHeight = frameHeight * 10,
+                vOffset = animatedFrameIndex * frameHeight,
+                alpha = opacity
+            )
+        }
+
+        val display =
+            if (inTransition && transitionProgress >= 0.5f) displays[nextPageIndex] else displays[basePageIndex]
+        val header = if (!display.headerTranslationKey.isNullOrBlank()) {
+            Component.translatable(display.headerTranslationKey)
+        } else {
+            Component.literal(display.headerLabel ?: "Info")
+        }
+        val value = if (!display.labelTranslationKey.isNullOrBlank()) {
+            Component.translatable(display.labelTranslationKey).copy().bold()
+        } else {
+            Component.literal(display.label).copy().bold()
+        }
+        val headerScale =
+            if (displays.size > 1 && inTransition) {
+                when {
+                    transitionProgress < 0.20f -> 0.5f * (1f - (transitionProgress / 0.20f))
+                    transitionProgress < 0.8f -> 0f
+                    else -> 0.5f * ((transitionProgress - 0.8f) / 0.3f)
+                }
+            } else {
+                0.5f
+            }
+        val maxWidth = frameWidth - 8
+        val baseTextWidth = Minecraft.getInstance().font.width(value.font(CobblemonResources.DEFAULT_LARGE))
+        val textScale = if (baseTextWidth > maxWidth) 0.75F else 1.0F
+        val animatedTextScale =
+            if (!inTransition) {
+                textScale
+            } else {
+                when {
+                    transitionProgress < 0.20f -> textScale * (1f - (transitionProgress / 0.20f))
+                    transitionProgress < 0.8f -> 0f
+                    else -> textScale * ((transitionProgress - 0.8f) / 0.3f)
+                }
+            }
+        val headerY = if (index == 3) centerY + yOffset + 40 else centerY + yOffset + when (index) {
+            0 -> 3
+            1 -> 2
+            2 -> 6
+            else -> 3
+        }
+        val valueY = if (index == 3) centerY + yOffset + 44 else centerY + yOffset + when (index) {
+            0 -> 7
+            1 -> 6
+            2 -> 10
+            else -> 7
+        }
+
+        drawScaledText(
+            context = graphics,
+            text = header,
+            x = centerX + xOffset + xOffsetText,
+            y = headerY,
+            shadow = true,
+            centered = true,
+            scale = headerScale
+        )
+
+        drawScaledText(
+            context = graphics,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = value,
+            x = centerX + xOffset + xOffsetText,
+            y = valueY,
+            colour = display.colour ?: 0xFFFFFF,
+            shadow = true,
+            centered = true,
+            scale = animatedTextScale
+        )
+    }
+
+    private fun renderEnvironmentalStructureTag(
+        graphics: GuiGraphics,
+        poseStack: PoseStack,
+        snapshot: EnvironmentalScanSnapshot,
+        isLeftSide: Boolean,
+        centerX: Int,
+        centerY: Int,
+        opacity: Float,
+        effectiveFocusIntervals: Float
+    ) {
+        val structureName = snapshot.nearbyStructureName ?: return
+        val mirroredSide = !isLeftSide
+        val xOffset = -120 + if (mirroredSide) 0 else 148
+        val yOffset = 25
+        val centerTextX = centerX + xOffset + (PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH / 2)
+        val maxWidth = PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH - 8
+        val wrappedLines = wrapStructureName(structureName, maxWidth)
+        val autoScale = wrappedLines.maxOfOrNull { line ->
+            val width = Minecraft.getInstance().font.width(Component.literal(line).font(CobblemonResources.DEFAULT_LARGE))
+            when {
+                width <= maxWidth -> 1.0F
+                width <= (maxWidth / 0.75F).toInt() -> 0.75F
+                else -> 0.6F
+            }
+        } ?: 1.0F
+        val valueScale = if (wrappedLines.size > 1) min(autoScale, 0.7F) else autoScale
+
+        blitk(
+            matrixStack = poseStack,
+            texture = PokedexScannerRenderer.infoFrameResource(mirroredSide, 3),
+            x = centerX + xOffset,
+            y = centerY + yOffset,
+            width = PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH,
+            height = PokedexScannerRenderer.OUTER_INFO_FRAME_HEIGHT,
+            textureHeight = PokedexScannerRenderer.OUTER_INFO_FRAME_HEIGHT * 10,
+            vOffset = ceil(effectiveFocusIntervals) * PokedexScannerRenderer.OUTER_INFO_FRAME_HEIGHT,
+            alpha = opacity
+        )
+
+        drawScaledText(
+            context = graphics,
+            text = Component.translatable("betterpokedexscanner.header.environment.nearby_structure"),
+            x = centerTextX,
+            y = centerY + yOffset + 39.5,
+            shadow = true,
+            centered = true,
+            scale = 0.5F
+        )
+
+        val firstLineY = if (wrappedLines.size > 1) centerY + yOffset + 43 else centerY + yOffset + 44
+        wrappedLines.forEachIndexed { index, line ->
+            drawScaledText(
+                context = graphics,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = Component.literal(line).copy().bold(),
+                x = centerTextX,
+                y = firstLineY + (index * 4),
+                shadow = true,
+                centered = true,
+                scale = valueScale
+            )
+        }
+    }
+
+    private fun wrapStructureName(structureName: String, maxWidth: Int): List<String> {
+        val words = structureName.split(' ').filter { it.isNotBlank() }
+        if (words.isEmpty()) return listOf(structureName)
+        val font = Minecraft.getInstance().font
+        val singleLineWidth = font.width(Component.literal(structureName).font(CobblemonResources.DEFAULT_LARGE))
+        if (words.size == 1 || singleLineWidth <= maxWidth) {
+            return listOf(structureName)
+        }
+
+        var bestSplit: List<String>? = null
+        var bestScore = Int.MAX_VALUE
+
+        for (splitIndex in 1 until words.size) {
+            val firstLine = words.take(splitIndex).joinToString(" ")
+            val secondLine = words.drop(splitIndex).joinToString(" ")
+            val firstWidth = font.width(Component.literal(firstLine).font(CobblemonResources.DEFAULT_LARGE))
+            val secondWidth = font.width(Component.literal(secondLine).font(CobblemonResources.DEFAULT_LARGE))
+            val overflowPenalty = max(0, firstWidth - maxWidth) + max(0, secondWidth - maxWidth)
+            val balancePenalty = kotlin.math.abs(firstWidth - secondWidth)
+            val score = overflowPenalty * 4 + balancePenalty
+
+            if (score < bestScore) {
+                bestScore = score
+                bestSplit = listOf(firstLine, secondLine)
+            }
+        }
+
+        return bestSplit ?: listOf(structureName)
     }
 
     private fun buildTankRenderState(): VariantRenderState {

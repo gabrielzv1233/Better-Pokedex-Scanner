@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.pokedex.scanner.PokemonScanner
 import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity
 import com.joshiki.betterpokedexscanner.scanner.VariantCycleAccess
+import com.joshiki.betterpokedexscanner.scanner.CarouselSlotState
 import com.joshiki.betterpokedexscanner.scanner.VariantLabelResolver
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.resources.ResourceLocation
@@ -22,13 +23,16 @@ import com.joshiki.betterpokedexscanner.client.SlowpokeTailRegrowthClientState
 import com.joshiki.betterpokedexscanner.network.SlowpokeTailRegrowthRequestPayload
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import com.joshiki.betterpokedexscanner.client.RestorationTankScanState
+import com.joshiki.betterpokedexscanner.client.EnvironmentalScanState
 import com.joshiki.betterpokedexscanner.scanner.RestorationTankScanner
+import com.joshiki.betterpokedexscanner.scanner.EnvironmentalScanner
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import com.joshiki.betterpokedexscanner.client.RestorationTankRegistrationState
 import com.joshiki.betterpokedexscanner.network.StartTankScanningPayload
 import com.joshiki.betterpokedexscanner.network.FinishTankScanningPayload
+import com.joshiki.betterpokedexscanner.network.EnvironmentalStructureRequestPayload
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -58,6 +62,10 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
     @Unique
     private var variantCycleTicksChimericShinies: Float = 0F
+    @Unique
+    private var carouselSlotStates: MutableList<CarouselSlotState>? = null
+    @Unique
+    private var carouselNextFlipDelayTicks: Float = 55F
 
     @Shadow
     abstract fun resetFocusedPokemonState()
@@ -72,12 +80,117 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         variantCycleTicksChimericShinies = value
     }
 
+    override fun getCarouselSlotState(index: Int): CarouselSlotState {
+        val states = getOrCreateCarouselSlotStates()
+        return states.getOrElse(index) { CarouselSlotState() }
+    }
+
+    override fun tickCarouselScheduler(pageCounts: List<Int>) {
+        if (pageCounts.isEmpty()) return
+        val states = getOrCreateCarouselSlotStates()
+
+        var anyTransitioning = false
+        pageCounts.forEachIndexed { index, count ->
+            val state = states[index]
+
+            if (count <= 1) {
+                state.currentPage = 0
+                state.nextPage = 0
+                state.transitionProgress = 0F
+                state.cooldownTicks = 0F
+                state.ticksSinceFlip = 0F
+                return@forEachIndexed
+            }
+
+            state.currentPage %= count
+            state.nextPage %= count
+            state.cooldownTicks = (state.cooldownTicks - 1F).coerceAtLeast(0F)
+            state.ticksSinceFlip += 1F
+
+            if (state.transitionProgress > 0F) {
+                anyTransitioning = true
+                state.transitionProgress = (state.transitionProgress + 0.1F).coerceAtMost(1F)
+                if (state.transitionProgress >= 1F) {
+                    state.currentPage = state.nextPage
+                    state.transitionProgress = 0F
+                }
+            }
+        }
+
+        if (anyTransitioning) return
+
+        carouselNextFlipDelayTicks -= 1F
+        if (carouselNextFlipDelayTicks > 0F) return
+
+        val candidates = pageCounts.mapIndexedNotNull { index, count ->
+            if (count <= 1) return@mapIndexedNotNull null
+
+            val state = states[index]
+            if (state.cooldownTicks > 0F) return@mapIndexedNotNull null
+
+            val pageWeight = (count - 1).coerceAtMost(4).toFloat() * 0.45F
+            val stalenessWeight = (state.ticksSinceFlip / 28F).coerceAtMost(6F)
+            val jitter = kotlin.random.Random.nextFloat() * 1.15F
+            Triple(index, count, pageWeight + stalenessWeight + jitter)
+        }
+
+        if (candidates.isEmpty()) {
+            carouselNextFlipDelayTicks = 12F
+            return
+        }
+
+        val chosen = candidates.maxBy { it.third }
+        val chosenState = states[chosen.first]
+        chosenState.nextPage = (chosenState.currentPage + 1) % chosen.second
+        chosenState.transitionProgress = 0.01F
+        chosenState.cooldownTicks = 26F + kotlin.random.Random.nextFloat() * 24F
+        chosenState.ticksSinceFlip = 0F
+
+        val quickFollowup = kotlin.random.Random.nextFloat() < 0.28F
+        carouselNextFlipDelayTicks =
+            if (quickFollowup) {
+                10F + kotlin.random.Random.nextFloat() * 16F
+            } else {
+                34F + kotlin.random.Random.nextFloat() * 34F
+            }
+    }
+
+    override fun resetCarouselScheduler() {
+        getOrCreateCarouselSlotStates().forEach {
+            it.currentPage = 0
+            it.nextPage = 0
+            it.transitionProgress = 0F
+            it.cooldownTicks = 0F
+            it.ticksSinceFlip = 0F
+        }
+        carouselNextFlipDelayTicks = 55F
+    }
+
+    @Unique
+    private fun getOrCreateCarouselSlotStates(): MutableList<CarouselSlotState> {
+        val existing = carouselSlotStates
+        if (existing != null) {
+            return existing
+        }
+
+        val created = mutableListOf(
+            CarouselSlotState(),
+            CarouselSlotState(),
+            CarouselSlotState(),
+            CarouselSlotState()
+        )
+        carouselSlotStates = created
+        return created
+    }
+
     @Inject(method = ["stopUsing"], at = [At("HEAD")])
     private fun clearCustomScanStateOnStop(ticks: Int, sound: ResourceLocation?, ci: CallbackInfo) {
         RestorationTankScanState.clear()
         SlowpokeTailRegrowthClientState.clear()
         variantCycleTicksChimericShinies = 0F
         RestorationTankRegistrationState.clear()
+        EnvironmentalScanState.clear()
+        resetCarouselScheduler()
     }
 
     @Inject(method = ["renderUpdate"], at = [At("TAIL")])
@@ -96,6 +209,14 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
             // Vanilla already added the "slow" +1x rotation.
             // Add another 9x so the total matches the normal scanned-entity speed (~10x).
+            innerRingRotation = (innerRingRotation + (updateInterval * 9F)) % 360
+        } else if (
+            EnvironmentalScanState.active &&
+            !EnvironmentalScanState.completed &&
+            EnvironmentalScanState.scanProgress > 0F
+        ) {
+            val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !Minecraft.getInstance().isPaused } ?: 0F
+            val updateInterval = (tickDelta / 20F) * PokedexUsageContext.RENDER_UPDATES_PER_SECOND
             innerRingRotation = (innerRingRotation + (updateInterval * 9F)) % 360
         }
     }
@@ -117,11 +238,13 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
 
         if (targetScannableEntity != null) {
+            EnvironmentalScanState.suspendForTarget()
 
             if (targetScannableEntity != scannableEntityInFocus) {
                 resetFocusedPokemonState()
                 scannableEntityInFocus = targetScannableEntity
                 variantCycleTicksChimericShinies = 0F
+                resetCarouselScheduler()
 
                 RestorationTankScanState.beginClosing()
 
@@ -176,30 +299,10 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                 variantCycleTicksChimericShinies += 1F
             }
         } else {
-
-            val hit = user.pick(zoomLevel.toDouble(), 0f, false)
-
-            if (hit is net.minecraft.world.phys.BlockHitResult) {
-                var debugPos = hit.blockPos
-                var debugState = user.level().getBlockState(debugPos)
-
-                if (debugState.block == com.cobblemon.mod.common.CobblemonBlocks.RESTORATION_TANK) {
-                    if (debugState.getValue(com.cobblemon.mod.common.block.RestorationTankBlock.PART) ==
-                        com.cobblemon.mod.common.block.RestorationTankBlock.TankPart.TOP
-                    ) {
-                        debugPos = debugPos.below()
-                        debugState = user.level().getBlockState(debugPos)
-                    }
-
-                    println("BPS raw tank hit at $debugPos")
-                    playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
-                }
-            }
-
             val tankScan = RestorationTankScanner.findRestorationTankTarget(user)
 
             if (tankScan != null) {
-                println("BPS tank scan resolved: ${tankScan.speciesId} at ${tankScan.blockPos} time=${tankScan.timeRemaining}")
+                EnvironmentalScanState.suspendForTarget()
 
                 val isNewTankTarget =
                     !RestorationTankScanState.active ||
@@ -212,6 +315,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     resetFocusedPokemonState()
                     scannableEntityInFocus = null
                     variantCycleTicksChimericShinies = 0F
+                    resetCarouselScheduler()
 
                     SlowpokeTailRegrowthClientState.clear()
                     RestorationTankRegistrationState.clear()
@@ -304,10 +408,89 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             } else {
                 resetFocusedPokemonState()
                 scannableEntityInFocus = null
-                variantCycleTicksChimericShinies = 0F
                 SlowpokeTailRegrowthClientState.clear()
                 RestorationTankScanState.beginClosing()
                 RestorationTankRegistrationState.clear()
+
+                val activationThreshold =
+                    if (EnvironmentalScanState.reacquirePending) {
+                        EnvironmentalScanState.REACQUIRE_IDLE_TICKS
+                    } else {
+                        EnvironmentalScanState.INITIAL_IDLE_TICKS
+                    }
+
+                if (!EnvironmentalScanState.active) {
+                    EnvironmentalScanState.idleTicks =
+                        (EnvironmentalScanState.idleTicks + 1F).coerceAtMost(activationThreshold)
+
+                    if (EnvironmentalScanState.idleTicks >= activationThreshold) {
+                        val snapshot = EnvironmentalScanner.sample(user)
+                        availableInfoFrames = mutableListOf(null, null, null, null)
+
+                        for (i in 0 until 4) {
+                            var randomIndex = Random.nextInt(availableInfoFrames.size)
+                            if (availableInfoFrames[randomIndex] != null) {
+                                randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                            }
+                            availableInfoFrames[randomIndex] = Random.nextBoolean()
+                        }
+
+                        newPokemonInfo = PokedexLearnedInformation.NONE
+                        isPokemonInFocusOwned = false
+                        variantCycleTicksChimericShinies = 0F
+                        resetCarouselScheduler()
+
+                        if (EnvironmentalScanState.reacquirePending) {
+                            EnvironmentalScanState.restoreSnapshot(snapshot)
+                        } else {
+                            EnvironmentalScanState.beginFreshScan(snapshot)
+                        }
+
+                        ClientPlayNetworking.send(
+                            EnvironmentalStructureRequestPayload(EnvironmentalScanState.sessionId)
+                        )
+                        EnvironmentalScanState.markStructureRequestSent()
+
+                        playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
+                    } else {
+                        variantCycleTicksChimericShinies = 0F
+                    }
+                } else {
+                    variantCycleTicksChimericShinies += 1F
+
+                    if (!EnvironmentalScanState.structureRequestSent) {
+                        ClientPlayNetworking.send(
+                            EnvironmentalStructureRequestPayload(EnvironmentalScanState.sessionId)
+                        )
+                        EnvironmentalScanState.markStructureRequestSent()
+                    }
+
+                    if (!EnvironmentalScanState.completed && EnvironmentalScanState.scanProgress < PokedexUsageContext.MAX_SCAN_PROGRESS) {
+                        EnvironmentalScanState.scanProgress =
+                            (EnvironmentalScanState.scanProgress + 2.5F)
+                                .coerceAtMost(PokedexUsageContext.MAX_SCAN_PROGRESS.toFloat())
+
+                        if (variantCycleTicksChimericShinies % 2F == 0F) {
+                            playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
+                        }
+
+                        if (EnvironmentalScanState.scanProgress >= PokedexUsageContext.MAX_SCAN_PROGRESS) {
+                            EnvironmentalScanState.completed = true
+                            playSound(CobblemonSounds.POKEDEX_SCAN_REGISTER_ASPECT)
+                        }
+                    } else {
+                        EnvironmentalScanState.focusIntervals =
+                            (EnvironmentalScanState.focusIntervals + 2.5F)
+                                .coerceAtMost(PokedexUsageContext.FOCUS_INTERVALS)
+
+                        if (EnvironmentalScanState.focusIntervals >= PokedexUsageContext.FOCUS_INTERVALS) {
+                            EnvironmentalScanState.focusIntervals = PokedexUsageContext.FOCUS_INTERVALS
+                            tickCarouselScheduler(
+                                EnvironmentalScanState.snapshot?.frameDisplays?.map { it.size } ?: emptyList()
+                            )
+                        }
+                    }
+                }
             }
         }
     }
