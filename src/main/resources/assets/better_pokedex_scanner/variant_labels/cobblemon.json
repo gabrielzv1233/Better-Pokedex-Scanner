@@ -1,0 +1,1082 @@
+{
+  "groups": [
+    {
+      "headerLabel": "Regional Variation",
+      "aspectLabels": {
+        "alolan": "Alolan",
+        "galarian": "Galarian",
+        "hisuian": "Hisuian",
+        "paldean": "Paldean"
+      }
+    },
+    {
+      "headerLabel": "Chimeric Variation",
+      "aspectLabels": {
+        "chimera-a": "Chimera A",
+        "chimera-b": "Chimera B",
+        "chimera-c": "Chimera C",
+        "chimera-ab": "Chimera AB",
+        "chimera-ac": "Chimera AC",
+        "chimera-bc": "Chimera BC",
+        "chimera-abc": "Chimera ABC"
+      }
+    },
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.flower_color",
+      "species": ["cobblemon:flabebe","cobblemon:floette","cobblemon:florges"],
+      "aspectLabels": {
+        "flower-red": "Red Flower",
+        "flower-pink": "Pink Flower",
+        "flower-orange": "Orange Flower",
+        "flower-yellow": "Yellow Flower",
+        "flower-blue": "Blue Flower",
+        "flower-white": "White Flower",
+        "flower-eternal": "Eternal Flower"
+      }
+    },
+    {
+      "headerLabel": "Pattern",
+      "aspectLabels": {
+        "magikarp-jump-apricot-stripes": "Apricot Stripes",
+        "magikarp-jump-apricot-tiger": "Apricot Tiger",
+        "magikarp-jump-apricot-zebra": "Apricot Zebra",
+        "magikarp-jump-black-forehead": "Black Forehead",
+        "magikarp-jump-black-mask": "Black Mask",
+        "magikarp-jump-blue-raindrops": "Blue Raindrops",
+        "magikarp-jump-blue-saucy": "Saucy Blue",
+        "magikarp-jump-brown-stripes": "Brown Stripes",
+        "magikarp-jump-brown-tiger": "Brown Tiger",
+        "magikarp-jump-brown-zebra": "Brown Zebra",
+        "magikarp-jump-calico-orange-gold": "Calico (Orange & Gold)",
+        "magikarp-jump-calico-orange-white": "Calico (Orange & White)",
+        "magikarp-jump-calico-orange-white-black": "Calico (Orange, White, Black)",
+        "magikarp-jump-calico-white-orange": "Calico (White & Orange)",
+        "magikarp-jump-gray-bubbles": "Gray Bubbles",
+        "magikarp-jump-gray-diamonds": "Gray Diamonds",
+        "magikarp-jump-gray-patches": "Gray Patches",
+        "magikarp-jump-orange-dapples": "Orange Dapples",
+        "magikarp-jump-orange-forehead": "Orange Forehead",
+        "magikarp-jump-orange-mask": "Orange Mask",
+        "magikarp-jump-orange-orca": "Orange Orca",
+        "magikarp-jump-orange-two-tone": "Orange Two-Tone",
+        "magikarp-jump-pink-dapples": "Pink Dapples",
+        "magikarp-jump-pink-orca": "Pink Orca",
+        "magikarp-jump-pink-two-tone": "Pink Two-Tone",
+        "magikarp-jump-purple-bubbles": "Purple Bubbles",
+        "magikarp-jump-purple-diamonds": "Purple Diamonds",
+        "magikarp-jump-purple-patches": "Purple Patches",
+        "magikarp-jump-skelly": "Skelly",
+        "magikarp-jump-violet-raindrops": "Violet Raindrops",
+        "magikarp-jump-violet-saucy": "Saucy Violet",
+        "magikarp-jump-standard": "Standard",
+        "snake-pattern-attack": "Attack",
+        "snake-pattern-dark": "Dark",
+        "snake-pattern-elusive": "Elusive",
+        "snake-pattern-heart": "Heart",
+        "snake-pattern-legacy": "Legacy",
+        "snake-pattern-sound": "Sound",
+        "snake-pattern-speed": "Speed",
+        "snake-pattern-classic": "Classic",
+        "wooper_heart": "Heart-Marked",
+        "redstriped": "Red Striped",
+        "bluestriped": "Blue Striped",
+        "whitestriped": "White Striped",
+        "vivillon-wings-meadow": "Meadow",
+        "vivillon-wings-archipelago": "Archipelago",
+        "vivillon-wings-continental": "Continental",
+        "vivillon-wings-elegant": "Elegant",
+        "vivillon-wings-fancy": "Fancy",
+        "vivillon-wings-garden": "Garden",
+        "vivillon-wings-high-plains": "High Plains",
+        "vivillon-wings-icy-snow": "Icy Snow",
+        "vivillon-wings-jungle": "Jungle",
+        "vivillon-wings-marine": "Marine",
+        "vivillon-wings-modern": "Modern",
+        "vivillon-wings-monsoon": "Monsoon",
+        "vivillon-wings-ocean": "Ocean",
+        "vivillon-wings-poke-ball": "Poké Ball",
+        "vivillon-wings-polar": "Polar",
+        "vivillon-wings-river": "River",
+        "vivillon-wings-sandstorm": "Sandstorm",
+        "vivillon-wings-savanna": "Savanna",
+        "vivillon-wings-sun": "Sun",
+        "vivillon-wings-tundra": "Tundra",
+        "vivillon-wings-inferno": "Inferno",
+        "vivillon-wings-void": "Void",
+        "vivillon-wings-forsaken": "Forsaken"
+      }
+    },
+    
+    {
+      "headerLabel": "Stance",
+      "species": ["cobblemon:aegislash"],
+      "aspectLabels": {
+        "shield-forme": "Shield Forme",
+        "blade-forme": "Blade Forme"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:squirtle","cobblemon:wartortle","cobblemon:blastoise"],
+      "aspectLabels": {
+        "cosmetic_item-wise_glasses": "Squirtle Squad",
+        "cosmetic_item-black_glasses": "Squirtle Squad Leader"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:jigglypuff","cobblemon:alakazam"],
+      "aspectLabels": {
+        "color-black": "Ancient Pokémopolis"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:gengar"],
+      "aspectLabels": {
+        "color-green": "Ancient Pokémopolis"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:pichu","cobblemon:pikachu","cobblemon:raichu"],
+      "aspectLabels": {
+        "cosmetic_item-rage_candy_bar": "Original Cap",
+        "cosmetic_item-pewter_crunchies": "Partner Cap",
+        "cosmetic_item-lava_cookie": "Hoenn Cap",
+        "cosmetic_item-old_gateau": "Sinnoh Cap",
+        "cosmetic_item-casteliacone": "Unova Cap",
+        "cosmetic_item-lumiose_galette": "Kalos Cap",
+        "cosmetic_item-big_malasada": "Alola Cap",
+        "cosmetic_item-smoked_tail_curry": "World Cap",
+        "cosmetic_item-compass": "Captain Cap",
+        "cosmetic_item-leather_helmet": "Detective Cap",
+        "cosmetic_item-sinister_tea": "Detective Cap",
+        "cosmetic_item-cocoa_beans": "Detective Cap",
+        "cosmetic_item-shears": "Hair Cut - Sparky",
+        "cosmetic_item-music": "Ukulele"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:electrode"],
+      "aspectLabels": {
+        "color-lime": "Lime Watermelon",
+        "color-green": "Green Watermelon"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:dragonite"],
+      "aspectLabels": {
+        "cosmetic_item-bundle": "Messenger"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:sudowoodo"],
+      "aspectLabels": {
+        "cosmetic_item-gold_armor": "Golden"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:treecko","cobblemon:grovyle","cobblemon:sceptile"],
+      "aspectLabels": {
+        "cosmetic_item-stick": "Twig"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:spoink"],
+      "aspectLabels": {
+        "cosmetic_item-ender_pearl": "Ender Pearl"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:timburr","cobblemon:komala"],
+      "aspectLabels": {
+        "tree-oak": "Oak Log",
+        "tree-spruce": "Spruce Log",
+        "tree-acacia": "Acacia Log",
+        "tree-birch": "Birch Log",
+        "tree-darkoak": "Dark Oak Log",
+        "tree-jungle": "Jungle Log",
+        "tree-mangrove": "Mangrove Log",
+        "tree-cherry": "Cherry Log",
+        "tree-crimson": "Crimson Log",
+        "tree-warped": "Warped Log",
+        "tree-apricorn": "Apricorn Log",
+        "tree-saccharine": "Saccharine Log"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:gurdurr"],
+      "aspectLabels": {
+        "metals-copper": "Copper Girder",
+        "metals-iron": "Iron Girder",
+        "metals-gold": "Gold Girder",
+        "metals-netherite": "Netherite Girder"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:conkeldurr"],
+      "aspectLabels": {
+        "color-white": "White Concrete",
+        "color-orange": "Orange Concrete",
+        "color-magenta": "Magenta Concrete",
+        "color-light_blue": "Light Blue Concrete",
+        "color-yellow": "Yellow Concrete",
+        "color-lime": "Lime Concrete",
+        "color-pink": "Pink Concrete",
+        "color-purple": "Purple Concrete",
+        "color-blue": "Blue Concrete",
+        "color-brown": "Brown Concrete",
+        "color-green": "Green Concrete",
+        "color-red": "Red Concrete",
+        "color-black": "Black Concrete",
+        "color-cyan": "Cyan Concrete"
+      },
+      "aspectTranslationKeys": {
+        "color-gray": "betterpokedexscanner.aspectLabel.gray_concrete",
+        "color-light_gray": "betterpokedexscanner.aspectLabel.light_gray_concrete"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:sandile","cobblemon:krokorok","cobblemon:krookodile"],
+      "aspectLabels": {
+        "cosmetic_item-black_glasses": "Red Sunglasses"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:braixen","cobblemon:delphox"],
+      "aspectLabels": {
+        "cosmetic_item-silk_scarf": "Ribboned Stick"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:hawlucha"],
+      "aspectLabels": {
+        "cosmetic_item-leaves": "Leaf Mask"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:tinkatink","cobblemon:tinkatuff","cobblemon:tinkaton"],
+      "aspectLabels": {
+        "cosmetic_item-music": "Microphone Hammer"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:sneasler"],
+      "aspectLabels": {
+        "cosmetic_item-composter": "Thatch Basket"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:zarude"],
+      "aspectLabels": {
+        "dada-cape": "251 Cape"
+      }
+    },
+
+    {
+      "headerLabel": "Cosmetic Appearance",
+      "species": ["cobblemon:gimmighoul","cobblemon:gholdengo"],
+      "aspectLabels": {
+        "minecraft": "Minecraft Chest",
+        "red-gilded-chest": "Red Gilded Chest",
+        "yellow-gilded-chest": "Yellow Gilded Chest",
+        "green-gilded-chest": "Green Gilded Chest",
+        "blue-gilded-chest": "Blue Gilded Chest",
+        "pink-gilded-chest": "Pink Gilded Chest",
+        "black-gilded-chest": "Black Gilded Chest",
+        "white-gilded-chest": "White Gilded Chest"
+      }
+    },
+
+    {
+      "headerLabel": "Regional Appearance",
+      "aspectLabels": {
+        "valencian": "Valencian",
+        "west-sea": "West Sea",
+        "east-sea": "East Sea"
+      }
+    },
+
+    {
+      "headerLabel": "Breed",
+      "aspectLabels": {
+        "combat-breed": "Combat",
+        "blaze-breed": "Blaze",
+        "aqua-breed": "Aqua",
+        "mooshtank-red": "Red Mooshtank",
+        "mooshtank-brown": "Brown Mooshtank"
+      }
+    },
+
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.eye_color",
+      "species": ["cobblemon:gyarados"],
+      "aspectLabels": {
+        "gyarados-eye-color-purple": "Purple",
+        "gyarados-eye-color-red": "Red"
+      }
+    },
+
+    {
+      "headerLabel": "Character",
+      "species": ["cobblemon:unown"],
+      "aspectLabels": {
+        "character-a": "A",
+        "character-b": "B",
+        "character-c": "C",
+        "character-d": "D",
+        "character-e": "E",
+        "character-f": "F",
+        "character-g": "G",
+        "character-h": "H",
+        "character-i": "I",
+        "character-j": "J",
+        "character-k": "K",
+        "character-l": "L",
+        "character-m": "M",
+        "character-n": "N",
+        "character-o": "O",
+        "character-p": "P",
+        "character-q": "Q",
+        "character-r": "R",
+        "character-s": "S",
+        "character-t": "T",
+        "character-u": "U",
+        "character-v": "V",
+        "character-w": "W",
+        "character-x": "X",
+        "character-y": "Y",
+        "character-z": "Z",
+        "character-!": "!",
+        "character-?": "?"
+      }
+    },
+
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.signature_paint_color",
+      "species": ["cobblemon:smeargle"],
+      "aspectLabels": {
+        "rainbow-light_blue": "Light Blue",
+        "rainbow-pink": "Pink",
+        "rainbow-magenta": "Magenta",
+        "rainbow-purple": "Purple",
+        "rainbow-blue": "Blue",
+        "rainbow-cyan": "Cyan",
+        "rainbow-green": "Green",
+        "rainbow-lime": "Lime",
+        "rainbow-yellow": "Yellow",
+        "rainbow-orange": "Orange",
+        "rainbow-red": "Red"
+      }
+    },
+
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_paint_color",
+      "species": ["cobblemon:smeargle"],
+      "aspectLabels": {
+        "color-light_blue": "Light Blue",
+        "color-pink": "Pink",
+        "color-magenta": "Magenta",
+        "color-purple": "Purple",
+        "color-blue": "Blue",
+        "color-cyan": "Cyan",
+        "color-green": "Green",
+        "color-lime": "Lime",
+        "color-yellow": "Yellow",
+        "color-orange": "Orange",
+        "color-red": "Red",
+        "color-black": "Black",
+        "color-brown": "Brown",
+        "color-white": "White"
+      },
+      "aspectTranslationKeys": {
+        "color-light_gray": "betterpokedexscanner.aspectLabel.light_gray",
+        "color-gray": "betterpokedexscanner.aspectLabel.gray"
+      }
+    },
+
+    {
+      "headerLabel": "Unique Form",
+      "aspectLabels": {
+        "whiscash_nero": "Nero",
+        "bond": "Battle Bond",
+        "bloodmoon": "Bloodmoon"
+      },
+      "formLabels": {
+        "dada": "Dada"
+      }
+    },
+
+    {
+      "headerTranslationKey": "Model",
+      "species": ["cobblemon:magearna"],
+      "aspectTranslationKeys": {
+        "original-color": "betterpokedexscanner.aspectLabel.original_color"
+      }
+    },
+
+    {
+      "headerTranslationKey": "Chirality",
+      "species": ["cobblemon:clauncher","cobblemon:clawitzer"],
+      "aspectLabels": {
+        "claw-left": "Left Clawed",
+        "claw-right": "Right Clawed"
+      }
+    },
+
+    {
+      "headerLabel": "Shell Flora",
+      "species": ["cobblemon:torterra"],
+      "aspectLabels": {
+        "tree-cherry": "Cherry Tree",
+        "tree-birch": "Birch Tree",
+        "tree-darkoak": "Dark Oak Tree",
+        "tree-oak": "Oak Tree",
+        "tree-spruce": "Spruce Tree",
+        "tree-jungle": "Jungle Tree",
+        "tree-swamp": "Swamped Tree",
+        "tree-acacia": "Acacia Tree",
+        "tree-azalea": "Azalea Tree",
+        "tree-mangrove": "Mangrove Tree",
+        "tree-none": "Sinnohan Tree"
+      }
+    },
+
+    {
+      "headerLabel": "Unique Behaviour",
+      "aspectLabels": {
+        "has_nectar": "Carrying Nectar",
+        "gulping-form": "Gulping Form",
+        "gorging-form": "Gorging Form",
+        "roaming": "Roaming"
+      }
+    },
+
+    {
+      "headerLabel": "Appliance",
+      "species": ["cobblemon:rotom"],
+      "baseFormLabel": "Light Bulb",
+      "aspectLabels": {
+        "heat-appliance": "Microwave Oven",
+        "wash-appliance": "Washing Machine",
+        "frost-appliance": "Fridge-Freezer",
+        "fan-appliance": "Electric Fan",
+        "mow-appliance": "Lawn Mower"
+      }
+    },
+    {
+      "headerLabel": "Seasonal Appearance",
+      "species": ["cobblemon:deerling","cobblemon:sawsbuck"],
+      "aspectLabels": {
+        "autumn": "Autumn",
+        "summer": "Summer",
+        "winter": "Winter",
+        "spring": "Spring"
+      }
+    },
+
+    {
+      "headerLabel": "Fur Style",
+      "species": ["cobblemon:furfrou"],
+      "aspectLabels": {
+        "natural-trim": "Natural",
+        "heart-trim": "Heart Trim",
+        "star-trim": "Star Trim",
+        "diamond-trim": "Diamond Trim",
+        "debutante-trim": "Debutante Trim",
+        "matron-trim": "Matron Trim",
+        "dandy-trim": "Dandy Trim",
+        "la_reine-trim": "La Reine Trim",
+        "kabuki-trim": "Kabuki Trim",
+        "pharaoh-trim": "Pharaoh Trim",
+        "cinnamon-trim": "Cinnamon Trim",
+        "crusader-trim": "Crusader Trim",
+        "lavender-trim": "Lavender Trim",
+        "matcha-trim": "Matcha Trim",
+        "mourner-trim": "Mourner Trim",
+        "rocker-trim": "Rocker Trim"
+      }
+    },
+
+    {
+      "headerLabel": "Variety",
+      "aspectLabels": {
+        "pumpkin-size-small": "Small",
+        "pumpkin-size-large": "Large",
+        "pumpkin-size-super": "Super",
+        "pumpkin-size-average":"Medium"
+      }
+    },
+
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.wool_color",
+      "species": ["cobblemon:wooloo","cobblemon:dubwool"],
+      "aspectLabels": {
+        "color-black": "Black",
+        "color-blue": "Blue",
+        "color-brown": "Brown",
+        "color-cyan": "Cyan",
+        "color-green": "Green",
+        "color-light_blue": "Light Blue",
+        "color-lime": "Lime",
+        "color-magenta": "Magenta",
+        "color-orange": "Orange",
+        "color-pink": "Pink",
+        "color-purple": "Purple",
+        "color-red": "Red",
+        "color-white": "White",
+        "color-white shiny": "White",
+        "color-yellow": "Yellow",
+        "color-none": "Natural"
+      },
+      "aspectTranslationKeys": {
+        "color-gray": "betterpokedexscanner.aspectLabel.gray",
+        "color-light_gray": "betterpokedexscanner.aspectLabel.light_gray"
+      }
+    },
+
+    {
+      "headerLabel": "Authenticity",
+      "species": ["cobblemon:sinistea","cobblemon:polteageist","cobblemon:poltchageist","cobblemon:sinistcha"],
+      "aspectLabels": {
+        "antique": "Antique",
+        "phony": "Phony",
+        "masterpiece": "Masterpiece",
+        "unremarkable": "Unremarkable",
+        "artisan": "Artisan",
+        "counterfeit": "Counterfeit"
+      }
+    },
+
+    {
+      "headerLabel": "Decoration",
+      "species": ["cobblemon:alcremie"],
+      "aspectLabels": {
+        "decoration-strawberry": "Strawberry Sweet",
+        "decoration-berry": "Berry Sweet",
+        "decoration-clover": "Clover Sweet",
+        "decoration-flower": "Flower Sweet",
+        "decoration-love": "Love Sweet",
+        "decoration-ribbon": "Ribbon Sweet",
+        "decoration-star": "Star Sweet"
+      }
+    },
+
+    {
+      "headerLabel": "Cream",
+      "species": ["cobblemon:alcremie"],
+      "aspectLabels": {
+        "cream-vanilla": "Vanilla Cream",
+        "cream-caramel_swirl": "Caramel Swirl",
+        "cream-ruby": "Ruby Cream",
+        "cream-matcha": "Matcha Cream",
+        "cream-mint": "Mint Cream",
+        "cream-lemon": "Lemon Cream",
+        "cream-salted": "Salted Cream",
+        "cream-ruby_swirl": "Ruby Swirl",
+        "cream-rainbow_swirl": "Rainbow Swirl"
+      }
+    },
+
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.plumage_color",
+      "species": ["cobblemon:squawkabilly"],
+      "aspectLabels": {
+        "squawkabilly-color-blue": "Blue",
+        "squawkabilly-color-green": "Green",
+        "squawkabilly-color-yellow": "Yellow"
+      },
+      "aspectTranslationKeys": {
+        "squawkabilly-color-gray": "betterpokedexscanner.aspectLabel.gray"
+      }
+    },
+
+    {
+      "headerLabel": "Regional Bias",
+      "aspectLabels": {
+        "region-bias-alola": "Alolan",
+        "region-bias-galar": "Galarian",
+        "region-bias-hisui": "Hisuian"
+      }
+    },
+
+    {
+      "headerLabel": "Cocoon Silk",
+      "species": ["cobblemon:wurmple"],
+      "aspectLabels": {
+        "silcoon-cocoon": "Silcoon",
+        "cascoon-cocoon": "Cascoon"
+      }
+    },
+
+    {
+      "headerLabel": "Forecast Form",
+      "species": ["cobblemon:castform","cobblemon:cherrim"],
+      "aspectLabels": {
+        "normal-form": "Normal",
+        "sunny-form": "Sunny",
+        "rainy-form": "Rainy",
+        "snowy-form": "Snowy",
+        "overcast-form": "Overcast",
+        "sunshine-form": "Sunshine"
+      }
+    },
+
+    {
+      "headerLabel": "Morphology",
+      "species": ["cobblemon:deoxys","cobblemon:palafin"],
+      "aspectLabels": {
+        "normal-forme": "Normal Forme",
+        "attack-forme": "Attack Forme",
+        "defense-forme": "Defense Forme",
+        "speed-forme": "Speed Forme"
+      }
+    },
+
+    {
+      "headerLabel": "Multitype",
+      "species": ["cobblemon:arceus"],
+      "aspectLabels": {
+        "fighting-plate": "Fighting Plate",
+        "flying-plate": "Flying Plate",
+        "poison-plate": "Poison Plate",
+        "ground-plate": "Ground Plate",
+        "rock-plate": "Rock Plate",
+        "bug-plate": "Bug Plate",
+        "ghost-plate": "Ghost Plate",
+        "steel-plate": "Steel Plate",
+        "fire-plate": "Fire Plate",
+        "water-plate": "Water Plate",
+        "grass-plate": "Grass Plate",
+        "electric-plate": "Electric Plate",
+        "psychic-plate": "Psychic Plate",
+        "ice-plate": "Ice Plate",
+        "dragon-plate": "Dragon Plate",
+        "dark-plate": "Dark Plate",
+        "fairy-plate": "Fairy Plate",
+        "normal-plate": "Normal Plate"
+      }
+    },
+
+    {
+      "headerLabel": "Cloak Material",
+      "species": ["cobblemon:burmy","cobblemon:wormadam","cobblemon:mothim"],
+      "aspectLabels": {
+        "sandy-cloak": "Sandy",
+        "plant-cloak": "Plant",
+        "trash-cloak": "Trash"
+      }
+    },
+
+    {
+      "headerLabel": "Techno Drive",
+      "species": ["cobblemon:genesect"],
+      "aspectLabels": {
+        "water-drive": "Douse Drive",
+        "electric-drive": "Shock Drive",
+        "fire-drive": "Burn Drive",
+        "ice-drive": "Chill Drive"
+      }
+    },
+
+    {
+      "headerLabel": "Fusion Aspects",
+      "aspectLabels": {
+        "white-fusion": "Reshiram",
+        "black-fusion": "Zekrom",
+        "dusk-fusion": "Solgaleo",
+        "dawn-fusion": "Lunala"
+      }
+    },
+
+    {
+      "headerLabel": "Hunger Level",
+      "species": ["cobblemon:morpeko"],
+      "aspectLabels": {
+        "full_belly-mode": "Full Belly",
+        "hangry-mode": "Hangry"
+      }
+    },
+
+    {
+      "headerLabel": "Lifeforce Radiance",
+      "species": ["cobblemon:xerneas"],
+      "aspectLabels": {
+        "neutral-mode": "Neutral",
+        "active-mode": "Active"
+      }
+    },
+
+    {
+      "headerLabel": "Daruma State",
+      "species": ["cobblemon:darmanitan"],
+      "aspectLabels": {
+        "zen-mode": "Zen Mode",
+        "standard-mode": "Standard Mode"
+      }
+    },
+
+    {
+      "headerLabel": "Cellular Construction",
+      "species": ["cobblemon:zygarde"],
+      "aspectLabels": {
+        "10-percent": "10% Complete",
+        "50-percent": "50% Complete",
+        "power-construct": "Power Construct",
+        "complete-percent": "Complete"
+      }
+    },
+
+    {
+      "headerLabel": "Schooling State",
+      "species": ["cobblemon:wishiwashi"],
+      "aspectLabels": {
+        "solo-form": "Solo",
+        "school-form": "Schooling"
+      }
+    },
+
+    {
+      "headerLabel": "Ice Face status",
+      "species": ["cobblemon:eiscue"],
+      "aspectLabels": {
+        "ice_face": "Ice",
+        "noice_face": "Noice"
+      }
+    },
+
+    {
+      "headerLabel": "Family Composition",
+      "species": ["cobblemon:maushold","cobblemon:tandemaus"],
+      "aspectLabels": {
+        "maushold-family-three": "Family of Free",
+        "maushold-family-four": "Family of Four"
+      }
+    },
+
+    {
+      "headerLabel": "Netherite Coating",
+      "species": ["cobblemon:gholdengo"],
+      "aspectLabels": {
+        "netherite-coating-stage1": "12.5%",
+        "netherite-coating-stage2": "25%",
+        "netherite-coating-stage3": "37.5%",
+        "netherite-coating-stage4": "50%",
+        "netherite-coating-stage5": "62.5%",
+        "netherite-coating-stage6": "75%",
+        "netherite-coating-stage7": "87.5%",
+        "netherite-coating-full": "Complete"
+      }
+    },
+
+    {
+      "headerLabel": "Disguise",
+      "species": ["cobblemon:mimikyu"],
+      "aspectLabels": {
+        "disguised-form": "Disguised",
+        "busted-form": "Busted"
+      }
+    },
+
+    {
+      "headerLabel": "Mask",
+      "species": ["cobblemon:ogerpon"],
+      "aspectLabels": {
+        "teal-mask": "Teal Mask",
+        "wellspring-mask": "Wellspring Mask",
+        "hearthflame-mask": "Hearthflame Mask",
+        "cornerstone-mask": "Cornerstone Mask"
+      }
+    },
+
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.core_color",
+      "species": ["cobblemon:minior"],
+      "aspectLabels": {
+        "red-core": "Red",
+        "orange-core": "Orange",
+        "yellow-core": "Yellow",
+        "green-core": "Green",
+        "blue-core": "Blue",
+        "indigo-core": "Indigo",
+        "violet-core": "Violet"
+      }
+    },
+
+    {
+      "headerLabel": "Shields",
+      "species": ["cobblemon:minior"],
+      "aspectLabels": {
+        "core-form": "Down",
+        "meteor-form": "Up"
+      }
+    },
+
+    {
+      "headerLabel": "Dance Style",
+      "species": ["cobblemon:oricorio"],
+      "aspectLabels": {
+        "baile-style": "Baile",
+        "pom_pom-style": "Pom-Pom",
+        "pa'u-style": "Pa'u",
+        "sensu-style": "Sensu"
+      }
+    },
+
+    {
+      "headerLabel": "RKS System",
+      "species": ["cobblemon:silvally"],
+      "aspectLabels": {
+        "fighting-memory": "Fighting Memory",
+        "flying-memory": "Flying Memory",
+        "poison-memory": "Poison Memory",
+        "ground-memory": "Ground Memory",
+        "rock-memory": "Rock Memory",
+        "bug-memory": "Bug Memory",
+        "ghost-memory": "Ghost Memory",
+        "steel-memory": "Steel Memory",
+        "fire-memory": "Fire Memory",
+        "water-memory": "Water Memory",
+        "grass-memory": "Grass Memory",
+        "electric-memory": "Electric Memory",
+        "psychic-memory": "Psychic Memory",
+        "ice-memory": "Ice Memory",
+        "dragon-memory": "Dragon Memory",
+        "dark-memory": "Dark Memory",
+        "fairy-memory": "Fairy Memory",
+        "normal-memory": "Normal Memory"
+      }
+    },
+
+    {
+      "headerLabel": "Wushu Style",
+      "species": ["cobblemon:urshifu"],
+      "aspectLabels": {
+        "single_strike-style": "Single Strike",
+        "rapid_strike-style": "Rapid Strike"
+      }
+    },
+
+    {
+      "headerLabel": "Heroic Epithet",
+      "species": ["cobblemon:zamazenta","cobblemon:zacian"],
+      "baseFormLabel": "Battleworn Hero"
+    },
+
+    {
+      "headerLabel": "Regalia State",
+      "species": ["cobblemon:zacian"],
+      "aspectLabels": {
+        "hero": "Uncrowned",
+        "crowned": "Crowned Sword"
+      }
+    },
+
+    {
+      "headerLabel": "Regalia State",
+      "species": ["cobblemon:zamazenta"],
+      "aspectLabels": {
+        "hero": "Uncrowned",
+        "crowned": "Crowned Shield"
+      }
+    },
+
+    {
+      "headerLabel": "King's Steed",
+      "species": ["cobblemon:calyrex"],
+      "aspectLabels": {
+        "ice-rider": "Glastrier",
+        "shadow-rider": "Spectrier"
+      }
+    },
+
+    {
+      "headerLabel": "Presentation",
+      "species": ["cobblemon:tatsugiri"],
+      "aspectLabels": {
+        "tatsugiri-texture-curly": "Curly",
+        "tatsugiri-texture-droopy": "Droopy",
+        "tatsugiri-texture-stretchy": "Stretchy"
+      }
+    },
+
+    {
+      "headerLabel": "Body Segmentation",
+      "species": ["cobblemon:dudunsparce"],
+      "aspectLabels": {
+        "two-segment-form": "Two Segment",
+        "three-segment-form": "Three Segment"
+      }
+    },
+
+    {
+      "headerLabel": "Creation State",
+      "species": ["cobblemon:dialga","cobblemon:palkia","cobblemon:giratina"],
+      "aspectLabels": {
+        "altered-forme": "Altered",
+        "origin-forme": "Origin"
+      }
+    },
+
+    {
+      "headerLabel": "Habitat",
+      "species": ["cobblemon:shaymin"],
+      "aspectLabels": {
+        "land-forme": "Land",
+        "sky-forme": "Sky"
+      }
+    },
+
+    {
+      "headerLabel": "Resolve",
+      "species": ["cobblemon:keldeo"],
+      "aspectLabels": {
+        "ordinary-form": "Ordinary",
+        "resolute-form": "Resolute"
+      }
+    },
+
+    {
+      "headerLabel": "Embodiment",
+      "species": ["cobblemon:tornadus","cobblemon:thundurus","cobblemon:landorus","cobblemon:enamorus"],
+      "aspectLabels": {
+        "incarnate-forme": "Incarnate",
+        "therian-forme": "Therian"
+      }
+    },
+
+    {
+      "headerLabel": "Performance Style",
+      "species": ["cobblemon:meloetta"],
+      "aspectLabels": {
+        "aria-forme": "Aria",
+        "pirouette-forme": "Pirouette"
+      }
+    },
+
+    {
+      "headerLabel": "Confinement",
+      "species": ["cobblemon:hoopa"],
+      "aspectLabels": {
+        "confined": "Confined",
+        "unbound": "Unbound"
+      }
+    },
+
+    {
+      "headerLabel": "Chronotype",
+      "species": ["cobblemon:lycanroc"],
+      "aspectLabels": {
+        "midday-form": "Midday",
+        "midnight-form": "Midnight",
+        "dusk-form": "Dusk"
+      }
+    },
+
+    {
+      "headerLabel": "Unique Form",
+      "species": ["cobblemon:rockruff"],
+      "aspectLabels": {
+        "dusk-form": "Own Tempo"
+      }
+    },
+
+    {
+      "headerLabel": "Prismatic Aura",
+      "species": ["cobblemon:necrozma"],
+      "baseFormLabel": "Depleted",
+      "aspectLabels": {
+        "ultra-fusion": "Ultra"
+      },
+      "formLabels": {
+        "Dusk-Mane": "Restored",
+        "Dawn-Wings": "Restored"
+      }
+    },
+
+    {
+      "headerLabel": "Temperament",
+      "species": ["cobblemon:toxtricity"],
+      "aspectLabels": {
+        "low_key": "Low Key",
+        "amped-form": "Amped"
+      }
+    },
+
+    {
+      "headerLabel": "Guise",
+      "species": ["cobblemon:palafin"],
+      "aspectLabels": {
+        "hero-form": "Hero Form",
+        "zero-form": "Zero Form"
+      }
+    },
+
+    {
+      "headerLabel": "Battle Form",
+      "aspectLabels": {
+        "mega": "Mega Evolution",
+        "gmax": "Gigantamax Form",
+        "mega_x": "Mega Evolution X",
+        "mega_y": "Mega Evolution Y",
+        "mega_z": "Mega Evolution Z",
+        "primal": "Primal Reversion",
+        "Ash": "Bond Phenomenon",
+        "eternamax": "Etermamax Form",
+        "embody-aspect": "Embodied Aspect",
+        "terastal-form": "Terastal Form",
+        "stellar-form": "Stellar Form"
+      }
+    },
+
+    {
+      "headerLabel": "Wool Status",
+      "species": ["cobblemon:wooloo","cobblemon:dubwool","cobblemon:mareep"],
+      "aspectLabels": {
+        "sheared": "Sheared"
+      }
+    },
+
+    {
+      "headerLabel": "Lineage",
+      "aspectLabels": {
+        "clone": "Clone"
+      }
+    }
+
+
+  ]
+}

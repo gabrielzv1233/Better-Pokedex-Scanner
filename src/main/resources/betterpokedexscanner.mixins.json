@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.joshiki.betterpokedexscanner.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "PokedexUsageContextMixin",
+    "PokedexScannerRendererMixin"
+
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

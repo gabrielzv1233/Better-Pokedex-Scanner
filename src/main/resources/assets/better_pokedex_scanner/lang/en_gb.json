@@ -1,0 +1,14 @@
+{
+  "betterpokedexscanner.header.flower_color": "Flower Colour",
+  "betterpokedexscanner.header.eye_color": "Eye Colour",
+  "betterpokedexscanner.header.cosmetic_paint_color": "Cosmetic Paint Colour",
+  "betterpokedexscanner.header.signature_paint_color": "Signature Palette",
+  "betterpokedexscanner.aspectLabel.light_gray_concrete": "Light Grey Concrete",
+  "betterpokedexscanner.aspectLabel.gray_concrete": "Grey Concrete",
+  "betterpokedexscanner.aspectLabel.light_gray": "Light Grey",
+  "betterpokedexscanner.aspectLabel.gray": "Grey",
+  "betterpokedexscanner.aspectLabel.original_color": "Original Colour",
+  "betterpokedexscanner.header.wool_color": "Wool Colour",
+  "betterpokedexscanner.header.plumage_color": "Plumage Colour",
+  "betterpokedexscanner.header.core_color": "Core Colour"
+}
