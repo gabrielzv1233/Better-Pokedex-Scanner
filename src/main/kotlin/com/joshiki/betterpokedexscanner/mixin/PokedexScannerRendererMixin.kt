@@ -368,6 +368,17 @@ abstract class PokedexScannerRendererMixin {
 
         if (effectiveFocusIntervals <= 0) return
 
+        val tankTypeVisible = tankActive && !tankRegistrationActive && isTankTypingVisible()
+        val tankPrimaryDisplayCounter = if (tankTypeVisible) 4 else 3
+        val pokemonActive =
+            usageContext.scannableEntityInFocus != null &&
+                !tankRegistrationActive &&
+                !tankActive &&
+                !beehiveActive &&
+                !environmentActive
+        val pokemonTypeVisible = pokemonActive && usageContext.isPokemonInFocusOwned
+        val pokemonPrimaryDisplayCounter = if (pokemonTypeVisible) 4 else 3
+
         var infoDisplayedCounter = 0
 
 
@@ -403,69 +414,16 @@ abstract class PokedexScannerRendererMixin {
                                     BeehiveScanState.snapshot,
                                     beehiveDisplayIndex
                                 ).size > 1
-                            } else if (index == 3 && tankActive && !tankRegistrationActive) {
-                                val progress = getTankProgressPercent(
-                                    RestorationTankScanState.timeRemaining ?: FossilMultiblockStructure.TIME_TO_TAKE
-                                )
-
-                                val tankProgressDisplays = if (progress >= 100) {
-                                    listOf(
-                                        VariantDisplay(
-                                            headerLabel = "Restoration Progress",
-                                            headerTranslationKey = null,
-                                            label = "Complete",
-                                            labelTranslationKey = null,
-                                            showShinyIcon = false,
-                                            needsSeparateShinyTag = false,
-                                            colour = interpolateCyanToGreen(progress)
-                                        )
-                                    )
-                                } else {
-                                    listOf(
-                                        VariantDisplay(
-                                            headerLabel = "Development State",
-                                            headerTranslationKey = null,
-                                            label = if (progress < 50) "Embryonic" else "Fetal",
-                                            labelTranslationKey = null,
-                                            showShinyIcon = false,
-                                            needsSeparateShinyTag = false,
-                                            colour = 0xFFFFFF
-                                        ),
-                                        VariantDisplay(
-                                            headerLabel = "Restoration Progress",
-                                            headerTranslationKey = null,
-                                            label = "$progress%",
-                                            labelTranslationKey = null,
-                                            showShinyIcon = false,
-                                            needsSeparateShinyTag = false,
-                                            colour = interpolateCyanToGreen(progress)
-                                        )
-                                    )
-                                }
-
-                                val tankRenderState = buildTankRenderState()
-                                val primaryDisplays = (tankRenderState.primaryDisplays + tankProgressDisplays).distinctBy {
-                                    Triple(it.headerLabel, it.headerTranslationKey, it.label)
-                                }
-
-                                primaryDisplays.size > 1
-                            } else if (index == 3 && usageContext.scannableEntityInFocus != null) {
+                            } else if (tankActive && !tankRegistrationActive && infoDisplayedCounter == tankPrimaryDisplayCounter) {
+                                buildTankPrimaryRenderState().primaryDisplays.size > 1
+                            } else if (usageContext.scannableEntityInFocus != null && infoDisplayedCounter == pokemonPrimaryDisplayCounter) {
                                 val scanData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
                                 val focusedEntity = usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity
-                                val liveAspects = focusedEntity?.aspects
 
                                 if (scanData == null) {
                                     false
                                 } else {
-                                    val renderState = VariantLabelResolver.resolveRenderState(scanData, liveAspects)
-
-                                    val serverDisplaysCount =
-                                        if (
-                                            focusedEntity?.pokemon?.species?.resourceIdentifier?.toString() == "cobblemon:slowpoke" &&
-                                            SlowpokeTailRegrowthClientState.activeEntityId == focusedEntity.id &&
-                                            SlowpokeTailRegrowthClientState.percent != null
-                                        ) 1 else 0
-                                    (renderState.primaryDisplays.size + serverDisplaysCount) > 1
+                                    buildPokemonPrimaryRenderState(scanData, focusedEntity).primaryDisplays.size > 1
                                 }
                             } else {
                                 false
@@ -508,27 +466,30 @@ abstract class PokedexScannerRendererMixin {
                 val environmentalSnapshot = EnvironmentalScanState.snapshot
                 val beehiveSnapshot = BeehiveScanState.snapshot
 
+                if (beehiveActive) {
+                    renderBeehiveInfoFrame(
+                        graphics = graphics,
+                        poseStack = poseStack,
+                        usageContext = usageContext,
+                        snapshot = beehiveSnapshot ?: return@forEachIndexed,
+                        displayIndex = beehiveDisplayIndex,
+                        slotIndex = index,
+                        isLeftSide = isLeftSide,
+                        centerX = centerX,
+                        centerY = centerY,
+                        xOffset = xOffset,
+                        yOffset = yOffset,
+                        xOffsetText = xOffsetText,
+                        yOffsetText = yOffsetText,
+                        frameHeight = frameHeight,
+                        effectiveFocusIntervals = effectiveFocusIntervals,
+                        opacity = opacity
+                    )
+                    return@forEachIndexed
+                }
+
                 if (infoDisplayedCounter == 1) {
-                    if (beehiveActive) {
-                        renderBeehiveInfoFrame(
-                            graphics = graphics,
-                            poseStack = poseStack,
-                            usageContext = usageContext,
-                            snapshot = beehiveSnapshot ?: return@forEachIndexed,
-                            displayIndex = beehiveDisplayIndex,
-                            slotIndex = index,
-                            isLeftSide = isLeftSide,
-                            centerX = centerX,
-                            centerY = centerY,
-                            xOffset = xOffset,
-                            yOffset = yOffset,
-                            xOffsetText = xOffsetText,
-                            yOffsetText = yOffsetText,
-                            frameHeight = frameHeight,
-                            effectiveFocusIntervals = effectiveFocusIntervals,
-                            opacity = opacity
-                        )
-                    } else if (environmentActive) {
+                    if (environmentActive) {
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
@@ -575,26 +536,7 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (infoDisplayedCounter == 2) {
-                    if (beehiveActive) {
-                        renderBeehiveInfoFrame(
-                            graphics = graphics,
-                            poseStack = poseStack,
-                            usageContext = usageContext,
-                            snapshot = beehiveSnapshot ?: return@forEachIndexed,
-                            displayIndex = beehiveDisplayIndex,
-                            slotIndex = index,
-                            isLeftSide = isLeftSide,
-                            centerX = centerX,
-                            centerY = centerY,
-                            xOffset = xOffset,
-                            yOffset = yOffset,
-                            xOffsetText = xOffsetText,
-                            yOffsetText = yOffsetText,
-                            frameHeight = frameHeight,
-                            effectiveFocusIntervals = effectiveFocusIntervals,
-                            opacity = opacity
-                        )
-                    } else if (environmentActive) {
+                    if (environmentActive) {
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
@@ -702,26 +644,7 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (infoDisplayedCounter == 3) {
-                    if (beehiveActive) {
-                        renderBeehiveInfoFrame(
-                            graphics = graphics,
-                            poseStack = poseStack,
-                            usageContext = usageContext,
-                            snapshot = beehiveSnapshot ?: return@forEachIndexed,
-                            displayIndex = beehiveDisplayIndex,
-                            slotIndex = index,
-                            isLeftSide = isLeftSide,
-                            centerX = centerX,
-                            centerY = centerY,
-                            xOffset = xOffset,
-                            yOffset = yOffset,
-                            xOffsetText = xOffsetText,
-                            yOffsetText = yOffsetText,
-                            frameHeight = frameHeight,
-                            effectiveFocusIntervals = effectiveFocusIntervals,
-                            opacity = opacity
-                        )
-                    } else if (environmentActive) {
+                    if (environmentActive) {
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
@@ -740,125 +663,145 @@ abstract class PokedexScannerRendererMixin {
                             opacity = opacity
                         )
                     } else if (tankActive && !tankRegistrationActive) {
-                        val speciesId = RestorationTankScanState.speciesId ?: return@forEachIndexed
-                        val typeText =
-                            if (RestorationTankScanState.validSpecies) {
-                                val baseTypeText = resolveSpeciesTypeText(speciesId)?.copy() ?: Component.literal("Unknown")
-                                Component.literal(baseTypeText.string + " Type").bold()
+                        if (tankTypeVisible) {
+                            val speciesId = RestorationTankScanState.speciesId ?: return@forEachIndexed
+                            val typeText =
+                                if (RestorationTankScanState.validSpecies) {
+                                    val baseTypeText = resolveSpeciesTypeText(speciesId)?.copy() ?: Component.literal("Unknown")
+                                    Component.literal(baseTypeText.string + " Type").bold()
+                                } else {
+                                    Component.literal("Unknown Type").bold()
+                                }
+
+                            val typeWidth =
+                                Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
+
+                            if (typeWidth > (PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH - 8) && typeText.string.contains(
+                                    "/"
+                                )
+                            ) {
+                                val splitLines = typeText.string.split("/")
+
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = text(splitLines[0], "/").bold(),
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText - 4,
+                                    shadow = true,
+                                    centered = true
+                                )
+
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = text(splitLines[1]).bold(),
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText + 3,
+                                    shadow = true,
+                                    centered = true
+                                )
                             } else {
-                                Component.literal("Unknown Type").bold()
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = typeText,
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText,
+                                    shadow = true,
+                                    centered = true
+                                )
                             }
-
-                        val typeWidth =
-                            Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
-
-                        if (typeWidth > (PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH - 8) && typeText.string.contains(
-                                "/"
-                            )
-                        ) {
-                            val splitLines = typeText.string.split("/")
-
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = text(splitLines[0], "/").bold(),
-                                x = centerX + xOffset + xOffsetText,
-                                y = centerY + yOffset + yOffsetText - 4,
-                                shadow = true,
-                                centered = true
-                            )
-
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = text(splitLines[1]).bold(),
-                                x = centerX + xOffset + xOffsetText,
-                                y = centerY + yOffset + yOffsetText + 3,
-                                shadow = true,
-                                centered = true
-                            )
                         } else {
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = typeText,
-                                x = centerX + xOffset + xOffsetText,
-                                y = centerY + yOffset + yOffsetText,
-                                shadow = true,
-                                centered = true
+                            renderPrimaryDisplayFrame(
+                                graphics = graphics,
+                                poseStack = poseStack,
+                                usageContext = usageContext,
+                                renderState = buildTankPrimaryRenderState(),
+                                index = index,
+                                isLeftSide = isLeftSide,
+                                centerX = centerX,
+                                centerY = centerY,
+                                xOffset = xOffset,
+                                yOffset = yOffset,
+                                xOffsetText = xOffsetText,
+                                frameHeight = frameHeight,
+                                effectiveFocusIntervals = effectiveFocusIntervals,
+                                opacity = opacity
                             )
                         }
                     } else {
                         val entityData = pokedexEntityData ?: return@forEachIndexed
-                        val typeText = lang(
-                            "type.suffix",
-                            entityData.getApparentForm().types
-                                .map { it.displayName.copy() }
-                                .reduce { acc, next -> acc.plus("/").plus(next) }
-                        ).bold()
+                        if (pokemonTypeVisible) {
+                            val typeText = lang(
+                                "type.suffix",
+                                entityData.getApparentForm().types
+                                    .map { it.displayName.copy() }
+                                    .reduce { acc, next -> acc.plus("/").plus(next) }
+                            ).bold()
 
-                        val typeWidth =
-                            Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
+                            val typeWidth =
+                                Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
 
-                        if (typeWidth > (PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH - 8) &&
-                            entityData.getApparentForm().secondaryType != null
-                        ) {
-                            val splitLines = typeText.string.split("/")
+                            if (typeWidth > (PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH - 8) &&
+                                entityData.getApparentForm().secondaryType != null
+                            ) {
+                                val splitLines = typeText.string.split("/")
 
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = text(splitLines[0], "/").bold(),
-                                x = centerX + xOffset + xOffsetText,
-                                y = centerY + yOffset + yOffsetText - 4,
-                                shadow = true,
-                                centered = true
-                            )
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = text(splitLines[0], "/").bold(),
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText - 4,
+                                    shadow = true,
+                                    centered = true
+                                )
 
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = text(splitLines[1]).bold(),
-                                x = centerX + xOffset + xOffsetText,
-                                y = centerY + yOffset + yOffsetText + 3,
-                                shadow = true,
-                                centered = true
-                            )
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = text(splitLines[1]).bold(),
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText + 3,
+                                    shadow = true,
+                                    centered = true
+                                )
+                            } else {
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = typeText,
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText,
+                                    shadow = true,
+                                    centered = true
+                                )
+                            }
                         } else {
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = typeText,
-                                x = centerX + xOffset + xOffsetText,
-                                y = centerY + yOffset + yOffsetText,
-                                shadow = true,
-                                centered = true
+                            val focusedEntity = usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity
+                            renderPrimaryDisplayFrame(
+                                graphics = graphics,
+                                poseStack = poseStack,
+                                usageContext = usageContext,
+                                renderState = buildPokemonPrimaryRenderState(entityData, focusedEntity),
+                                index = index,
+                                isLeftSide = isLeftSide,
+                                centerX = centerX,
+                                centerY = centerY,
+                                xOffset = xOffset,
+                                yOffset = yOffset,
+                                xOffsetText = xOffsetText,
+                                frameHeight = frameHeight,
+                                effectiveFocusIntervals = effectiveFocusIntervals,
+                                opacity = opacity
                             )
                         }
                     }
                 }
 
                 if (infoDisplayedCounter == 4) {
-                    if (beehiveActive) {
-                        renderBeehiveInfoFrame(
-                            graphics = graphics,
-                            poseStack = poseStack,
-                            usageContext = usageContext,
-                            snapshot = beehiveSnapshot ?: return@forEachIndexed,
-                            displayIndex = beehiveDisplayIndex,
-                            slotIndex = index,
-                            isLeftSide = isLeftSide,
-                            centerX = centerX,
-                            centerY = centerY,
-                            xOffset = xOffset,
-                            yOffset = yOffset,
-                            xOffsetText = xOffsetText,
-                            yOffsetText = yOffsetText,
-                            frameHeight = frameHeight,
-                            effectiveFocusIntervals = effectiveFocusIntervals,
-                            opacity = opacity
-                        )
-                    } else if (environmentActive) {
+                    if (environmentActive) {
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
@@ -1463,7 +1406,8 @@ abstract class PokedexScannerRendererMixin {
             xOffsetText = xOffsetText,
             frameHeight = frameHeight,
             effectiveFocusIntervals = effectiveFocusIntervals,
-            opacity = opacity
+            opacity = opacity,
+            forceDrawFrame = false
         )
     }
 
@@ -1509,7 +1453,36 @@ abstract class PokedexScannerRendererMixin {
             xOffsetText = xOffsetText,
             frameHeight = frameHeight,
             effectiveFocusIntervals = effectiveFocusIntervals,
-            opacity = opacity
+            opacity = opacity,
+            forceDrawFrame = false
+        )
+
+        if (!isBeehiveInhabitantsFrame(snapshot, displayIndex) || snapshot.rareIndividualDisplays.isEmpty()) {
+            return
+        }
+
+        val mirroredSide = !isLeftSide
+        val mirroredXOffset =
+            (if (slotIndex == 1 || slotIndex == 2) -177 else -120) +
+                if (mirroredSide) 0 else if (slotIndex == 1 || slotIndex == 2) 234 else 148
+
+        renderCyclingInfoDisplay(
+            graphics = graphics,
+            poseStack = poseStack,
+            usageContext = usageContext,
+            displays = snapshot.rareIndividualDisplays,
+            index = slotIndex,
+            schedulerIndex = 4 + displayIndex,
+            isLeftSide = mirroredSide,
+            centerX = centerX,
+            centerY = centerY,
+            xOffset = mirroredXOffset,
+            yOffset = yOffset,
+            xOffsetText = getInfoFrameTextOffset(slotIndex, mirroredSide),
+            frameHeight = frameHeight,
+            effectiveFocusIntervals = effectiveFocusIntervals,
+            opacity = opacity,
+            forceDrawFrame = true
         )
     }
 
@@ -1518,6 +1491,350 @@ abstract class PokedexScannerRendererMixin {
         index: Int
     ): List<VariantDisplay> {
         return snapshot?.frameDisplays?.getOrNull(index).orEmpty()
+    }
+
+    private fun isBeehiveInhabitantsFrame(
+        snapshot: BeehiveScanSnapshot?,
+        index: Int
+    ): Boolean {
+        return getBeehiveDisplaysForFrame(snapshot, index)
+            .firstOrNull()
+            ?.headerLabel == "Inhabitants"
+    }
+
+    private fun getInfoFrameTextOffset(index: Int, isLeftSide: Boolean): Int {
+        val isInnerFrame = index == 1 || index == 2
+        return if (isInnerFrame) {
+            ((PokedexScannerRenderer.INNER_INFO_FRAME_WIDTH - PokedexScannerRenderer.INNER_INFO_FRAME_STEM_WIDTH) / 2) +
+                if (isLeftSide) 0 else PokedexScannerRenderer.INNER_INFO_FRAME_STEM_WIDTH
+        } else {
+            PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH / 2
+        }
+    }
+
+    private fun isTankTypingVisible(): Boolean {
+        val speciesId = RestorationTankScanState.speciesId ?: return false
+        return CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(speciesId) ==
+            com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress.CAUGHT
+    }
+
+    private fun buildTankPrimaryRenderState(): VariantRenderState {
+        val progress = getTankProgressPercent(
+            RestorationTankScanState.timeRemaining ?: FossilMultiblockStructure.TIME_TO_TAKE
+        )
+        val progressDisplays = if (progress >= 100) {
+            listOf(
+                VariantDisplay(
+                    headerLabel = "Restoration Progress",
+                    headerTranslationKey = null,
+                    label = "Complete",
+                    labelTranslationKey = null,
+                    showShinyIcon = false,
+                    needsSeparateShinyTag = false,
+                    colour = interpolateCyanToGreen(progress)
+                )
+            )
+        } else {
+            listOf(
+                VariantDisplay(
+                    headerLabel = "Development State",
+                    headerTranslationKey = null,
+                    label = if (progress < 50) "Embryonic" else "Fetal",
+                    labelTranslationKey = null,
+                    showShinyIcon = false,
+                    needsSeparateShinyTag = false,
+                    colour = 0xFFFFFF
+                ),
+                VariantDisplay(
+                    headerLabel = "Restoration Progress",
+                    headerTranslationKey = null,
+                    label = "$progress%",
+                    labelTranslationKey = null,
+                    showShinyIcon = false,
+                    needsSeparateShinyTag = false,
+                    colour = interpolateCyanToGreen(progress)
+                )
+            )
+        }
+
+        val tankRenderState = buildTankRenderState()
+        return VariantRenderState(
+            primaryDisplays = (tankRenderState.primaryDisplays + progressDisplays).distinctBy {
+                Triple(it.headerLabel, it.headerTranslationKey, it.label)
+            },
+            showSeparateShinyTag = tankRenderState.showSeparateShinyTag
+        )
+    }
+
+    private fun buildPokemonPrimaryRenderState(scanData: Any, focusedEntity: PokemonEntity?): VariantRenderState {
+        val renderState = VariantLabelResolver.resolveRenderState(scanData, focusedEntity?.aspects)
+        val serverDisplays = buildList {
+            val focusedEntityId = focusedEntity?.id
+            val speciesId = focusedEntity?.pokemon?.species?.resourceIdentifier?.toString()
+            val percent = SlowpokeTailRegrowthClientState.percent
+
+            if (
+                speciesId == "cobblemon:slowpoke" &&
+                focusedEntityId != null &&
+                SlowpokeTailRegrowthClientState.activeEntityId == focusedEntityId &&
+                percent != null
+            ) {
+                add(
+                    when {
+                        percent <= 0 -> VariantDisplay(
+                            headerLabel = "Tail Health",
+                            headerTranslationKey = null,
+                            label = "Sheared",
+                            labelTranslationKey = null,
+                            showShinyIcon = false,
+                            needsSeparateShinyTag = false,
+                            colour = interpolateRedToGreen(percent)
+                        )
+                        percent >= 100 -> VariantDisplay(
+                            headerLabel = "Tail Health",
+                            headerTranslationKey = null,
+                            label = "Fully Grown",
+                            labelTranslationKey = null,
+                            showShinyIcon = false,
+                            needsSeparateShinyTag = false,
+                            colour = interpolateRedToGreen(percent)
+                        )
+                        else -> VariantDisplay(
+                            headerLabel = "Tail Regrowth",
+                            headerTranslationKey = null,
+                            label = "$percent%",
+                            labelTranslationKey = null,
+                            showShinyIcon = false,
+                            needsSeparateShinyTag = false,
+                            colour = interpolateRedToGreen(percent)
+                        )
+                    }
+                )
+            }
+        }
+
+        return VariantRenderState(
+            primaryDisplays = (renderState.primaryDisplays + serverDisplays).distinctBy {
+                Triple(it.headerLabel, it.headerTranslationKey, it.label)
+            },
+            showSeparateShinyTag = renderState.showSeparateShinyTag
+        )
+    }
+
+    private fun renderPrimaryDisplayFrame(
+        graphics: GuiGraphics,
+        poseStack: PoseStack,
+        usageContext: PokedexUsageContext,
+        renderState: VariantRenderState,
+        index: Int,
+        isLeftSide: Boolean,
+        centerX: Int,
+        centerY: Int,
+        xOffset: Int,
+        yOffset: Int,
+        xOffsetText: Int,
+        frameHeight: Int,
+        effectiveFocusIntervals: Float,
+        opacity: Float
+    ) {
+        val primaryDisplays = renderState.primaryDisplays
+        if (primaryDisplays.isEmpty()) return
+
+        val isInnerFrame = index == 1 || index == 2
+        val frameWidth =
+            if (isInnerFrame) PokedexScannerRenderer.INNER_INFO_FRAME_WIDTH
+            else PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH
+        val variantCycleAccess = usageContext as VariantCycleAccess
+        val variantCycleTicks = variantCycleAccess.getVariantCycleTicksChimericShinies()
+        val holdTicks = 80f
+        val transitionTicks = 10f
+        val totalTicksPerPage = holdTicks + transitionTicks
+        val cyclePosition = variantCycleTicks % totalTicksPerPage
+        val basePageIndex = ((variantCycleTicks / totalTicksPerPage).toInt()) % primaryDisplays.size
+        val nextPageIndex = (basePageIndex + 1) % primaryDisplays.size
+        val inTransition = primaryDisplays.size > 1 && cyclePosition >= holdTicks
+        val transitionProgress =
+            if (inTransition) ((cyclePosition - holdTicks) / transitionTicks).coerceIn(0f, 1f)
+            else 0f
+        val baseFrameIndex = ceil(effectiveFocusIntervals).toInt().coerceIn(0, 9)
+        val animatedPrimaryFrameIndex =
+            if (primaryDisplays.size > 1 && inTransition) {
+                val collapseAmount =
+                    if (transitionProgress < 0.5f) transitionProgress / 0.5f
+                    else (1f - transitionProgress) / 0.5f
+                val collapseStepRange = if (isInnerFrame) 4f else 2f
+                val collapseSteps = (collapseAmount * collapseStepRange).roundToInt()
+                (baseFrameIndex - collapseSteps).coerceIn(0, 9)
+            } else {
+                baseFrameIndex
+            }
+
+        if (primaryDisplays.size > 1) {
+            blitk(
+                matrixStack = poseStack,
+                texture = PokedexScannerRenderer.infoFrameResource(isLeftSide, index),
+                x = centerX + xOffset,
+                y = centerY + yOffset,
+                width = frameWidth,
+                height = frameHeight,
+                textureHeight = frameHeight * 10,
+                vOffset = animatedPrimaryFrameIndex * frameHeight,
+                alpha = opacity
+            )
+        }
+
+        val variantDisplay =
+            if (inTransition && transitionProgress >= 0.5f) primaryDisplays[nextPageIndex]
+            else primaryDisplays[basePageIndex]
+        val variantText = Component.literal(variantDisplay.label).copy().bold()
+        val headerComponent = if (!variantDisplay.headerTranslationKey.isNullOrBlank()) {
+            Component.translatable(variantDisplay.headerTranslationKey)
+        } else {
+            Component.literal(variantDisplay.headerLabel ?: "Variant")
+        }
+        val headerY = if (index == 3) centerY + yOffset + 40 else centerY + yOffset + when (index) {
+            0 -> 3
+            1 -> 2
+            2 -> 6
+            else -> 3
+        }
+        val valueY = if (index == 3) centerY + yOffset + 44 else centerY + yOffset + when (index) {
+            0 -> 7
+            1 -> 6
+            2 -> 10
+            else -> 7
+        }
+        val noHeaderValueY = if (index == 3) centerY + yOffset + 42 else valueY
+        val primaryValueY =
+            if (variantDisplay.showShinyIcon && !variantDisplay.needsSeparateShinyTag && variantDisplay.label == "Shiny")
+                noHeaderValueY
+            else
+                valueY
+        val isShinyOnlyDisplay =
+            variantDisplay.showShinyIcon &&
+                !variantDisplay.needsSeparateShinyTag &&
+                variantDisplay.label == "Shiny"
+        val shinyValueY = when {
+            index == 3 -> primaryValueY.toFloat() - 2f
+            isInnerFrame -> primaryValueY.toFloat() - 2.4f
+            else -> primaryValueY.toFloat()
+        }
+        val headerScale =
+            if (primaryDisplays.size > 1 && inTransition) {
+                when {
+                    transitionProgress < 0.20f -> 0.5f * (1f - (transitionProgress / 0.20f))
+                    transitionProgress < 0.8f -> 0f
+                    else -> 0.5f * ((transitionProgress - 0.8f) / 0.3f)
+                }
+            } else {
+                0.5f
+            }
+        val maxWidth = frameWidth - 8
+        val baseTextWidth = Minecraft.getInstance().font.width(variantText.font(CobblemonResources.DEFAULT_LARGE))
+        val textScale = if (baseTextWidth > maxWidth) 0.75F else 1.0F
+        val animatedTextScale =
+            if (!inTransition) {
+                textScale
+            } else {
+                when {
+                    transitionProgress < 0.20f -> textScale * (1f - (transitionProgress / 0.20f))
+                    transitionProgress < 0.8f -> 0f
+                    else -> textScale * ((transitionProgress - 0.8f) / 0.3f)
+                }
+            }
+
+        if (!(variantDisplay.showShinyIcon && !variantDisplay.needsSeparateShinyTag && variantDisplay.label == "Shiny")) {
+            drawScaledText(
+                context = graphics,
+                text = headerComponent,
+                x = centerX + xOffset + xOffsetText,
+                y = headerY,
+                shadow = true,
+                centered = true,
+                scale = headerScale
+            )
+        }
+
+        val scaledTextWidth = (baseTextWidth * textScale).toInt()
+        val textCenterX = centerX + xOffset + xOffsetText
+        val textLeftX = textCenterX - (scaledTextWidth / 2)
+
+        if (variantDisplay.showShinyIcon) {
+            val iconScale = ScannerRenderConstants.SHINY_ICON_SCALE
+            val iconVisualWidth = (ScannerRenderConstants.SHINY_ICON_SIZE * iconScale).toInt()
+            val iconSpacing = 2
+
+            blitk(
+                matrixStack = poseStack,
+                texture = ScannerRenderConstants.SHINY_ICON,
+                x = (textLeftX - iconSpacing - iconVisualWidth) / iconScale,
+                y = (if (isShinyOnlyDisplay) shinyValueY else primaryValueY.toFloat()) / iconScale,
+                width = ScannerRenderConstants.SHINY_ICON_SIZE,
+                height = ScannerRenderConstants.SHINY_ICON_SIZE,
+                scale = iconScale
+            )
+        }
+
+        drawScaledText(
+            context = graphics,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = variantText,
+            x = textCenterX,
+            y = if (isShinyOnlyDisplay) shinyValueY else primaryValueY.toFloat(),
+            colour = variantDisplay.colour ?: 0xFFFFFF,
+            shadow = true,
+            centered = true,
+            scale = animatedTextScale
+        )
+
+        if (!renderState.showSeparateShinyTag) return
+
+        val shinySide = !isLeftSide
+        val shinyXOffsetText = getInfoFrameTextOffset(index, shinySide)
+        val shinyXOffset =
+            (if (isInnerFrame) -177 else -120) + if (shinySide) 0 else if (isInnerFrame) 234 else 148
+        val shinyTextCenterX = centerX + shinyXOffset + shinyXOffsetText
+        val shinyText = Component.literal("Shiny").copy().bold()
+        val shinyTextWidth = Minecraft.getInstance().font.width(shinyText.font(CobblemonResources.DEFAULT_LARGE))
+        val shinyTextScale = if (shinyTextWidth > maxWidth) 0.75F else 1.0F
+        val shinyScaledTextWidth = (shinyTextWidth * shinyTextScale).toInt()
+        val shinyTextLeftX = shinyTextCenterX - (shinyScaledTextWidth / 2)
+
+        blitk(
+            matrixStack = poseStack,
+            texture = PokedexScannerRenderer.infoFrameResource(shinySide, index),
+            x = centerX + shinyXOffset,
+            y = centerY + yOffset,
+            width = frameWidth,
+            height = frameHeight,
+            textureHeight = frameHeight * 10,
+            vOffset = ceil(effectiveFocusIntervals).toInt().coerceIn(0, 9) * frameHeight,
+            alpha = opacity
+        )
+
+        val shinyIconScale = ScannerRenderConstants.SHINY_ICON_SCALE
+        val shinyIconVisualWidth = (ScannerRenderConstants.SHINY_ICON_SIZE * shinyIconScale).toInt()
+
+        blitk(
+            matrixStack = poseStack,
+            texture = ScannerRenderConstants.SHINY_ICON,
+            x = (shinyTextLeftX - 2 - shinyIconVisualWidth) / shinyIconScale,
+            y = shinyValueY / shinyIconScale,
+            width = ScannerRenderConstants.SHINY_ICON_SIZE,
+            height = ScannerRenderConstants.SHINY_ICON_SIZE,
+            scale = shinyIconScale
+        )
+
+        drawScaledText(
+            context = graphics,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = shinyText,
+            x = shinyTextCenterX,
+            y = shinyValueY,
+            shadow = true,
+            centered = true,
+            scale = shinyTextScale
+        )
     }
 
     private fun renderCyclingInfoDisplay(
@@ -1535,7 +1852,8 @@ abstract class PokedexScannerRendererMixin {
         xOffsetText: Int,
         frameHeight: Int,
         effectiveFocusIntervals: Float,
-        opacity: Float
+        opacity: Float,
+        forceDrawFrame: Boolean
     ) {
         val isInnerFrame = index == 1 || index == 2
         val frameWidth =
@@ -1562,7 +1880,7 @@ abstract class PokedexScannerRendererMixin {
                 baseFrameIndex
             }
 
-        if (displays.size > 1) {
+        if (forceDrawFrame || displays.size > 1) {
             blitk(
                 matrixStack = poseStack,
                 texture = PokedexScannerRenderer.infoFrameResource(isLeftSide, index),
@@ -1634,12 +1952,50 @@ abstract class PokedexScannerRendererMixin {
             scale = headerScale
         )
 
+        val scaledTextWidth = (baseTextWidth * textScale).toInt()
+        val textCenterX = centerX + xOffset + xOffsetText
+        val textLeftX = textCenterX - (scaledTextWidth / 2)
+
+        if (display.showShinyIcon && animatedTextScale > 0F) {
+            val iconScale = ScannerRenderConstants.SHINY_ICON_SCALE
+            val iconVisualWidth = (ScannerRenderConstants.SHINY_ICON_SIZE * iconScale).toInt()
+            val animatedIconScale = iconScale * animatedTextScale
+
+            blitk(
+                matrixStack = poseStack,
+                texture = ScannerRenderConstants.SHINY_ICON,
+                x = (textLeftX - 2 - iconVisualWidth) / animatedIconScale,
+                y = valueY.toFloat() / animatedIconScale,
+                width = ScannerRenderConstants.SHINY_ICON_SIZE,
+                height = ScannerRenderConstants.SHINY_ICON_SIZE,
+                scale = animatedIconScale
+            )
+        }
+
+        if (display.genderIcon != null && display.genderIcon != Gender.GENDERLESS && animatedTextScale > 0F) {
+            val isMale = display.genderIcon == Gender.MALE
+            val symbol = if (isMale) "♂" else "♀"
+            val symbolText = Component.literal(symbol).copy().bold()
+            val symbolWidth =
+                (Minecraft.getInstance().font.width(symbolText.font(CobblemonResources.DEFAULT_LARGE)) * animatedTextScale).toInt()
+            drawScaledText(
+                context = graphics,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = symbolText,
+                x = textLeftX - 2 - symbolWidth,
+                y = valueY.toFloat(),
+                colour = if (isMale) 0x32CBFF else 0xFC5454,
+                shadow = true,
+                scale = animatedTextScale
+            )
+        }
+
         drawScaledText(
             context = graphics,
             font = CobblemonResources.DEFAULT_LARGE,
             text = value,
-            x = centerX + xOffset + xOffsetText,
-            y = valueY,
+            x = textCenterX,
+            y = valueY.toFloat(),
             colour = display.colour ?: 0xFFFFFF,
             shadow = true,
             centered = true,

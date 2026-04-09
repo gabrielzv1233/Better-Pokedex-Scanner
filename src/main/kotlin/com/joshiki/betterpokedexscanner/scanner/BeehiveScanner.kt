@@ -1,6 +1,7 @@
 package com.joshiki.betterpokedexscanner.scanner
 
 import com.joshiki.betterpokedexscanner.network.BeehiveDetailsResponsePayload
+import com.cobblemon.mod.common.pokemon.Gender
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
@@ -17,11 +18,16 @@ data class BeehiveScanSnapshot(
     val beeCount: Int? = null,
     val combeeCount: Int? = null,
     val unknownCount: Int? = null,
+    val femaleRareSpeciesId: String? = null,
+    val shinyRareSpeciesId: String? = null,
     val sedated: Boolean = false,
     val hasSavedFlowerPos: Boolean? = null
 ) {
     val frameDisplays: List<List<VariantDisplay>>
         get() = buildFrameDisplays()
+
+    val rareIndividualDisplays: List<VariantDisplay>
+        get() = buildRareIndividualDisplays()
 
     fun withServerDetails(payload: BeehiveDetailsResponsePayload): BeehiveScanSnapshot {
         return copy(
@@ -30,6 +36,8 @@ data class BeehiveScanSnapshot(
             beeCount = payload.beeCount,
             combeeCount = payload.combeeCount,
             unknownCount = payload.unknownCount,
+            femaleRareSpeciesId = payload.femaleRareSpeciesId,
+            shinyRareSpeciesId = payload.shinyRareSpeciesId,
             sedated = payload.sedated,
             hasSavedFlowerPos = payload.hasSavedFlowerPos
         )
@@ -154,6 +162,44 @@ data class BeehiveScanSnapshot(
                 }
             )
         }
+    }
+
+    private fun buildRareIndividualDisplays(): List<VariantDisplay> {
+        if ((occupantCount ?: 0) <= 0) return emptyList()
+
+        return buildList {
+            shinyRareSpeciesId?.let { speciesId ->
+                add(
+                    VariantDisplay(
+                        headerLabel = "Rare Individual Detected",
+                        label = "Shiny ${formatSpeciesName(speciesId)}",
+                        showShinyIcon = true,
+                        colour = 0xFFFFFF
+                    )
+                )
+            }
+
+            femaleRareSpeciesId?.let { speciesId ->
+                add(
+                    VariantDisplay(
+                        headerLabel = "Rare Individual Detected",
+                        label = "Female ${formatSpeciesName(speciesId)}",
+                        genderIcon = Gender.FEMALE,
+                        colour = 0xFFFFFF
+                    )
+                )
+            }
+        }
+    }
+
+    private fun formatSpeciesName(speciesId: String): String {
+        return speciesId
+            .substringAfter(':')
+            .split('_', '-')
+            .filter { it.isNotBlank() }
+            .joinToString(" ") { part ->
+                part.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            }
     }
 }
 

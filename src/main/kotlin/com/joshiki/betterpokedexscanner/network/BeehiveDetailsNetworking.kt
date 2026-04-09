@@ -29,6 +29,8 @@ object BeehiveDetailsNetworking {
                     beeCount = counts.beeCount,
                     combeeCount = counts.combeeCount,
                     unknownCount = counts.unknownCount,
+                    femaleRareSpeciesId = counts.femaleRareSpeciesId,
+                    shinyRareSpeciesId = counts.shinyRareSpeciesId,
                     sedated = blockEntity.isSedated,
                     hasSavedFlowerPos = hasSavedFlowerPos(blockEntity)
                 )
@@ -47,7 +49,9 @@ object BeehiveDetailsNetworking {
     private data class OccupantCounts(
         val beeCount: Int,
         val combeeCount: Int,
-        val unknownCount: Int
+        val unknownCount: Int,
+        val femaleRareSpeciesId: String?,
+        val shinyRareSpeciesId: String?
     )
 
     @Suppress("UNCHECKED_CAST")
@@ -65,11 +69,25 @@ object BeehiveDetailsNetworking {
         var beeCount = 0
         var combeeCount = 0
         var unknownCount = 0
+        var femaleRareSpeciesId: String? = null
+        var shinyRareSpeciesId: String? = null
 
         occupants.forEach { occupant ->
-            when (classifyOccupant(occupant.entityData())) {
+            val tag = extractEntityTag(occupant.entityData())
+            when (classifyOccupant(tag)) {
                 "bee" -> beeCount += 1
-                "combee" -> combeeCount += 1
+                "combee" -> {
+                    combeeCount += 1
+                    if (tag != null) {
+                        val speciesId = resolveSpeciesId(tag) ?: "combee"
+                        if (femaleRareSpeciesId == null && isFemaleCombee(tag)) {
+                            femaleRareSpeciesId = speciesId
+                        }
+                        if (shinyRareSpeciesId == null && isShinyCombee(tag)) {
+                            shinyRareSpeciesId = speciesId
+                        }
+                    }
+                }
                 else -> unknownCount += 1
             }
         }
@@ -77,12 +95,18 @@ object BeehiveDetailsNetworking {
         return OccupantCounts(
             beeCount = beeCount,
             combeeCount = combeeCount,
-            unknownCount = unknownCount
+            unknownCount = unknownCount,
+            femaleRareSpeciesId = femaleRareSpeciesId,
+            shinyRareSpeciesId = shinyRareSpeciesId
         )
     }
 
     private fun classifyOccupant(entityData: CustomData): String {
-        val tag = extractEntityTag(entityData) ?: return "unknown"
+        return classifyOccupant(extractEntityTag(entityData))
+    }
+
+    private fun classifyOccupant(tag: CompoundTag?): String {
+        tag ?: return "unknown"
         val entityId = tag.getString("id").lowercase()
         if (entityId == "minecraft:bee") {
             return "bee"
@@ -113,6 +137,62 @@ object BeehiveDetailsNetworking {
             directKeys.forEach { nestedKey ->
                 val value = nested.getString(nestedKey).takeIf { it.isNotBlank() }
                 if (value != null) return value.lowercase()
+            }
+        }
+
+        return null
+    }
+
+    private fun isFemaleCombee(tag: CompoundTag): Boolean {
+        return resolveGenderValue(tag)?.contains("female") == true
+    }
+
+    private fun isShinyCombee(tag: CompoundTag): Boolean {
+        return resolveBooleanValue(
+            tag = tag,
+            directKeys = listOf("shiny", "Shiny", "isShiny"),
+            nestedKeys = listOf("Pokemon", "pokemon", "Data", "data")
+        ) == true
+    }
+
+    private fun resolveGenderValue(tag: CompoundTag): String? {
+        val directKeys = listOf("gender", "Gender", "sex", "Sex")
+        directKeys.forEach { key ->
+            val value = tag.getString(key).takeIf { it.isNotBlank() }
+            if (value != null) return value.lowercase()
+        }
+
+        val nestedKeys = listOf("Pokemon", "pokemon", "Data", "data")
+        nestedKeys.forEach { key ->
+            if (!tag.contains(key, CompoundTag.TAG_COMPOUND.toInt())) return@forEach
+            val nested = tag.getCompound(key)
+            directKeys.forEach { nestedKey ->
+                val value = nested.getString(nestedKey).takeIf { it.isNotBlank() }
+                if (value != null) return value.lowercase()
+            }
+        }
+
+        return null
+    }
+
+    private fun resolveBooleanValue(
+        tag: CompoundTag,
+        directKeys: List<String>,
+        nestedKeys: List<String>
+    ): Boolean? {
+        directKeys.forEach { key ->
+            if (tag.contains(key)) {
+                return tag.getBoolean(key)
+            }
+        }
+
+        nestedKeys.forEach { key ->
+            if (!tag.contains(key, CompoundTag.TAG_COMPOUND.toInt())) return@forEach
+            val nested = tag.getCompound(key)
+            directKeys.forEach { nestedKey ->
+                if (nested.contains(nestedKey)) {
+                    return nested.getBoolean(nestedKey)
+                }
             }
         }
 

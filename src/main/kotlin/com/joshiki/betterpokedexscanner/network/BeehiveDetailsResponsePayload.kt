@@ -13,6 +13,8 @@ data class BeehiveDetailsResponsePayload(
     val beeCount: Int,
     val combeeCount: Int,
     val unknownCount: Int,
+    val femaleRareSpeciesId: String?,
+    val shinyRareSpeciesId: String?,
     val sedated: Boolean,
     val hasSavedFlowerPos: Boolean
 ) : CustomPacketPayload {
@@ -32,6 +34,8 @@ data class BeehiveDetailsResponsePayload(
                     buf.writeInt(payload.beeCount)
                     buf.writeInt(payload.combeeCount)
                     buf.writeInt(payload.unknownCount)
+                    buf.writeNullable(payload.femaleRareSpeciesId) { innerBuf, value -> innerBuf.writeUtf(value) }
+                    buf.writeNullable(payload.shinyRareSpeciesId) { innerBuf, value -> innerBuf.writeUtf(value) }
                     buf.writeBoolean(payload.sedated)
                     buf.writeBoolean(payload.hasSavedFlowerPos)
                 },
@@ -43,6 +47,8 @@ data class BeehiveDetailsResponsePayload(
                         beeCount = buf.readInt(),
                         combeeCount = buf.readInt(),
                         unknownCount = buf.readInt(),
+                        femaleRareSpeciesId = buf.readNullable { innerBuf -> innerBuf.readUtf() },
+                        shinyRareSpeciesId = buf.readNullable { innerBuf -> innerBuf.readUtf() },
                         sedated = buf.readBoolean(),
                         hasSavedFlowerPos = buf.readBoolean()
                     )

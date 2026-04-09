@@ -195,6 +195,10 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             CarouselSlotState(),
             CarouselSlotState(),
             CarouselSlotState(),
+            CarouselSlotState(),
+            CarouselSlotState(),
+            CarouselSlotState(),
+            CarouselSlotState(),
             CarouselSlotState()
         )
         carouselSlotStates = created
@@ -310,10 +314,12 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     ) == PokedexEntryProgress.CAUGHT
 
                 val hasSlowpokeTailDisplay = focusedSpeciesId == "cobblemon:slowpoke"
-
-                val frameCount = if (
+                val hasPrimaryDisplay =
                     hasSlowpokeTailDisplay || VariantLabelResolver.hasDisplay(resolvedPokemon, liveAspects)
-                ) 4 else 3
+                val frameCount =
+                    2 +
+                        (if (isPokemonInFocusOwned) 1 else 0) +
+                        (if (hasPrimaryDisplay) 1 else 0)
 
                 assignRandomInfoFrames(frameCount)
 
@@ -358,7 +364,9 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                 } else {
                     variantCycleTicksChimericShinies += 1F
-                    ensureInfoFrameCount(beehiveScan.frameDisplays.size)
+                    val activeBeehiveFrameCount =
+                        (BeehiveScanState.snapshot ?: beehiveScan).frameDisplays.size
+                    ensureInfoFrameCount(activeBeehiveFrameCount)
 
                     if (!BeehiveScanState.detailsRequestSent) {
                         ClientPlayNetworking.send(BeehiveDetailsRequestPayload(beehiveScan.blockPos))
@@ -384,8 +392,26 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
                         if (BeehiveScanState.focusIntervals >= PokedexUsageContext.FOCUS_INTERVALS) {
                             BeehiveScanState.focusIntervals = PokedexUsageContext.FOCUS_INTERVALS
+                            val snapshot = BeehiveScanState.snapshot
+                            val framePageCounts = snapshot?.frameDisplays?.map { it.size } ?: emptyList()
+                            val rarePageCounts =
+                                if (snapshot == null) {
+                                    emptyList()
+                                } else {
+                                    List(4) { displayIndex ->
+                                        if (
+                                            snapshot.frameDisplays.getOrNull(displayIndex)
+                                                ?.firstOrNull()
+                                                ?.headerLabel == "Inhabitants"
+                                        ) {
+                                            snapshot.rareIndividualDisplays.size
+                                        } else {
+                                            0
+                                        }
+                                    }
+                                }
                             tickCarouselScheduler(
-                                BeehiveScanState.snapshot?.frameDisplays?.map { it.size } ?: emptyList()
+                                framePageCounts + rarePageCounts
                             )
                         }
                     }
@@ -432,7 +458,8 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     RestorationTankScanState.focusIntervals = 0F
 
                     isPokemonInFocusOwned = false
-                    val frameCount = 4
+                    val canShowTankTyping = knownKnowledge == PokedexEntryProgress.CAUGHT
+                    val frameCount = if (canShowTankTyping) 4 else 3
                     assignRandomInfoFrames(frameCount)
 
                     newPokemonInfo = PokedexLearnedInformation.NONE

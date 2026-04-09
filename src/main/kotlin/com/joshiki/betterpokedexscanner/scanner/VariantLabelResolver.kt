@@ -1,6 +1,7 @@
 package com.joshiki.betterpokedexscanner.scanner
 
 import net.minecraft.client.resources.language.I18n
+import com.cobblemon.mod.common.pokemon.Gender
 
 data class VariantDisplay(
     val headerLabel: String? = null,
@@ -8,6 +9,7 @@ data class VariantDisplay(
     val label: String,
     val labelTranslationKey: String? = null,
     val showShinyIcon: Boolean = false,
+    val genderIcon: Gender? = null,
     val needsSeparateShinyTag: Boolean = false,
     val colour: Int? = null
 )
