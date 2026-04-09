@@ -28,10 +28,6 @@ object EnvironmentalScanState {
         snapshot = null
     }
 
-    fun resetIdleTimer() {
-        idleTicks = 0F
-    }
-
     fun beginFreshScan(snapshot: EnvironmentalScanSnapshot) {
         sessionId += 1
         active = true

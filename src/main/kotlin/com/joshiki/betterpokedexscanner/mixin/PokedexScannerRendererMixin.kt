@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.Overwrite
 import kotlin.math.ceil
 import com.joshiki.betterpokedexscanner.scanner.VariantLabelResolver
-import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 import com.joshiki.betterpokedexscanner.client.ScannerRenderConstants
 import com.joshiki.betterpokedexscanner.scanner.VariantCycleAccess

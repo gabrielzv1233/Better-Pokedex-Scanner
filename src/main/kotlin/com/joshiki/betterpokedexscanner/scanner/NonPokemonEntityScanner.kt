@@ -25,6 +25,7 @@ import net.minecraft.world.entity.monster.Phantom
 import net.minecraft.world.entity.monster.Slime
 import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.entity.decoration.ArmorStand
+import net.minecraft.world.entity.boss.EnderDragonPart
 import net.minecraft.world.entity.vehicle.Boat
 
 data class NonPokemonEntityScanSnapshot(
@@ -45,7 +46,8 @@ data class MirroredDisplayGroup(
 object NonPokemonEntityScanner {
 
     fun findTarget(user: LocalPlayer, zoomLevel: Int): NonPokemonEntityScanSnapshot? {
-        val entity = PokemonScanner.detectEntity(user, zoomLevel * 2) ?: return null
+        val detectedEntity = PokemonScanner.detectEntity(user, zoomLevel * 2) ?: return null
+        val entity = normalizeScanTarget(detectedEntity)
         if (entity is PokemonEntity || shouldIgnoreEntity(entity)) return null
 
         val frameDisplays = buildFrameDisplays(entity)
@@ -272,6 +274,7 @@ object NonPokemonEntityScanner {
         return buildList {
             resolveSaddledDisplay(entity)?.let(::add)
             resolveArmoredDisplay(entity)?.let(::add)
+            addAll(resolvePassengerDisplays(entity))
         }
     }
 
@@ -330,6 +333,13 @@ object NonPokemonEntityScanner {
             is Boat -> true
             is ArmorStand -> isArmorStandEmpty(entity)
             else -> BuiltInRegistries.ENTITY_TYPE.getKey(entity.type).path.contains("boat")
+        }
+    }
+
+    private fun normalizeScanTarget(entity: Entity): Entity {
+        return when (entity) {
+            is EnderDragonPart -> entity.parentMob
+            else -> entity
         }
     }
 
@@ -563,6 +573,17 @@ object NonPokemonEntityScanner {
             headerTranslationKey = headerTranslationKey,
             label = itemStack.hoverName.string
         )
+    }
+
+    private fun resolvePassengerDisplays(entity: Entity): List<VariantDisplay> {
+        return entity.passengers.map { passenger ->
+            val typeName = passenger.type.description.string
+            val displayName = passenger.displayName?.string ?: typeName
+            VariantDisplay(
+                headerTranslationKey = "betterpokedexscanner.header.entity.passenger",
+                label = if (displayName == typeName) typeName else displayName
+            )
+        }
     }
 
     private fun resolveCategoryLabel(entity: Entity): String {
