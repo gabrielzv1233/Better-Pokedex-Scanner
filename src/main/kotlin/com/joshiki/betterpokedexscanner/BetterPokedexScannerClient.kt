@@ -1,6 +1,7 @@
 package com.joshiki.betterpokedexscanner
 
 import com.joshiki.betterpokedexscanner.client.SlowpokeTailRegrowthClientState
+import com.joshiki.betterpokedexscanner.network.BeehiveDetailsNetworking
 import com.joshiki.betterpokedexscanner.network.EnvironmentalStructureNetworking
 import com.joshiki.betterpokedexscanner.network.RestorationTankRegistrationNetworking
 import com.joshiki.betterpokedexscanner.network.SlowpokeTailRegrowthResponsePayload
@@ -13,6 +14,7 @@ class BetterPokedexScannerClient : ClientModInitializer {
         VariantLabelLoader.register()
         RestorationTankRegistrationNetworking.registerClient()
         EnvironmentalStructureNetworking.registerClient()
+        BeehiveDetailsNetworking.registerClient()
 
         ClientPlayNetworking.registerGlobalReceiver(SlowpokeTailRegrowthResponsePayload.TYPE) { payload, context ->
             context.client().execute {

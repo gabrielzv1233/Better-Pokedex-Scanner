@@ -31,6 +31,7 @@ import com.joshiki.betterpokedexscanner.client.SlowpokeTailRegrowthClientState
 import com.joshiki.betterpokedexscanner.scanner.VariantDisplay
 import com.joshiki.betterpokedexscanner.client.RestorationTankScanState
 import com.joshiki.betterpokedexscanner.client.EnvironmentalScanState
+import com.joshiki.betterpokedexscanner.client.BeehiveScanState
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
 import com.joshiki.betterpokedexscanner.client.RestorationTankRegistrationState
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -48,6 +49,7 @@ import com.joshiki.betterpokedexscanner.scanner.VariantLabelRegistry
 import net.minecraft.client.resources.language.I18n
 import com.joshiki.betterpokedexscanner.scanner.VariantRenderState
 import com.joshiki.betterpokedexscanner.scanner.EnvironmentalScanSnapshot
+import com.joshiki.betterpokedexscanner.scanner.BeehiveScanSnapshot
 
 
 @Mixin(PokedexScannerRenderer::class)
@@ -86,7 +88,17 @@ abstract class PokedexScannerRendererMixin {
                 0F
             }
 
-        val effectiveScanningProgress = max(max(usageContext.scanningProgress, tankScanProgress), environmentScanProgress)
+        val beehiveScanProgress =
+            if (BeehiveScanState.active) {
+                BeehiveScanState.scanProgress
+            } else {
+                0F
+            }
+
+        val effectiveScanningProgress = max(
+            max(usageContext.scanningProgress, tankScanProgress),
+            max(environmentScanProgress, beehiveScanProgress)
+        )
 
         poseStack.pushPose()
         poseStack.translate(centerX.toFloat(), centerY.toFloat(), 0.0f)
@@ -170,7 +182,12 @@ abstract class PokedexScannerRendererMixin {
                     !EnvironmentalScanState.completed &&
                     EnvironmentalScanState.scanProgress > 0F
 
-        if (!showTankUnknown && !showTankRegister && !showEnvironmentUnknown) return
+        val showBeehiveUnknown =
+            BeehiveScanState.active &&
+                    BeehiveScanState.scanProgress > 0F &&
+                    BeehiveScanState.focusIntervals <= 0F
+
+        if (!showTankUnknown && !showTankRegister && !showEnvironmentUnknown && !showBeehiveUnknown) return
 
         val screenWidth = Minecraft.getInstance().window.guiScaledWidth
         val screenHeight = Minecraft.getInstance().window.guiScaledHeight
@@ -213,10 +230,11 @@ abstract class PokedexScannerRendererMixin {
                     centered = true
                 )
             }
-        } else if (showTankUnknown || showEnvironmentUnknown) {
+        } else if (showTankUnknown || showEnvironmentUnknown || showBeehiveUnknown) {
             val progress =
                 if (showTankUnknown) RestorationTankRegistrationState.scanProgress
-                else EnvironmentalScanState.scanProgress
+                else if (showEnvironmentUnknown) EnvironmentalScanState.scanProgress
+                else BeehiveScanState.scanProgress
             val unknownTexture =
                 if (showEnvironmentUnknown) ScannerRenderConstants.ENVIRONMENT_SCAN_MARK
                 else PokedexScannerRenderer.UNKNOWN_MARK
@@ -321,10 +339,19 @@ abstract class PokedexScannerRendererMixin {
                     RestorationTankScanState.speciesId != null &&
                     RestorationTankScanState.focusIntervals > 0F
 
+        val beehiveActive =
+            usageContext.scannableEntityInFocus == null &&
+                    !tankRegistrationActive &&
+                    !tankActive &&
+                    BeehiveScanState.active &&
+                    BeehiveScanState.snapshot != null &&
+                    BeehiveScanState.focusIntervals > 0F
+
         val environmentActive =
             usageContext.scannableEntityInFocus == null &&
                     !tankRegistrationActive &&
                     !tankActive &&
+                    !beehiveActive &&
                     EnvironmentalScanState.active &&
                     EnvironmentalScanState.snapshot != null &&
                     EnvironmentalScanState.focusIntervals > 0F
@@ -335,6 +362,7 @@ abstract class PokedexScannerRendererMixin {
 
         val effectiveFocusIntervals =
             if (environmentActive) EnvironmentalScanState.focusIntervals
+            else if (beehiveActive) BeehiveScanState.focusIntervals
             else if (tankActive) RestorationTankScanState.focusIntervals
             else usageContext.focusIntervals
 
@@ -348,6 +376,7 @@ abstract class PokedexScannerRendererMixin {
 
 
             infoDisplayedCounter++
+            val beehiveDisplayIndex = if (beehiveActive) infoDisplayedCounter - 1 else index
 
             val isInnerFrame = index == 1 || index == 2
             val frameHeight =
@@ -368,6 +397,11 @@ abstract class PokedexScannerRendererMixin {
                                 getEnvironmentalDisplaysForFrame(
                                     EnvironmentalScanState.snapshot,
                                     index
+                                ).size > 1
+                            } else if (beehiveActive) {
+                                getBeehiveDisplaysForFrame(
+                                    BeehiveScanState.snapshot,
+                                    beehiveDisplayIndex
                                 ).size > 1
                             } else if (index == 3 && tankActive && !tankRegistrationActive) {
                                 val progress = getTankProgressPercent(
@@ -468,13 +502,33 @@ abstract class PokedexScannerRendererMixin {
             }
 
             if (effectiveFocusIntervals >= PokedexUsageContext.FOCUS_INTERVALS &&
-                (usageContext.scannableEntityInFocus != null || tankActive || environmentActive)
+                (usageContext.scannableEntityInFocus != null || tankActive || beehiveActive || environmentActive)
             ) {
                 val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
                 val environmentalSnapshot = EnvironmentalScanState.snapshot
+                val beehiveSnapshot = BeehiveScanState.snapshot
 
                 if (infoDisplayedCounter == 1) {
-                    if (environmentActive) {
+                    if (beehiveActive) {
+                        renderBeehiveInfoFrame(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            usageContext = usageContext,
+                            snapshot = beehiveSnapshot ?: return@forEachIndexed,
+                            displayIndex = beehiveDisplayIndex,
+                            slotIndex = index,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            xOffset = xOffset,
+                            yOffset = yOffset,
+                            xOffsetText = xOffsetText,
+                            yOffsetText = yOffsetText,
+                            frameHeight = frameHeight,
+                            effectiveFocusIntervals = effectiveFocusIntervals,
+                            opacity = opacity
+                        )
+                    } else if (environmentActive) {
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
@@ -521,7 +575,26 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (infoDisplayedCounter == 2) {
-                    if (environmentActive) {
+                    if (beehiveActive) {
+                        renderBeehiveInfoFrame(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            usageContext = usageContext,
+                            snapshot = beehiveSnapshot ?: return@forEachIndexed,
+                            displayIndex = beehiveDisplayIndex,
+                            slotIndex = index,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            xOffset = xOffset,
+                            yOffset = yOffset,
+                            xOffsetText = xOffsetText,
+                            yOffsetText = yOffsetText,
+                            frameHeight = frameHeight,
+                            effectiveFocusIntervals = effectiveFocusIntervals,
+                            opacity = opacity
+                        )
+                    } else if (environmentActive) {
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
@@ -629,7 +702,26 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (infoDisplayedCounter == 3) {
-                    if (environmentActive) {
+                    if (beehiveActive) {
+                        renderBeehiveInfoFrame(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            usageContext = usageContext,
+                            snapshot = beehiveSnapshot ?: return@forEachIndexed,
+                            displayIndex = beehiveDisplayIndex,
+                            slotIndex = index,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            xOffset = xOffset,
+                            yOffset = yOffset,
+                            xOffsetText = xOffsetText,
+                            yOffsetText = yOffsetText,
+                            frameHeight = frameHeight,
+                            effectiveFocusIntervals = effectiveFocusIntervals,
+                            opacity = opacity
+                        )
+                    } else if (environmentActive) {
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
@@ -747,7 +839,26 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (infoDisplayedCounter == 4) {
-                    if (environmentActive) {
+                    if (beehiveActive) {
+                        renderBeehiveInfoFrame(
+                            graphics = graphics,
+                            poseStack = poseStack,
+                            usageContext = usageContext,
+                            snapshot = beehiveSnapshot ?: return@forEachIndexed,
+                            displayIndex = beehiveDisplayIndex,
+                            slotIndex = index,
+                            isLeftSide = isLeftSide,
+                            centerX = centerX,
+                            centerY = centerY,
+                            xOffset = xOffset,
+                            yOffset = yOffset,
+                            xOffsetText = xOffsetText,
+                            yOffsetText = yOffsetText,
+                            frameHeight = frameHeight,
+                            effectiveFocusIntervals = effectiveFocusIntervals,
+                            opacity = opacity
+                        )
+                    } else if (environmentActive) {
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
@@ -1358,6 +1469,52 @@ abstract class PokedexScannerRendererMixin {
 
     private fun getEnvironmentalDisplaysForFrame(
         snapshot: EnvironmentalScanSnapshot?,
+        index: Int
+    ): List<VariantDisplay> {
+        return snapshot?.frameDisplays?.getOrNull(index).orEmpty()
+    }
+
+    private fun renderBeehiveInfoFrame(
+        graphics: GuiGraphics,
+        poseStack: PoseStack,
+        usageContext: PokedexUsageContext,
+        snapshot: BeehiveScanSnapshot,
+        displayIndex: Int,
+        slotIndex: Int,
+        isLeftSide: Boolean,
+        centerX: Int,
+        centerY: Int,
+        xOffset: Int,
+        yOffset: Int,
+        xOffsetText: Int,
+        yOffsetText: Int,
+        frameHeight: Int,
+        effectiveFocusIntervals: Float,
+        opacity: Float
+    ) {
+        val displays = getBeehiveDisplaysForFrame(snapshot, displayIndex)
+        if (displays.isEmpty()) return
+        renderCyclingInfoDisplay(
+            graphics = graphics,
+            poseStack = poseStack,
+            usageContext = usageContext,
+            displays = displays,
+            index = slotIndex,
+            schedulerIndex = displayIndex,
+            isLeftSide = isLeftSide,
+            centerX = centerX,
+            centerY = centerY,
+            xOffset = xOffset,
+            yOffset = yOffset,
+            xOffsetText = xOffsetText,
+            frameHeight = frameHeight,
+            effectiveFocusIntervals = effectiveFocusIntervals,
+            opacity = opacity
+        )
+    }
+
+    private fun getBeehiveDisplaysForFrame(
+        snapshot: BeehiveScanSnapshot?,
         index: Int
     ): List<VariantDisplay> {
         return snapshot?.frameDisplays?.getOrNull(index).orEmpty()

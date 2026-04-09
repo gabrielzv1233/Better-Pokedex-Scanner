@@ -24,8 +24,10 @@ import com.joshiki.betterpokedexscanner.network.SlowpokeTailRegrowthRequestPaylo
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import com.joshiki.betterpokedexscanner.client.RestorationTankScanState
 import com.joshiki.betterpokedexscanner.client.EnvironmentalScanState
+import com.joshiki.betterpokedexscanner.client.BeehiveScanState
 import com.joshiki.betterpokedexscanner.scanner.RestorationTankScanner
 import com.joshiki.betterpokedexscanner.scanner.EnvironmentalScanner
+import com.joshiki.betterpokedexscanner.scanner.BeehiveScanner
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
@@ -33,6 +35,7 @@ import com.joshiki.betterpokedexscanner.client.RestorationTankRegistrationState
 import com.joshiki.betterpokedexscanner.network.StartTankScanningPayload
 import com.joshiki.betterpokedexscanner.network.FinishTankScanningPayload
 import com.joshiki.betterpokedexscanner.network.EnvironmentalStructureRequestPayload
+import com.joshiki.betterpokedexscanner.network.BeehiveDetailsRequestPayload
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -65,7 +68,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
     @Unique
     private var carouselSlotStates: MutableList<CarouselSlotState>? = null
     @Unique
-    private var carouselNextFlipDelayTicks: Float = 55F
+    private var carouselNextFlipDelayTicks: Float = 80F
 
     @Shadow
     abstract fun resetFocusedPokemonState()
@@ -128,14 +131,14 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             val state = states[index]
             if (state.cooldownTicks > 0F) return@mapIndexedNotNull null
 
-            val pageWeight = (count - 1).coerceAtMost(4).toFloat() * 0.45F
-            val stalenessWeight = (state.ticksSinceFlip / 28F).coerceAtMost(6F)
-            val jitter = kotlin.random.Random.nextFloat() * 1.15F
+            val pageWeight = (count - 1).coerceAtMost(4).toFloat() * 0.35F
+            val stalenessWeight = (state.ticksSinceFlip / 45F).coerceAtMost(6F)
+            val jitter = kotlin.random.Random.nextFloat() * 0.75F
             Triple(index, count, pageWeight + stalenessWeight + jitter)
         }
 
         if (candidates.isEmpty()) {
-            carouselNextFlipDelayTicks = 12F
+            carouselNextFlipDelayTicks = 24F
             return
         }
 
@@ -143,16 +146,10 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         val chosenState = states[chosen.first]
         chosenState.nextPage = (chosenState.currentPage + 1) % chosen.second
         chosenState.transitionProgress = 0.01F
-        chosenState.cooldownTicks = 26F + kotlin.random.Random.nextFloat() * 24F
+        chosenState.cooldownTicks = 70F + kotlin.random.Random.nextFloat() * 35F
         chosenState.ticksSinceFlip = 0F
 
-        val quickFollowup = kotlin.random.Random.nextFloat() < 0.28F
-        carouselNextFlipDelayTicks =
-            if (quickFollowup) {
-                10F + kotlin.random.Random.nextFloat() * 16F
-            } else {
-                34F + kotlin.random.Random.nextFloat() * 34F
-            }
+        carouselNextFlipDelayTicks = 48F + kotlin.random.Random.nextFloat() * 32F
     }
 
     override fun resetCarouselScheduler() {
@@ -163,7 +160,28 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             it.cooldownTicks = 0F
             it.ticksSinceFlip = 0F
         }
-        carouselNextFlipDelayTicks = 55F
+        carouselNextFlipDelayTicks = 80F
+    }
+
+    @Unique
+    private fun assignRandomInfoFrames(frameCount: Int) {
+        availableInfoFrames = mutableListOf(null, null, null, null)
+
+        for (i in 0 until frameCount.coerceIn(0, availableInfoFrames.size)) {
+            var randomIndex = Random.nextInt(availableInfoFrames.size)
+            if (availableInfoFrames[randomIndex] != null) {
+                randomIndex = availableInfoFrames.indexOfFirst { it == null }
+            }
+            availableInfoFrames[randomIndex] = Random.nextBoolean()
+        }
+    }
+
+    @Unique
+    private fun ensureInfoFrameCount(frameCount: Int) {
+        if (availableInfoFrames.count { it != null } != frameCount.coerceIn(0, 4)) {
+            assignRandomInfoFrames(frameCount)
+            resetCarouselScheduler()
+        }
     }
 
     @Unique
@@ -186,6 +204,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
     @Inject(method = ["stopUsing"], at = [At("HEAD")])
     private fun clearCustomScanStateOnStop(ticks: Int, sound: ResourceLocation?, ci: CallbackInfo) {
         RestorationTankScanState.clear()
+        BeehiveScanState.clear()
         SlowpokeTailRegrowthClientState.clear()
         variantCycleTicksChimericShinies = 0F
         RestorationTankRegistrationState.clear()
@@ -211,6 +230,13 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             // Add another 9x so the total matches the normal scanned-entity speed (~10x).
             innerRingRotation = (innerRingRotation + (updateInterval * 9F)) % 360
         } else if (
+            BeehiveScanState.active &&
+            BeehiveScanState.scanProgress > 0F
+        ) {
+            val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !Minecraft.getInstance().isPaused } ?: 0F
+            val updateInterval = (tickDelta / 20F) * PokedexUsageContext.RENDER_UPDATES_PER_SECOND
+            innerRingRotation = (innerRingRotation + (updateInterval * 9F)) % 360
+        } else if (
             EnvironmentalScanState.active &&
             !EnvironmentalScanState.completed &&
             EnvironmentalScanState.scanProgress > 0F
@@ -234,6 +260,15 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             }
         }
 
+        if (BeehiveScanState.closing) {
+            BeehiveScanState.focusIntervals =
+                (BeehiveScanState.focusIntervals - 2.5F).coerceAtLeast(0F)
+
+            if (BeehiveScanState.focusIntervals <= 0F) {
+                BeehiveScanState.clear()
+            }
+        }
+
         val targetScannableEntity = PokemonScanner.findScannableEntity(user, zoomLevel.toInt())
 
 
@@ -247,6 +282,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                 resetCarouselScheduler()
 
                 RestorationTankScanState.beginClosing()
+                BeehiveScanState.beginClosing()
 
                 SlowpokeTailRegrowthClientState.clear()
                 RestorationTankRegistrationState.clear()
@@ -273,21 +309,13 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                         resolvedPokemon.getApparentSpecies().resourceIdentifier
                     ) == PokedexEntryProgress.CAUGHT
 
-                availableInfoFrames = mutableListOf(null, null, null, null)
-
                 val hasSlowpokeTailDisplay = focusedSpeciesId == "cobblemon:slowpoke"
 
                 val frameCount = if (
                     hasSlowpokeTailDisplay || VariantLabelResolver.hasDisplay(resolvedPokemon, liveAspects)
                 ) 4 else 3
 
-                for (i in 0 until frameCount) {
-                    var randomIndex = Random.nextInt(availableInfoFrames.size)
-                    if (availableInfoFrames[randomIndex] != null) {
-                        randomIndex = availableInfoFrames.indexOfFirst { it == null }
-                    }
-                    availableInfoFrames[randomIndex] = Random.nextBoolean()
-                }
+                assignRandomInfoFrames(frameCount)
 
                 newPokemonInfo = CobblemonClient.clientPokedexData.getNewInformation(resolvedPokemon)
                 if (newPokemonInfo == PokedexLearnedInformation.NONE) {
@@ -299,6 +327,70 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                 variantCycleTicksChimericShinies += 1F
             }
         } else {
+            val beehiveScan = BeehiveScanner.findBeehiveTarget(user)
+
+            if (beehiveScan != null) {
+                EnvironmentalScanState.suspendForTarget()
+
+                val isNewBeehiveTarget =
+                    !BeehiveScanState.active ||
+                        BeehiveScanState.blockPos != beehiveScan.blockPos
+
+                if (isNewBeehiveTarget) {
+                    resetFocusedPokemonState()
+                    scannableEntityInFocus = null
+                    variantCycleTicksChimericShinies = 0F
+                    resetCarouselScheduler()
+
+                    SlowpokeTailRegrowthClientState.clear()
+                    RestorationTankScanState.beginClosing()
+                    RestorationTankRegistrationState.clear()
+
+                    BeehiveScanState.set(beehiveScan)
+                    ClientPlayNetworking.send(BeehiveDetailsRequestPayload(beehiveScan.blockPos))
+                    BeehiveScanState.markDetailsRequestSent()
+
+                    isPokemonInFocusOwned = false
+                    assignRandomInfoFrames(beehiveScan.frameDisplays.size)
+
+                    newPokemonInfo = PokedexLearnedInformation.NONE
+
+                    playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
+                } else {
+                    variantCycleTicksChimericShinies += 1F
+                    ensureInfoFrameCount(beehiveScan.frameDisplays.size)
+
+                    if (!BeehiveScanState.detailsRequestSent) {
+                        ClientPlayNetworking.send(BeehiveDetailsRequestPayload(beehiveScan.blockPos))
+                        BeehiveScanState.markDetailsRequestSent()
+                    }
+
+                    if (BeehiveScanState.scanProgress < PokedexUsageContext.MAX_SCAN_PROGRESS) {
+                        BeehiveScanState.scanProgress =
+                            (BeehiveScanState.scanProgress + 2.5F)
+                                .coerceAtMost(PokedexUsageContext.MAX_SCAN_PROGRESS.toFloat())
+
+                        if (variantCycleTicksChimericShinies % 2F == 0F) {
+                            playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
+                        }
+
+                        if (BeehiveScanState.scanProgress >= PokedexUsageContext.MAX_SCAN_PROGRESS) {
+                            playSound(CobblemonSounds.POKEDEX_SCAN_REGISTER_ASPECT)
+                        }
+                    } else {
+                        BeehiveScanState.focusIntervals =
+                            (BeehiveScanState.focusIntervals + 2.5F)
+                                .coerceAtMost(PokedexUsageContext.FOCUS_INTERVALS)
+
+                        if (BeehiveScanState.focusIntervals >= PokedexUsageContext.FOCUS_INTERVALS) {
+                            BeehiveScanState.focusIntervals = PokedexUsageContext.FOCUS_INTERVALS
+                            tickCarouselScheduler(
+                                BeehiveScanState.snapshot?.frameDisplays?.map { it.size } ?: emptyList()
+                            )
+                        }
+                    }
+                }
+            } else {
             val tankScan = RestorationTankScanner.findRestorationTankTarget(user)
 
             if (tankScan != null) {
@@ -318,6 +410,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     resetCarouselScheduler()
 
                     SlowpokeTailRegrowthClientState.clear()
+                    BeehiveScanState.beginClosing()
                     RestorationTankRegistrationState.clear()
 
                     if (speciesUnknown && tankScan.validSpecies) {
@@ -339,16 +432,8 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     RestorationTankScanState.focusIntervals = 0F
 
                     isPokemonInFocusOwned = false
-                    availableInfoFrames = mutableListOf(null, null, null, null)
-
                     val frameCount = 4
-                    for (i in 0 until frameCount) {
-                        var randomIndex = Random.nextInt(availableInfoFrames.size)
-                        if (availableInfoFrames[randomIndex] != null) {
-                            randomIndex = availableInfoFrames.indexOfFirst { it == null }
-                        }
-                        availableInfoFrames[randomIndex] = Random.nextBoolean()
-                    }
+                    assignRandomInfoFrames(frameCount)
 
                     newPokemonInfo = PokedexLearnedInformation.NONE
 
@@ -410,6 +495,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                 scannableEntityInFocus = null
                 SlowpokeTailRegrowthClientState.clear()
                 RestorationTankScanState.beginClosing()
+                BeehiveScanState.beginClosing()
                 RestorationTankRegistrationState.clear()
 
                 val activationThreshold =
@@ -425,15 +511,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
                     if (EnvironmentalScanState.idleTicks >= activationThreshold) {
                         val snapshot = EnvironmentalScanner.sample(user)
-                        availableInfoFrames = mutableListOf(null, null, null, null)
-
-                        for (i in 0 until 4) {
-                            var randomIndex = Random.nextInt(availableInfoFrames.size)
-                            if (availableInfoFrames[randomIndex] != null) {
-                                randomIndex = availableInfoFrames.indexOfFirst { it == null }
-                            }
-                            availableInfoFrames[randomIndex] = Random.nextBoolean()
-                        }
+                        assignRandomInfoFrames(snapshot.frameDisplays.size)
 
                         newPokemonInfo = PokedexLearnedInformation.NONE
                         isPokemonInFocusOwned = false
@@ -491,6 +569,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                         }
                     }
                 }
+            }
             }
         }
     }

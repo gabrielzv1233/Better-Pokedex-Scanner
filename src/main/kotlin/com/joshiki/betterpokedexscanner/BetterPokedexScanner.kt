@@ -1,6 +1,7 @@
 package com.joshiki.betterpokedexscanner
 
 import com.joshiki.betterpokedexscanner.network.EnvironmentalStructureNetworking
+import com.joshiki.betterpokedexscanner.network.BeehiveDetailsNetworking
 import com.joshiki.betterpokedexscanner.network.RestorationTankRegistrationNetworking
 import com.joshiki.betterpokedexscanner.network.SlowpokeTailRegrowthNetworking
 import net.fabricmc.api.ModInitializer
@@ -10,5 +11,6 @@ class BetterPokedexScanner : ModInitializer {
         SlowpokeTailRegrowthNetworking.registerCommon()
         RestorationTankRegistrationNetworking.registerCommon()
         EnvironmentalStructureNetworking.registerCommon()
+        BeehiveDetailsNetworking.registerCommon()
     }
 }
