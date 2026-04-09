@@ -32,6 +32,7 @@ import com.joshiki.betterpokedexscanner.scanner.VariantDisplay
 import com.joshiki.betterpokedexscanner.client.RestorationTankScanState
 import com.joshiki.betterpokedexscanner.client.EnvironmentalScanState
 import com.joshiki.betterpokedexscanner.client.BeehiveScanState
+import com.joshiki.betterpokedexscanner.client.NonPokemonEntityScanState
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
 import com.joshiki.betterpokedexscanner.client.RestorationTankRegistrationState
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -50,6 +51,7 @@ import net.minecraft.client.resources.language.I18n
 import com.joshiki.betterpokedexscanner.scanner.VariantRenderState
 import com.joshiki.betterpokedexscanner.scanner.EnvironmentalScanSnapshot
 import com.joshiki.betterpokedexscanner.scanner.BeehiveScanSnapshot
+import com.joshiki.betterpokedexscanner.scanner.NonPokemonEntityScanSnapshot
 
 
 @Mixin(PokedexScannerRenderer::class)
@@ -95,9 +97,16 @@ abstract class PokedexScannerRendererMixin {
                 0F
             }
 
+        val nonPokemonEntityScanProgress =
+            if (NonPokemonEntityScanState.active && NonPokemonEntityScanState.focusIntervals <= 0F) {
+                NonPokemonEntityScanState.scanProgress
+            } else {
+                0F
+            }
+
         val effectiveScanningProgress = max(
             max(usageContext.scanningProgress, tankScanProgress),
-            max(environmentScanProgress, beehiveScanProgress)
+            max(max(environmentScanProgress, beehiveScanProgress), nonPokemonEntityScanProgress)
         )
 
         poseStack.pushPose()
@@ -187,7 +196,12 @@ abstract class PokedexScannerRendererMixin {
                     BeehiveScanState.scanProgress > 0F &&
                     BeehiveScanState.focusIntervals <= 0F
 
-        if (!showTankUnknown && !showTankRegister && !showEnvironmentUnknown && !showBeehiveUnknown) return
+        val showNonPokemonEntityUnknown =
+            NonPokemonEntityScanState.active &&
+                    NonPokemonEntityScanState.scanProgress > 0F &&
+                    NonPokemonEntityScanState.focusIntervals <= 0F
+
+        if (!showTankUnknown && !showTankRegister && !showEnvironmentUnknown && !showBeehiveUnknown && !showNonPokemonEntityUnknown) return
 
         val screenWidth = Minecraft.getInstance().window.guiScaledWidth
         val screenHeight = Minecraft.getInstance().window.guiScaledHeight
@@ -234,7 +248,8 @@ abstract class PokedexScannerRendererMixin {
             val progress =
                 if (showTankUnknown) RestorationTankRegistrationState.scanProgress
                 else if (showEnvironmentUnknown) EnvironmentalScanState.scanProgress
-                else BeehiveScanState.scanProgress
+                else if (showBeehiveUnknown) BeehiveScanState.scanProgress
+                else NonPokemonEntityScanState.scanProgress
             val unknownTexture =
                 if (showEnvironmentUnknown) ScannerRenderConstants.ENVIRONMENT_SCAN_MARK
                 else PokedexScannerRenderer.UNKNOWN_MARK
@@ -356,12 +371,23 @@ abstract class PokedexScannerRendererMixin {
                     EnvironmentalScanState.snapshot != null &&
                     EnvironmentalScanState.focusIntervals > 0F
 
+        val nonPokemonEntityActive =
+            usageContext.scannableEntityInFocus == null &&
+                    !tankRegistrationActive &&
+                    !tankActive &&
+                    !beehiveActive &&
+                    !environmentActive &&
+                    NonPokemonEntityScanState.active &&
+                    NonPokemonEntityScanState.snapshot != null &&
+                    NonPokemonEntityScanState.focusIntervals > 0F
+
         if (tankRegistrationActive && usageContext.scannableEntityInFocus == null) {
             return
         }
 
         val effectiveFocusIntervals =
             if (environmentActive) EnvironmentalScanState.focusIntervals
+            else if (nonPokemonEntityActive) NonPokemonEntityScanState.focusIntervals
             else if (beehiveActive) BeehiveScanState.focusIntervals
             else if (tankActive) RestorationTankScanState.focusIntervals
             else usageContext.focusIntervals
@@ -375,7 +401,8 @@ abstract class PokedexScannerRendererMixin {
                 !tankRegistrationActive &&
                 !tankActive &&
                 !beehiveActive &&
-                !environmentActive
+                !environmentActive &&
+                !nonPokemonEntityActive
         val pokemonTypeVisible = pokemonActive && usageContext.isPokemonInFocusOwned
         val pokemonPrimaryDisplayCounter = if (pokemonTypeVisible) 4 else 3
 
@@ -388,6 +415,7 @@ abstract class PokedexScannerRendererMixin {
 
             infoDisplayedCounter++
             val beehiveDisplayIndex = if (beehiveActive) infoDisplayedCounter - 1 else index
+            val nonPokemonEntityDisplayIndex = if (nonPokemonEntityActive) infoDisplayedCounter - 1 else index
 
             val isInnerFrame = index == 1 || index == 2
             val frameHeight =
@@ -408,6 +436,11 @@ abstract class PokedexScannerRendererMixin {
                                 getEnvironmentalDisplaysForFrame(
                                     EnvironmentalScanState.snapshot,
                                     index
+                                ).size > 1
+                            } else if (nonPokemonEntityActive) {
+                                getNonPokemonEntityDisplaysForFrame(
+                                    NonPokemonEntityScanState.snapshot,
+                                    nonPokemonEntityDisplayIndex
                                 ).size > 1
                             } else if (beehiveActive) {
                                 getBeehiveDisplaysForFrame(
@@ -460,11 +493,12 @@ abstract class PokedexScannerRendererMixin {
             }
 
             if (effectiveFocusIntervals >= PokedexUsageContext.FOCUS_INTERVALS &&
-                (usageContext.scannableEntityInFocus != null || tankActive || beehiveActive || environmentActive)
+                (usageContext.scannableEntityInFocus != null || tankActive || beehiveActive || environmentActive || nonPokemonEntityActive)
             ) {
                 val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
                 val environmentalSnapshot = EnvironmentalScanState.snapshot
                 val beehiveSnapshot = BeehiveScanState.snapshot
+                val nonPokemonEntitySnapshot = NonPokemonEntityScanState.snapshot
 
                 if (beehiveActive) {
                     renderBeehiveInfoFrame(
@@ -481,6 +515,43 @@ abstract class PokedexScannerRendererMixin {
                         yOffset = yOffset,
                         xOffsetText = xOffsetText,
                         yOffsetText = yOffsetText,
+                        frameHeight = frameHeight,
+                        effectiveFocusIntervals = effectiveFocusIntervals,
+                        opacity = opacity
+                    )
+                    return@forEachIndexed
+                }
+
+                if (nonPokemonEntityActive) {
+                    renderNonPokemonEntityInfoFrame(
+                        graphics = graphics,
+                        poseStack = poseStack,
+                        usageContext = usageContext,
+                        snapshot = nonPokemonEntitySnapshot ?: return@forEachIndexed,
+                        displayIndex = nonPokemonEntityDisplayIndex,
+                        slotIndex = index,
+                        isLeftSide = isLeftSide,
+                        centerX = centerX,
+                        centerY = centerY,
+                        xOffset = xOffset,
+                        yOffset = yOffset,
+                        xOffsetText = xOffsetText,
+                        frameHeight = frameHeight,
+                        effectiveFocusIntervals = effectiveFocusIntervals,
+                        opacity = opacity
+                    )
+
+                    renderNonPokemonEntityMirroredFrames(
+                        graphics = graphics,
+                        poseStack = poseStack,
+                        usageContext = usageContext,
+                        snapshot = nonPokemonEntitySnapshot ?: return@forEachIndexed,
+                        displayIndex = nonPokemonEntityDisplayIndex,
+                        slotIndex = index,
+                        isLeftSide = isLeftSide,
+                        centerX = centerX,
+                        centerY = centerY,
+                        yOffset = yOffset,
                         frameHeight = frameHeight,
                         effectiveFocusIntervals = effectiveFocusIntervals,
                         opacity = opacity
@@ -1411,8 +1482,101 @@ abstract class PokedexScannerRendererMixin {
         )
     }
 
+    private fun renderNonPokemonEntityInfoFrame(
+        graphics: GuiGraphics,
+        poseStack: PoseStack,
+        usageContext: PokedexUsageContext,
+        snapshot: NonPokemonEntityScanSnapshot,
+        displayIndex: Int,
+        slotIndex: Int,
+        isLeftSide: Boolean,
+        centerX: Int,
+        centerY: Int,
+        xOffset: Int,
+        yOffset: Int,
+        xOffsetText: Int,
+        frameHeight: Int,
+        effectiveFocusIntervals: Float,
+        opacity: Float
+    ) {
+        val frameIndex = if (snapshot.useFixedSlotLayout) slotIndex else displayIndex
+        val displays = getNonPokemonEntityDisplaysForFrame(snapshot, frameIndex)
+        if (displays.isEmpty()) return
+        renderCyclingInfoDisplay(
+            graphics = graphics,
+            poseStack = poseStack,
+            usageContext = usageContext,
+            displays = displays,
+            index = slotIndex,
+            schedulerIndex = frameIndex,
+            isLeftSide = isLeftSide,
+            centerX = centerX,
+            centerY = centerY,
+            xOffset = xOffset,
+            yOffset = yOffset,
+            xOffsetText = xOffsetText,
+            frameHeight = frameHeight,
+            effectiveFocusIntervals = effectiveFocusIntervals,
+            opacity = opacity,
+            forceDrawFrame = false
+        )
+    }
+
+    private fun renderNonPokemonEntityMirroredFrames(
+        graphics: GuiGraphics,
+        poseStack: PoseStack,
+        usageContext: PokedexUsageContext,
+        snapshot: NonPokemonEntityScanSnapshot,
+        displayIndex: Int,
+        slotIndex: Int,
+        isLeftSide: Boolean,
+        centerX: Int,
+        centerY: Int,
+        yOffset: Int,
+        frameHeight: Int,
+        effectiveFocusIntervals: Float,
+        opacity: Float
+    ) {
+        val anchorIndex = if (snapshot.useFixedSlotLayout) slotIndex else displayIndex
+        val mirroredSide = !isLeftSide
+        val mirroredXOffset =
+            (if (slotIndex == 1 || slotIndex == 2) -177 else -120) +
+                if (mirroredSide) 0 else if (slotIndex == 1 || slotIndex == 2) 234 else 148
+
+        snapshot.mirroredDisplayGroups.forEachIndexed { mirroredGroupIndex, mirroredGroup ->
+            if (mirroredGroup.anchorDisplayIndex != anchorIndex) return@forEachIndexed
+            if (mirroredGroup.displays.isEmpty()) return@forEachIndexed
+
+            renderCyclingInfoDisplay(
+                graphics = graphics,
+                poseStack = poseStack,
+                usageContext = usageContext,
+                displays = mirroredGroup.displays,
+                index = slotIndex,
+                schedulerIndex = snapshot.frameDisplays.size + mirroredGroupIndex,
+                isLeftSide = mirroredSide,
+                centerX = centerX,
+                centerY = centerY,
+                xOffset = mirroredXOffset,
+                yOffset = yOffset,
+                xOffsetText = getInfoFrameTextOffset(slotIndex, mirroredSide),
+                frameHeight = frameHeight,
+                effectiveFocusIntervals = effectiveFocusIntervals,
+                opacity = opacity,
+                forceDrawFrame = true
+            )
+        }
+    }
+
     private fun getEnvironmentalDisplaysForFrame(
         snapshot: EnvironmentalScanSnapshot?,
+        index: Int
+    ): List<VariantDisplay> {
+        return snapshot?.frameDisplays?.getOrNull(index).orEmpty()
+    }
+
+    private fun getNonPokemonEntityDisplaysForFrame(
+        snapshot: NonPokemonEntityScanSnapshot?,
         index: Int
     ): List<VariantDisplay> {
         return snapshot?.frameDisplays?.getOrNull(index).orEmpty()

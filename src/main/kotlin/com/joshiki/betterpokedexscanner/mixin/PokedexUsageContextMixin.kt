@@ -25,9 +25,11 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import com.joshiki.betterpokedexscanner.client.RestorationTankScanState
 import com.joshiki.betterpokedexscanner.client.EnvironmentalScanState
 import com.joshiki.betterpokedexscanner.client.BeehiveScanState
+import com.joshiki.betterpokedexscanner.client.NonPokemonEntityScanState
 import com.joshiki.betterpokedexscanner.scanner.RestorationTankScanner
 import com.joshiki.betterpokedexscanner.scanner.EnvironmentalScanner
 import com.joshiki.betterpokedexscanner.scanner.BeehiveScanner
+import com.joshiki.betterpokedexscanner.scanner.NonPokemonEntityScanner
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
@@ -177,9 +179,30 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
     }
 
     @Unique
+    private fun assignFixedInfoFrames(visibleSlots: List<Boolean>) {
+        availableInfoFrames = mutableListOf(null, null, null, null)
+
+        visibleSlots.take(availableInfoFrames.size).forEachIndexed { index, isVisible ->
+            if (isVisible) {
+                availableInfoFrames[index] = Random.nextBoolean()
+            }
+        }
+    }
+
+    @Unique
     private fun ensureInfoFrameCount(frameCount: Int) {
         if (availableInfoFrames.count { it != null } != frameCount.coerceIn(0, 4)) {
             assignRandomInfoFrames(frameCount)
+            resetCarouselScheduler()
+        }
+    }
+
+    @Unique
+    private fun ensureFixedInfoFrames(visibleSlots: List<Boolean>) {
+        val desiredSlots = visibleSlots.take(4)
+        val currentSlots = availableInfoFrames.map { it != null }.take(4)
+        if (currentSlots != desiredSlots) {
+            assignFixedInfoFrames(desiredSlots)
             resetCarouselScheduler()
         }
     }
@@ -209,6 +232,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
     private fun clearCustomScanStateOnStop(ticks: Int, sound: ResourceLocation?, ci: CallbackInfo) {
         RestorationTankScanState.clear()
         BeehiveScanState.clear()
+        NonPokemonEntityScanState.clear()
         SlowpokeTailRegrowthClientState.clear()
         variantCycleTicksBetterPokedexScanner = 0F
         RestorationTankRegistrationState.clear()
@@ -248,6 +272,14 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !Minecraft.getInstance().isPaused } ?: 0F
             val updateInterval = (tickDelta / 20F) * PokedexUsageContext.RENDER_UPDATES_PER_SECOND
             innerRingRotation = (innerRingRotation + (updateInterval * 9F)) % 360
+        } else if (
+            NonPokemonEntityScanState.active &&
+            NonPokemonEntityScanState.scanProgress > 0F &&
+            NonPokemonEntityScanState.focusIntervals <= 0F
+        ) {
+            val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !Minecraft.getInstance().isPaused } ?: 0F
+            val updateInterval = (tickDelta / 20F) * PokedexUsageContext.RENDER_UPDATES_PER_SECOND
+            innerRingRotation = (innerRingRotation + (updateInterval * 9F)) % 360
         }
     }
 
@@ -274,12 +306,88 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         }
 
         val targetScannableEntity = PokemonScanner.findScannableEntity(user, zoomLevel.toInt())
+        val targetNonPokemonEntity = NonPokemonEntityScanner.findTarget(user, zoomLevel.toInt())
 
-
-        if (targetScannableEntity != null) {
+        if (targetNonPokemonEntity != null) {
             EnvironmentalScanState.suspendForTarget()
+            resetFocusedPokemonState()
+            scannableEntityInFocus = null
 
+            val isNewEntityTarget =
+                !NonPokemonEntityScanState.active ||
+                    NonPokemonEntityScanState.snapshot?.entityId != targetNonPokemonEntity.entityId
+            val isCachedEntityType =
+                NonPokemonEntityScanState.cachedEntityTypeId == targetNonPokemonEntity.entityTypeId
+
+            if (isNewEntityTarget) {
+                variantCycleTicksBetterPokedexScanner = 0F
+                resetCarouselScheduler()
+
+                SlowpokeTailRegrowthClientState.clear()
+                RestorationTankScanState.beginClosing()
+                BeehiveScanState.beginClosing()
+                RestorationTankRegistrationState.clear()
+
+                if (isCachedEntityType) {
+                    NonPokemonEntityScanState.restoreCached(
+                        snapshot = targetNonPokemonEntity,
+                        completedProgress = PokedexUsageContext.MAX_SCAN_PROGRESS.toFloat()
+                    )
+                } else {
+                    NonPokemonEntityScanState.clearCached()
+                    NonPokemonEntityScanState.set(targetNonPokemonEntity)
+                }
+
+                isPokemonInFocusOwned = false
+                if (targetNonPokemonEntity.useFixedSlotLayout) {
+                    assignFixedInfoFrames(targetNonPokemonEntity.fixedVisibleSlots)
+                } else {
+                    assignRandomInfoFrames(targetNonPokemonEntity.frameDisplays.size)
+                }
+
+                newPokemonInfo = PokedexLearnedInformation.NONE
+
+                playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
+            } else {
+                variantCycleTicksBetterPokedexScanner += 1F
+                    if (targetNonPokemonEntity.useFixedSlotLayout) {
+                        ensureFixedInfoFrames(targetNonPokemonEntity.fixedVisibleSlots)
+                    } else {
+                        ensureInfoFrameCount(targetNonPokemonEntity.frameDisplays.size)
+                    }
+
+                    if (NonPokemonEntityScanState.scanProgress < PokedexUsageContext.MAX_SCAN_PROGRESS) {
+                        NonPokemonEntityScanState.scanProgress =
+                            (NonPokemonEntityScanState.scanProgress + 2.5F)
+                                .coerceAtMost(PokedexUsageContext.MAX_SCAN_PROGRESS.toFloat())
+
+                    if (variantCycleTicksBetterPokedexScanner % 2F == 0F) {
+                        playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
+                    }
+
+                        if (NonPokemonEntityScanState.scanProgress >= PokedexUsageContext.MAX_SCAN_PROGRESS) {
+                            NonPokemonEntityScanState.markCached()
+                            playSound(CobblemonSounds.POKEDEX_SCAN_REGISTER_ASPECT)
+                        }
+                } else {
+                    NonPokemonEntityScanState.focusIntervals =
+                        (NonPokemonEntityScanState.focusIntervals + 2.5F)
+                            .coerceAtMost(PokedexUsageContext.FOCUS_INTERVALS)
+
+                    if (NonPokemonEntityScanState.focusIntervals >= PokedexUsageContext.FOCUS_INTERVALS) {
+                        NonPokemonEntityScanState.focusIntervals = PokedexUsageContext.FOCUS_INTERVALS
+                        val mirroredPageCounts =
+                            targetNonPokemonEntity.mirroredDisplayGroups.map { it.displays.size }
+                        tickCarouselScheduler(
+                            targetNonPokemonEntity.frameDisplays.map { it.size } + mirroredPageCounts
+                        )
+                    }
+                }
+            }
+        } else if (targetScannableEntity != null) {
+            EnvironmentalScanState.suspendForTarget()
             if (targetScannableEntity != scannableEntityInFocus) {
+                NonPokemonEntityScanState.clearActive()
                 resetFocusedPokemonState()
                 scannableEntityInFocus = targetScannableEntity
                 variantCycleTicksBetterPokedexScanner = 0F
@@ -330,6 +438,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
                 }
             } else {
+                NonPokemonEntityScanState.clearActive()
                 variantCycleTicksBetterPokedexScanner += 1F
             }
         } else {
@@ -351,6 +460,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     SlowpokeTailRegrowthClientState.clear()
                     RestorationTankScanState.beginClosing()
                     RestorationTankRegistrationState.clear()
+                    NonPokemonEntityScanState.clearActive()
 
                     BeehiveScanState.set(beehiveScan)
                     ClientPlayNetworking.send(BeehiveDetailsRequestPayload(beehiveScan.blockPos))
@@ -421,6 +531,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
             if (tankScan != null) {
                 EnvironmentalScanState.suspendForTarget()
+                NonPokemonEntityScanState.clearActive()
 
                 val isNewTankTarget =
                     !RestorationTankScanState.active ||
@@ -523,6 +634,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                 SlowpokeTailRegrowthClientState.clear()
                 RestorationTankScanState.beginClosing()
                 BeehiveScanState.beginClosing()
+                NonPokemonEntityScanState.clearActive()
                 RestorationTankRegistrationState.clear()
 
                 val activationThreshold =
