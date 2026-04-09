@@ -64,7 +64,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
     @Shadow var availableInfoFrames: MutableList<Boolean?> = mutableListOf()
 
     @Unique
-    private var variantCycleTicksChimericShinies: Float = 0F
+    private var variantCycleTicksBetterPokedexScanner: Float = 0F
     @Unique
     private var carouselSlotStates: MutableList<CarouselSlotState>? = null
     @Unique
@@ -76,11 +76,11 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
     @Shadow
     abstract fun playSound(sound: SoundEvent)
 
-    override fun getVariantCycleTicksChimericShinies(): Float = variantCycleTicksChimericShinies
+    override fun getVariantCycleTicksBetterPokedexScanner(): Float = variantCycleTicksBetterPokedexScanner
 
 
-    override fun setVariantCycleTicksChimericShinies(value: Float) {
-        variantCycleTicksChimericShinies = value
+    override fun setVariantCycleTicksBetterPokedexScanner(value: Float) {
+        variantCycleTicksBetterPokedexScanner = value
     }
 
     override fun getCarouselSlotState(index: Int): CarouselSlotState {
@@ -210,7 +210,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         RestorationTankScanState.clear()
         BeehiveScanState.clear()
         SlowpokeTailRegrowthClientState.clear()
-        variantCycleTicksChimericShinies = 0F
+        variantCycleTicksBetterPokedexScanner = 0F
         RestorationTankRegistrationState.clear()
         EnvironmentalScanState.clear()
         resetCarouselScheduler()
@@ -282,7 +282,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             if (targetScannableEntity != scannableEntityInFocus) {
                 resetFocusedPokemonState()
                 scannableEntityInFocus = targetScannableEntity
-                variantCycleTicksChimericShinies = 0F
+                variantCycleTicksBetterPokedexScanner = 0F
                 resetCarouselScheduler()
 
                 RestorationTankScanState.beginClosing()
@@ -330,7 +330,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
                 }
             } else {
-                variantCycleTicksChimericShinies += 1F
+                variantCycleTicksBetterPokedexScanner += 1F
             }
         } else {
             val beehiveScan = BeehiveScanner.findBeehiveTarget(user)
@@ -345,7 +345,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                 if (isNewBeehiveTarget) {
                     resetFocusedPokemonState()
                     scannableEntityInFocus = null
-                    variantCycleTicksChimericShinies = 0F
+                    variantCycleTicksBetterPokedexScanner = 0F
                     resetCarouselScheduler()
 
                     SlowpokeTailRegrowthClientState.clear()
@@ -363,7 +363,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
                     playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                 } else {
-                    variantCycleTicksChimericShinies += 1F
+                    variantCycleTicksBetterPokedexScanner += 1F
                     val activeBeehiveFrameCount =
                         (BeehiveScanState.snapshot ?: beehiveScan).frameDisplays.size
                     ensureInfoFrameCount(activeBeehiveFrameCount)
@@ -378,7 +378,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                             (BeehiveScanState.scanProgress + 2.5F)
                                 .coerceAtMost(PokedexUsageContext.MAX_SCAN_PROGRESS.toFloat())
 
-                        if (variantCycleTicksChimericShinies % 2F == 0F) {
+                        if (variantCycleTicksBetterPokedexScanner % 2F == 0F) {
                             playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
                         }
 
@@ -432,7 +432,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                 if (isNewTankTarget) {
                     resetFocusedPokemonState()
                     scannableEntityInFocus = null
-                    variantCycleTicksChimericShinies = 0F
+                    variantCycleTicksBetterPokedexScanner = 0F
                     resetCarouselScheduler()
 
                     SlowpokeTailRegrowthClientState.clear()
@@ -466,7 +466,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
                     playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                 } else {
-                    variantCycleTicksChimericShinies += 1F
+                    variantCycleTicksBetterPokedexScanner += 1F
 
                     if (!RestorationTankRegistrationState.active || RestorationTankRegistrationState.registerCompleted) {
                         RestorationTankScanState.focusIntervals =
@@ -490,7 +490,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                                 (RestorationTankRegistrationState.scanProgress + 2.5F)
                                     .coerceAtMost(PokedexUsageContext.MAX_SCAN_PROGRESS.toFloat())
 
-                            if (variantCycleTicksChimericShinies % 2F == 0F) {
+                            if (variantCycleTicksBetterPokedexScanner % 2F == 0F) {
                                 playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
                             }
 
@@ -542,7 +542,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
                         newPokemonInfo = PokedexLearnedInformation.NONE
                         isPokemonInFocusOwned = false
-                        variantCycleTicksChimericShinies = 0F
+                        variantCycleTicksBetterPokedexScanner = 0F
                         resetCarouselScheduler()
 
                         if (EnvironmentalScanState.reacquirePending) {
@@ -558,10 +558,10 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
                         playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                     } else {
-                        variantCycleTicksChimericShinies = 0F
+                        variantCycleTicksBetterPokedexScanner = 0F
                     }
                 } else {
-                    variantCycleTicksChimericShinies += 1F
+                    variantCycleTicksBetterPokedexScanner += 1F
 
                     if (!EnvironmentalScanState.structureRequestSent) {
                         ClientPlayNetworking.send(
@@ -575,7 +575,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                             (EnvironmentalScanState.scanProgress + 2.5F)
                                 .coerceAtMost(PokedexUsageContext.MAX_SCAN_PROGRESS.toFloat())
 
-                        if (variantCycleTicksChimericShinies % 2F == 0F) {
+                        if (variantCycleTicksBetterPokedexScanner % 2F == 0F) {
                             playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
                         }
 

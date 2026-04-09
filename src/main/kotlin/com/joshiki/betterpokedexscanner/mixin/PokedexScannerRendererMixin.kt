@@ -877,7 +877,7 @@ abstract class PokedexScannerRendererMixin {
 
                         if (primaryDisplays.isNotEmpty()) {
                             val variantCycleAccess = usageContext as VariantCycleAccess
-                            val variantCycleTicks = variantCycleAccess.getVariantCycleTicksChimericShinies()
+                            val variantCycleTicks = variantCycleAccess.getVariantCycleTicksBetterPokedexScanner()
 
                             val holdTicks = 80f
                             val transitionTicks = 10f
@@ -1145,7 +1145,7 @@ abstract class PokedexScannerRendererMixin {
 
                         if (primaryDisplays.isNotEmpty()) {
                             val variantCycleAccess = usageContext as VariantCycleAccess
-                            val variantCycleTicks = variantCycleAccess.getVariantCycleTicksChimericShinies()
+                            val variantCycleTicks = variantCycleAccess.getVariantCycleTicksBetterPokedexScanner()
 
                             val holdTicks = 80f
                             val transitionTicks = 10f
@@ -1645,7 +1645,7 @@ abstract class PokedexScannerRendererMixin {
             if (isInnerFrame) PokedexScannerRenderer.INNER_INFO_FRAME_WIDTH
             else PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH
         val variantCycleAccess = usageContext as VariantCycleAccess
-        val variantCycleTicks = variantCycleAccess.getVariantCycleTicksChimericShinies()
+        val variantCycleTicks = variantCycleAccess.getVariantCycleTicksBetterPokedexScanner()
         val holdTicks = 80f
         val transitionTicks = 10f
         val totalTicksPerPage = holdTicks + transitionTicks

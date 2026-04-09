@@ -9,8 +9,8 @@ data class CarouselSlotState(
 )
 
 interface VariantCycleAccess {
-    fun getVariantCycleTicksChimericShinies(): Float
-    fun setVariantCycleTicksChimericShinies(value: Float)
+    fun getVariantCycleTicksBetterPokedexScanner(): Float
+    fun setVariantCycleTicksBetterPokedexScanner(value: Float)
     fun getCarouselSlotState(index: Int): CarouselSlotState
     fun tickCarouselScheduler(pageCounts: List<Int>)
     fun resetCarouselScheduler()
