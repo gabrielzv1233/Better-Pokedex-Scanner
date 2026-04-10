@@ -13,7 +13,7 @@ data class BeehiveDetailsRequestPayload(
     override fun type(): CustomPacketPayload.Type<BeehiveDetailsRequestPayload> = TYPE
 
     companion object {
-        val ID = ResourceLocation.fromNamespaceAndPath("better_pokedex_scanner", "beehive_details_request")
+        val ID: ResourceLocation = ResourceLocation.fromNamespaceAndPath("better_pokedex_scanner", "beehive_details_request")
         val TYPE = CustomPacketPayload.Type<BeehiveDetailsRequestPayload>(ID)
 
         val CODEC: StreamCodec<RegistryFriendlyByteBuf, BeehiveDetailsRequestPayload> =

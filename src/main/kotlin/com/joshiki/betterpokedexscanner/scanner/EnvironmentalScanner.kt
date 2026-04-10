@@ -120,7 +120,7 @@ object EnvironmentalScanner {
         )
     }
 
-    private fun resolveBiomeName(level: net.minecraft.world.level.Level, pos: BlockPos): String {
+    private fun resolveBiomeName(level: Level, pos: BlockPos): String {
         val biomeKey = level.getBiome(pos).unwrapKey().orElse(null)?.location()
         if (biomeKey != null) {
             val translated = Component.translatable("biome.${biomeKey.namespace}.${biomeKey.path}").string
@@ -137,7 +137,7 @@ object EnvironmentalScanner {
             ?: "Unknown"
     }
 
-    private fun resolveDimensionName(level: net.minecraft.world.level.Level): String {
+    private fun resolveDimensionName(level: Level): String {
         val dimensionId = level.dimension().location()
         val translated = Component.translatable("dimension.${dimensionId.namespace}.${dimensionId.path}").string
         if (!translated.startsWith("dimension.")) {
@@ -271,7 +271,7 @@ object EnvironmentalScanner {
     }
 
     private fun resolveStructureAtPosition(level: ServerLevel, pos: BlockPos): String? {
-        val start = level.structureManager().getStructureWithPieceAt(pos) { holder -> true }
+        val start = level.structureManager().getStructureWithPieceAt(pos) { _ -> true }
         if (!start.isValid) return null
         return formatStructure(level, start.structure)
     }

@@ -13,7 +13,7 @@ data class FinishTankScanningPayload(
     override fun type() = TYPE
 
     companion object {
-        val ID = ResourceLocation.fromNamespaceAndPath("better_pokedex_scanner", "finish_tank_scanning")
+        val ID: ResourceLocation = ResourceLocation.fromNamespaceAndPath("better_pokedex_scanner", "finish_tank_scanning")
         val TYPE = CustomPacketPayload.Type<FinishTankScanningPayload>(ID)
 
         val CODEC: StreamCodec<RegistryFriendlyByteBuf, FinishTankScanningPayload> =

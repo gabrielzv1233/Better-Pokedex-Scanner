@@ -53,11 +53,7 @@ object EnvironmentalScanState {
     }
 
     fun suspendForTarget() {
-        if (completed && snapshot != null) {
-            reacquirePending = true
-        } else {
-            reacquirePending = false
-        }
+        reacquirePending = completed && snapshot != null
         active = false
         completed = false
         scanProgress = 0F

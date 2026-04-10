@@ -38,34 +38,7 @@ object VariantLabelRegistry {
     }
 
     fun findFormLabel(rawFormName: String, speciesId: String? = null): VariantLabelMatch? {
-        val normalized = normalizeKey(rawFormName)
-        val normalizedSpecies = speciesId?.let(::normalizeSpeciesId)
-
-        return groups.firstNotNullOfOrNull { group ->
-            if (!groupMatchesSpecies(group, normalizedSpecies)) return@firstNotNullOfOrNull null
-
-            group.formLabels.entries
-                .firstOrNull { normalizeKey(it.key) == normalized }
-                ?.let {
-                    return@firstNotNullOfOrNull VariantLabelMatch(
-                        headerLabel = group.headerLabel,
-                        headerTranslationKey = group.headerTranslationKey,
-                        label = it.value,
-                        labelTranslationKey = null
-                    )
-                }
-
-            group.formTranslationKeys.entries
-                .firstOrNull { normalizeKey(it.key) == normalized }
-                ?.let {
-                    VariantLabelMatch(
-                        headerLabel = group.headerLabel,
-                        headerTranslationKey = group.headerTranslationKey,
-                        label = it.value,
-                        labelTranslationKey = it.value
-                    )
-                }
-        }
+        return findMappedLabel(rawFormName, speciesId, VariantLabelGroup::formLabels, VariantLabelGroup::formTranslationKeys)
     }
 
     fun findBaseFormLabel(speciesId: String? = null): VariantLabelMatch? {
@@ -73,60 +46,12 @@ object VariantLabelRegistry {
 
         return groups.firstNotNullOfOrNull { group ->
             if (!groupMatchesSpecies(group, normalizedSpecies)) return@firstNotNullOfOrNull null
-
-            when {
-                !group.baseFormLabel.isNullOrBlank() -> {
-                    VariantLabelMatch(
-                        headerLabel = group.headerLabel,
-                        headerTranslationKey = group.headerTranslationKey,
-                        label = group.baseFormLabel,
-                        labelTranslationKey = null
-                    )
-                }
-
-                !group.baseFormTranslationKey.isNullOrBlank() -> {
-                    VariantLabelMatch(
-                        headerLabel = group.headerLabel,
-                        headerTranslationKey = group.headerTranslationKey,
-                        label = group.baseFormTranslationKey,
-                        labelTranslationKey = group.baseFormTranslationKey
-                    )
-                }
-
-                else -> null
-            }
+            buildLabelMatch(group, group.baseFormLabel, group.baseFormTranslationKey)
         }
     }
 
     fun findAspectLabel(rawAspect: String, speciesId: String? = null): VariantLabelMatch? {
-        val normalized = normalizeKey(rawAspect)
-        val normalizedSpecies = speciesId?.let(::normalizeSpeciesId)
-
-        return groups.firstNotNullOfOrNull { group ->
-            if (!groupMatchesSpecies(group, normalizedSpecies)) return@firstNotNullOfOrNull null
-
-            group.aspectLabels.entries
-                .firstOrNull { normalizeKey(it.key) == normalized }
-                ?.let {
-                    return@firstNotNullOfOrNull VariantLabelMatch(
-                        headerLabel = group.headerLabel,
-                        headerTranslationKey = group.headerTranslationKey,
-                        label = it.value,
-                        labelTranslationKey = null
-                    )
-                }
-
-            group.aspectTranslationKeys.entries
-                .firstOrNull { normalizeKey(it.key) == normalized }
-                ?.let {
-                    VariantLabelMatch(
-                        headerLabel = group.headerLabel,
-                        headerTranslationKey = group.headerTranslationKey,
-                        label = it.value,
-                        labelTranslationKey = it.value
-                    )
-                }
-        }
+        return findMappedLabel(rawAspect, speciesId, VariantLabelGroup::aspectLabels, VariantLabelGroup::aspectTranslationKeys)
     }
 
     fun findMissingAspectLabel(
@@ -143,28 +68,67 @@ object VariantLabelRegistry {
             val normalizedMissingTargets = group.missingAllAspects.map(::normalizeKey)
             val nonePresent = normalizedMissingTargets.none { it in normalizedCurrentAspects }
             if (!nonePresent) return@firstNotNullOfOrNull null
+            buildLabelMatch(group, group.missingAspectLabel, group.missingAspectTranslationKey)
+        }
+    }
 
-            when {
-                !group.missingAspectLabel.isNullOrBlank() -> {
-                    VariantLabelMatch(
-                        headerLabel = group.headerLabel,
-                        headerTranslationKey = group.headerTranslationKey,
-                        label = group.missingAspectLabel,
-                        labelTranslationKey = null
-                    )
-                }
+    private fun findMappedLabelMatch(
+        group: VariantLabelGroup,
+        labels: Map<String, String>,
+        translationKeys: Map<String, String>,
+        normalizedKey: String
+    ): VariantLabelMatch? {
+        labels.entries
+            .firstOrNull { normalizeKey(it.key) == normalizedKey }
+            ?.let { return buildLabelMatch(group, label = it.value, translationKey = null) }
 
-                !group.missingAspectTranslationKey.isNullOrBlank() -> {
-                    VariantLabelMatch(
-                        headerLabel = group.headerLabel,
-                        headerTranslationKey = group.headerTranslationKey,
-                        label = group.missingAspectTranslationKey,
-                        labelTranslationKey = group.missingAspectTranslationKey
-                    )
-                }
+        val translationKey = translationKeys.entries
+            .firstOrNull { normalizeKey(it.key) == normalizedKey }
+            ?.value
 
-                else -> null
+        return buildLabelMatch(group, label = null, translationKey = translationKey)
+    }
+
+    private fun findMappedLabel(
+        rawKey: String,
+        speciesId: String?,
+        labels: (VariantLabelGroup) -> Map<String, String>,
+        translationKeys: (VariantLabelGroup) -> Map<String, String>
+    ): VariantLabelMatch? {
+        val normalizedKey = normalizeKey(rawKey)
+        val normalizedSpecies = speciesId?.let(::normalizeSpeciesId)
+
+        return groups.firstNotNullOfOrNull { group ->
+            if (!groupMatchesSpecies(group, normalizedSpecies)) return@firstNotNullOfOrNull null
+            findMappedLabelMatch(group, labels(group), translationKeys(group), normalizedKey)
+        }
+    }
+
+    private fun buildLabelMatch(
+        group: VariantLabelGroup,
+        label: String?,
+        translationKey: String?
+    ): VariantLabelMatch? {
+        return when {
+            !label.isNullOrBlank() -> {
+                VariantLabelMatch(
+                    headerLabel = group.headerLabel,
+                    headerTranslationKey = group.headerTranslationKey,
+                    label = label,
+                    labelTranslationKey = null
+                )
             }
+
+            !translationKey.isNullOrBlank() -> {
+                VariantLabelMatch(
+                    headerLabel = group.headerLabel,
+                    headerTranslationKey = group.headerTranslationKey,
+                    label = translationKey,
+                    labelTranslationKey = translationKey
+                )
+            }
+
+            else -> null
         }
     }
 

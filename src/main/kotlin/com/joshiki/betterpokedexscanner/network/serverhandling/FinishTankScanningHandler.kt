@@ -27,18 +27,12 @@ object FinishTankScanningHandler {
         val ticksScan = server.tickCount - startTick
         if (ticksScan < PokedexUsageContext.SUCCESS_SCAN_SERVER_TICKS) return
 
+        val resolvedSpeciesId = resolveTankSpeciesId(player, payload.blockPos) ?: return
+        if (resolvedSpeciesId != payload.speciesId) return
+
         val blockEntity = player.level().getBlockEntity(payload.blockPos) as? RestorationTankBlockEntity ?: return
         val struct = blockEntity.multiblockStructure as? FossilMultiblockStructure ?: return
         val fossil = struct.resultingFossil ?: return
-
-        val resolvedPokemonForValidation = try {
-            fossil.result.create()
-        } catch (_: Exception) {
-            null
-        } ?: return
-
-        val resolvedSpeciesId = resolvedPokemonForValidation.species.resourceIdentifier
-        if (resolvedSpeciesId != payload.speciesId) return
 
 
         val tempPokemon = fossil.result.create(player)

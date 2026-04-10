@@ -301,13 +301,20 @@ object NonPokemonEntityScanner {
             }
         }
 
-        val variantLabel = resolveVariantLabel(entity) ?: return emptyList()
-        return listOf(
-            VariantDisplay(
-                headerTranslationKey = "betterpokedexscanner.header.entity.variant",
-                label = variantLabel
+        resolveVariantLabel(entity)?.let { variantLabel ->
+            return listOf(
+                VariantDisplay(
+                    headerTranslationKey = "betterpokedexscanner.header.entity.variant",
+                    label = variantLabel
+                )
             )
-        )
+        }
+
+        resolveCustomAccessorDisplay(entity)?.let { customDisplay ->
+            return listOf(customDisplay)
+        }
+
+        return emptyList()
     }
 
     private fun resolveVariantLabel(entity: Entity): String? {
@@ -391,7 +398,7 @@ object NonPokemonEntityScanner {
 
     private fun resolveVillagerProfessionLabel(entity: Entity): String? {
         val villager = entity as? Villager ?: return null
-        val professionPath = BuiltInRegistries.VILLAGER_PROFESSION.getKey(villager.villagerData.profession)?.path ?: return null
+        val professionPath = BuiltInRegistries.VILLAGER_PROFESSION.getKey(villager.villagerData.profession).path
         return when (professionPath) {
             "none" -> "Unemployed"
             else -> formatResourcePath(professionPath)
@@ -573,6 +580,90 @@ object NonPokemonEntityScanner {
             headerTranslationKey = headerTranslationKey,
             label = itemStack.hoverName.string
         )
+    }
+
+    private fun resolveCustomAccessorDisplay(entity: Entity): VariantDisplay? {
+        val entityTypeId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.type).toString()
+        val group = EntityAccessorRegistry.findGroup(entityTypeId) ?: return null
+        val accessorValue = resolveAccessorValue(entity, group.accessor) ?: return null
+        val rawValue = resolveAccessorRawValue(accessorValue) ?: return null
+        val formattedValue = formatAccessorValue(accessorValue) ?: return null
+        val match = EntityAccessorRegistry.findValueLabel(group, rawValue)
+        val resolvedHeaderLabel = match?.headerLabel ?: group.accessorHeaderLabel ?: group.headerLabel
+        val resolvedHeaderTranslationKey =
+            match?.headerTranslationKey
+                ?: group.accessorHeaderTranslationKey
+                ?: group.headerTranslationKey
+                ?: if (resolvedHeaderLabel == null) "betterpokedexscanner.header.entity.variant" else null
+
+        return VariantDisplay(
+            headerLabel = resolvedHeaderLabel,
+            headerTranslationKey = resolvedHeaderTranslationKey,
+            label = match?.label ?: formattedValue,
+            labelTranslationKey = match?.labelTranslationKey
+        )
+    }
+
+    private fun resolveAccessorValue(target: Any, accessorPath: String): Any? {
+        var current: Any? = target
+
+        for (segment in accessorPath.split('.').filter { it.isNotBlank() }) {
+            current = current?.let { resolveAccessorSegment(it, segment) } ?: return null
+        }
+
+        return current
+    }
+
+    private fun resolveAccessorSegment(target: Any, segment: String): Any? {
+        val normalizedSegment = segment.trim()
+        val methods = target.javaClass.methods
+        val candidateMethodNames =
+            listOf(
+                normalizedSegment,
+                "get${normalizedSegment.replaceFirstChar { it.uppercase() }}",
+                "is${normalizedSegment.replaceFirstChar { it.uppercase() }}"
+            )
+
+        methods.firstOrNull { it.parameterCount == 0 && it.name in candidateMethodNames }?.let { method ->
+            return runCatching { method.invoke(target) }.getOrNull()
+        }
+
+        target.javaClass.fields.firstOrNull { it.name == normalizedSegment }?.let { field ->
+            return runCatching { field.get(target) }.getOrNull()
+        }
+
+        return null
+    }
+
+    private fun resolveAccessorRawValue(value: Any): String? {
+        return when (value) {
+            is String -> value
+            is Number, is Boolean -> value.toString()
+            is Enum<*> -> {
+                runCatching {
+                    value.javaClass.methods.firstOrNull {
+                        it.name == "getSerializedName" && it.parameterCount == 0
+                    }?.invoke(value) as? String
+                }.getOrNull() ?: value.name
+            }
+
+            is Holder<*> -> value.unwrapKey().orElse(null)?.location()?.path
+            else -> {
+                runCatching {
+                    value.javaClass.methods.firstOrNull {
+                        it.name == "getSerializedName" && it.parameterCount == 0
+                    }?.invoke(value) as? String
+                }.getOrNull() ?: value.toString()
+            }
+        }
+    }
+
+    private fun formatAccessorValue(value: Any): String? {
+        return when (value) {
+            is String -> formatResourcePath(value)
+            is Number, is Boolean -> value.toString()
+            else -> formatVariantValue(value)
+        }
     }
 
     private fun resolvePassengerDisplays(entity: Entity): List<VariantDisplay> {

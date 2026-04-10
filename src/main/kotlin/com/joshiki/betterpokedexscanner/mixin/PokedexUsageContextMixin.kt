@@ -135,7 +135,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
 
             val pageWeight = (count - 1).coerceAtMost(4).toFloat() * 0.35F
             val stalenessWeight = (state.ticksSinceFlip / 45F).coerceAtMost(6F)
-            val jitter = kotlin.random.Random.nextFloat() * 0.75F
+            val jitter = Random.nextFloat() * 0.75F
             Triple(index, count, pageWeight + stalenessWeight + jitter)
         }
 
@@ -148,10 +148,10 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         val chosenState = states[chosen.first]
         chosenState.nextPage = (chosenState.currentPage + 1) % chosen.second
         chosenState.transitionProgress = 0.01F
-        chosenState.cooldownTicks = 70F + kotlin.random.Random.nextFloat() * 35F
+        chosenState.cooldownTicks = 70F + Random.nextFloat() * 35F
         chosenState.ticksSinceFlip = 0F
 
-        carouselNextFlipDelayTicks = 48F + kotlin.random.Random.nextFloat() * 32F
+        carouselNextFlipDelayTicks = 48F + Random.nextFloat() * 32F
     }
 
     override fun resetCarouselScheduler() {
@@ -169,7 +169,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
     private fun assignRandomInfoFrames(frameCount: Int) {
         availableInfoFrames = mutableListOf(null, null, null, null)
 
-        for (i in 0 until frameCount.coerceIn(0, availableInfoFrames.size)) {
+        repeat(frameCount.coerceIn(0, availableInfoFrames.size)) {
             var randomIndex = Random.nextInt(availableInfoFrames.size)
             if (availableInfoFrames[randomIndex] != null) {
                 randomIndex = availableInfoFrames.indexOfFirst { it == null }
@@ -228,6 +228,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         return created
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @Inject(method = ["stopUsing"], at = [At("HEAD")])
     private fun clearCustomScanStateOnStop(ticks: Int, sound: ResourceLocation?, ci: CallbackInfo) {
         RestorationTankScanState.clear()
@@ -240,6 +241,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         resetCarouselScheduler()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @Inject(method = ["renderUpdate"], at = [At("TAIL")])
     private fun speedUpTankScanRotation(
         graphics: GuiGraphics,

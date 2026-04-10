@@ -68,31 +68,31 @@ data class BeehiveScanSnapshot(
 
         val inhabitantsDisplays = buildList {
             if ((occupantCount ?: 0) > 0 && combeeCount != null && beeCount != null && unknownCount != null) {
-                if ((combeeCount ?: 0) > 0) {
+                if (combeeCount > 0) {
                     add(
                         VariantDisplay(
                             headerLabel = "Inhabitants",
-                            label = "Combee x${combeeCount ?: 0}",
+                            label = "Combee x$combeeCount",
                             colour = 0xF7D774
                         )
                     )
                 }
 
-                if ((beeCount ?: 0) > 0) {
+                if (beeCount > 0) {
                     add(
                         VariantDisplay(
                             headerLabel = "Inhabitants",
-                            label = "Bee x${beeCount ?: 0}",
+                            label = "Bee x$beeCount",
                             colour = 0xFFF4BF
                         )
                     )
                 }
 
-                if ((unknownCount ?: 0) > 0) {
+                if (unknownCount > 0) {
                     add(
                         VariantDisplay(
                             headerLabel = "Inhabitants",
-                            label = "Unknown x${unknownCount ?: 0}",
+                            label = "Unknown x$unknownCount",
                             colour = 0xD1D5DB
                         )
                     )
@@ -211,7 +211,7 @@ object BeehiveScanner {
         val pos = hit.blockPos
         val state = level.getBlockState(pos)
         val block = state.block as? BeehiveBlock ?: return null
-        level.getBlockEntity(pos) as? BeehiveBlockEntity ?: return null
+        if (level.getBlockEntity(pos) !is BeehiveBlockEntity) return null
 
         val honeyLevel = state.getValue(BeehiveBlock.HONEY_LEVEL)
 

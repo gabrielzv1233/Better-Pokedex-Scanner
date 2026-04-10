@@ -13,7 +13,7 @@ data class EnvironmentalStructureResponsePayload(
     override fun type(): CustomPacketPayload.Type<EnvironmentalStructureResponsePayload> = TYPE
 
     companion object {
-        val ID = ResourceLocation.fromNamespaceAndPath("better_pokedex_scanner", "environment_structure_response")
+        val ID: ResourceLocation = ResourceLocation.fromNamespaceAndPath("better_pokedex_scanner", "environment_structure_response")
         val TYPE = CustomPacketPayload.Type<EnvironmentalStructureResponsePayload>(ID)
 
         val CODEC: StreamCodec<RegistryFriendlyByteBuf, EnvironmentalStructureResponsePayload> =

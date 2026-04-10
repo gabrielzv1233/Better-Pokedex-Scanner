@@ -1,0 +1,13 @@
+{
+  "groups": [
+    {
+      "entities": ["examplemod:example_mob"],
+      "accessor": "variant",
+      "accessorHeaderLabel": "Variant",
+      "valueLabels": {
+        "red": "Red Variant",
+        "blue": "Blue Variant"
+      }
+    }
+  ]
+}

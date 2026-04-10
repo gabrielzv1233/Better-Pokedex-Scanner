@@ -168,6 +168,7 @@ abstract class PokedexScannerRendererMixin {
         poseStack.popPose()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @Inject(method = ["renderScanOverlay"], at = [At("TAIL")])
     private fun renderTankRegistrationOverlay(
         graphics: GuiGraphics,
@@ -243,7 +244,7 @@ abstract class PokedexScannerRendererMixin {
                     centered = true
                 )
             }
-        } else if (showTankUnknown || showEnvironmentUnknown || showBeehiveUnknown) {
+        } else {
             val progress =
                 if (showTankUnknown) RestorationTankRegistrationState.scanProgress
                 else if (showEnvironmentUnknown) EnvironmentalScanState.scanProgress
@@ -393,15 +394,11 @@ abstract class PokedexScannerRendererMixin {
 
         if (effectiveFocusIntervals <= 0) return
 
-        val tankTypeVisible = tankActive && !tankRegistrationActive && isTankTypingVisible()
+        val tankTypeVisible = tankActive && isTankTypingVisible()
         val tankPrimaryDisplayCounter = if (tankTypeVisible) 4 else 3
         val pokemonActive =
             usageContext.scannableEntityInFocus != null &&
-                !tankRegistrationActive &&
-                !tankActive &&
-                !beehiveActive &&
-                !environmentActive &&
-                !nonPokemonEntityActive
+                !tankRegistrationActive
         val pokemonTypeVisible = pokemonActive && usageContext.isPokemonInFocusOwned
         val pokemonPrimaryDisplayCounter = if (pokemonTypeVisible) 4 else 3
 
@@ -500,11 +497,12 @@ abstract class PokedexScannerRendererMixin {
                 val nonPokemonEntitySnapshot = NonPokemonEntityScanState.snapshot
 
                 if (beehiveActive) {
+                    val snapshot = beehiveSnapshot ?: return@forEachIndexed
                     renderBeehiveInfoFrame(
                         graphics = graphics,
                         poseStack = poseStack,
                         usageContext = usageContext,
-                        snapshot = beehiveSnapshot ?: return@forEachIndexed,
+                        snapshot = snapshot,
                         displayIndex = beehiveDisplayIndex,
                         slotIndex = index,
                         isLeftSide = isLeftSide,
@@ -513,7 +511,6 @@ abstract class PokedexScannerRendererMixin {
                         xOffset = xOffset,
                         yOffset = yOffset,
                         xOffsetText = xOffsetText,
-                        yOffsetText = yOffsetText,
                         frameHeight = frameHeight,
                         effectiveFocusIntervals = effectiveFocusIntervals,
                         opacity = opacity
@@ -522,11 +519,12 @@ abstract class PokedexScannerRendererMixin {
                 }
 
                 if (nonPokemonEntityActive) {
+                    val snapshot = nonPokemonEntitySnapshot ?: return@forEachIndexed
                     renderNonPokemonEntityInfoFrame(
                         graphics = graphics,
                         poseStack = poseStack,
                         usageContext = usageContext,
-                        snapshot = nonPokemonEntitySnapshot ?: return@forEachIndexed,
+                        snapshot = snapshot,
                         displayIndex = nonPokemonEntityDisplayIndex,
                         slotIndex = index,
                         isLeftSide = isLeftSide,
@@ -544,7 +542,7 @@ abstract class PokedexScannerRendererMixin {
                         graphics = graphics,
                         poseStack = poseStack,
                         usageContext = usageContext,
-                        snapshot = nonPokemonEntitySnapshot ?: return@forEachIndexed,
+                        snapshot = snapshot,
                         displayIndex = nonPokemonEntityDisplayIndex,
                         slotIndex = index,
                         isLeftSide = isLeftSide,
@@ -560,11 +558,12 @@ abstract class PokedexScannerRendererMixin {
 
                 if (infoDisplayedCounter == 1) {
                     if (environmentActive) {
+                        val snapshot = environmentalSnapshot ?: return@forEachIndexed
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
                             usageContext = usageContext,
-                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            snapshot = snapshot,
                             index = index,
                             isLeftSide = isLeftSide,
                             centerX = centerX,
@@ -572,16 +571,11 @@ abstract class PokedexScannerRendererMixin {
                             xOffset = xOffset,
                             yOffset = yOffset,
                             xOffsetText = xOffsetText,
-                            yOffsetText = yOffsetText,
                             frameHeight = frameHeight,
                             effectiveFocusIntervals = effectiveFocusIntervals,
                             opacity = opacity
                         )
                     } else if (tankActive && !tankRegistrationActive) {
-                        val progress = getTankProgressPercent(
-                            RestorationTankScanState.timeRemaining ?: FossilMultiblockStructure.TIME_TO_TAKE
-                        )
-
                         drawScaledText(
                             context = graphics,
                             font = CobblemonResources.DEFAULT_LARGE,
@@ -607,11 +601,12 @@ abstract class PokedexScannerRendererMixin {
 
                 if (infoDisplayedCounter == 2) {
                     if (environmentActive) {
+                        val snapshot = environmentalSnapshot ?: return@forEachIndexed
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
                             usageContext = usageContext,
-                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            snapshot = snapshot,
                             index = index,
                             isLeftSide = isLeftSide,
                             centerX = centerX,
@@ -619,7 +614,6 @@ abstract class PokedexScannerRendererMixin {
                             xOffset = xOffset,
                             yOffset = yOffset,
                             xOffsetText = xOffsetText,
-                            yOffsetText = yOffsetText,
                             frameHeight = frameHeight,
                             effectiveFocusIntervals = effectiveFocusIntervals,
                             opacity = opacity
@@ -658,7 +652,7 @@ abstract class PokedexScannerRendererMixin {
                         val hasTrainer =
                             (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)?.ownerUUID != null
                         val speciesName = entityData.getApparentSpecies().translatedName.bold()
-                        var yOffsetName = if (hasTrainer) 2 else 0
+                        val yOffsetName = if (hasTrainer) 2 else 0
 
                         if (hasTrainer) {
                             drawScaledText(
@@ -715,11 +709,12 @@ abstract class PokedexScannerRendererMixin {
 
                 if (infoDisplayedCounter == 3) {
                     if (environmentActive) {
+                        val snapshot = environmentalSnapshot ?: return@forEachIndexed
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
                             usageContext = usageContext,
-                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            snapshot = snapshot,
                             index = index,
                             isLeftSide = isLeftSide,
                             centerX = centerX,
@@ -727,7 +722,6 @@ abstract class PokedexScannerRendererMixin {
                             xOffset = xOffset,
                             yOffset = yOffset,
                             xOffsetText = xOffsetText,
-                            yOffsetText = yOffsetText,
                             frameHeight = frameHeight,
                             effectiveFocusIntervals = effectiveFocusIntervals,
                             opacity = opacity
@@ -872,11 +866,12 @@ abstract class PokedexScannerRendererMixin {
 
                 if (infoDisplayedCounter == 4) {
                     if (environmentActive) {
+                        val snapshot = environmentalSnapshot ?: return@forEachIndexed
                         renderEnvironmentalInfoFrame(
                             graphics = graphics,
                             poseStack = poseStack,
                             usageContext = usageContext,
-                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            snapshot = snapshot,
                             index = index,
                             isLeftSide = isLeftSide,
                             centerX = centerX,
@@ -884,7 +879,6 @@ abstract class PokedexScannerRendererMixin {
                             xOffset = xOffset,
                             yOffset = yOffset,
                             xOffsetText = xOffsetText,
-                            yOffsetText = yOffsetText,
                             frameHeight = frameHeight,
                             effectiveFocusIntervals = effectiveFocusIntervals,
                             opacity = opacity
@@ -892,7 +886,7 @@ abstract class PokedexScannerRendererMixin {
                         renderEnvironmentalStructureTag(
                             graphics = graphics,
                             poseStack = poseStack,
-                            snapshot = environmentalSnapshot ?: return@forEachIndexed,
+                            snapshot = snapshot,
                             isLeftSide = isLeftSide,
                             centerX = centerX,
                             centerY = centerY,
@@ -1454,7 +1448,6 @@ abstract class PokedexScannerRendererMixin {
         xOffset: Int,
         yOffset: Int,
         xOffsetText: Int,
-        yOffsetText: Int,
         frameHeight: Int,
         effectiveFocusIntervals: Float,
         opacity: Float
@@ -1594,7 +1587,6 @@ abstract class PokedexScannerRendererMixin {
         xOffset: Int,
         yOffset: Int,
         xOffsetText: Int,
-        yOffsetText: Int,
         frameHeight: Int,
         effectiveFocusIntervals: Float,
         opacity: Float

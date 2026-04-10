@@ -13,7 +13,7 @@ data class SlowpokeTailRegrowthResponsePayload(
     override fun type(): CustomPacketPayload.Type<SlowpokeTailRegrowthResponsePayload> = TYPE
 
     companion object {
-        val ID = ResourceLocation.fromNamespaceAndPath("better_pokedex_scanner", "slowpoke_tail_regrowth_response")
+        val ID: ResourceLocation = ResourceLocation.fromNamespaceAndPath("better_pokedex_scanner", "slowpoke_tail_regrowth_response")
         val TYPE = CustomPacketPayload.Type<SlowpokeTailRegrowthResponsePayload>(ID)
 
         val CODEC: StreamCodec<RegistryFriendlyByteBuf, SlowpokeTailRegrowthResponsePayload> =

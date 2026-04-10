@@ -5,6 +5,7 @@ import com.joshiki.betterpokedexscanner.network.BeehiveDetailsNetworking
 import com.joshiki.betterpokedexscanner.network.EnvironmentalStructureNetworking
 import com.joshiki.betterpokedexscanner.network.RestorationTankRegistrationNetworking
 import com.joshiki.betterpokedexscanner.network.SlowpokeTailRegrowthResponsePayload
+import com.joshiki.betterpokedexscanner.scanner.EntityAccessorLoader
 import com.joshiki.betterpokedexscanner.scanner.VariantLabelLoader
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 class BetterPokedexScannerClient : ClientModInitializer {
     override fun onInitializeClient() {
         VariantLabelLoader.register()
+        EntityAccessorLoader.register()
         RestorationTankRegistrationNetworking.registerClient()
         EnvironmentalStructureNetworking.registerClient()
         BeehiveDetailsNetworking.registerClient()

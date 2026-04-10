@@ -101,10 +101,6 @@ object BeehiveDetailsNetworking {
         )
     }
 
-    private fun classifyOccupant(entityData: CustomData): String {
-        return classifyOccupant(extractEntityTag(entityData))
-    }
-
     private fun classifyOccupant(tag: CompoundTag?): String {
         tag ?: return "unknown"
         val entityId = tag.getString("id").lowercase()
@@ -124,23 +120,11 @@ object BeehiveDetailsNetworking {
     }
 
     private fun resolveSpeciesId(tag: CompoundTag): String? {
-        val directKeys = listOf("species", "Species", "speciesId", "species_id")
-        directKeys.forEach { key ->
-            val value = tag.getString(key).takeIf { it.isNotBlank() }
-            if (value != null) return value.lowercase()
-        }
-
-        val nestedKeys = listOf("Pokemon", "pokemon", "Data", "data")
-        nestedKeys.forEach { key ->
-            if (!tag.contains(key, CompoundTag.TAG_COMPOUND.toInt())) return@forEach
-            val nested = tag.getCompound(key)
-            directKeys.forEach { nestedKey ->
-                val value = nested.getString(nestedKey).takeIf { it.isNotBlank() }
-                if (value != null) return value.lowercase()
-            }
-        }
-
-        return null
+        return resolveStringValue(
+            tag = tag,
+            directKeys = listOf("species", "Species", "speciesId", "species_id"),
+            nestedKeys = listOf("Pokemon", "pokemon", "Data", "data")
+        )
     }
 
     private fun isFemaleCombee(tag: CompoundTag): Boolean {
@@ -156,13 +140,23 @@ object BeehiveDetailsNetworking {
     }
 
     private fun resolveGenderValue(tag: CompoundTag): String? {
-        val directKeys = listOf("gender", "Gender", "sex", "Sex")
+        return resolveStringValue(
+            tag = tag,
+            directKeys = listOf("gender", "Gender", "sex", "Sex"),
+            nestedKeys = listOf("Pokemon", "pokemon", "Data", "data")
+        )
+    }
+
+    private fun resolveStringValue(
+        tag: CompoundTag,
+        directKeys: List<String>,
+        nestedKeys: List<String>
+    ): String? {
         directKeys.forEach { key ->
             val value = tag.getString(key).takeIf { it.isNotBlank() }
             if (value != null) return value.lowercase()
         }
 
-        val nestedKeys = listOf("Pokemon", "pokemon", "Data", "data")
         nestedKeys.forEach { key ->
             if (!tag.contains(key, CompoundTag.TAG_COMPOUND.toInt())) return@forEach
             val nested = tag.getCompound(key)
