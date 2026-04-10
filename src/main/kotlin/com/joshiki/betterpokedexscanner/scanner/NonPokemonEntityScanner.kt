@@ -12,6 +12,10 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Saddleable
 import net.minecraft.world.entity.animal.Cat
+import net.minecraft.world.entity.animal.Fox
+import net.minecraft.world.entity.animal.MushroomCow
+import net.minecraft.world.entity.animal.Parrot
+import net.minecraft.world.entity.animal.Rabbit
 import net.minecraft.world.entity.animal.Sheep
 import net.minecraft.world.entity.animal.TropicalFish
 import net.minecraft.world.entity.animal.Wolf
@@ -20,6 +24,7 @@ import net.minecraft.world.entity.animal.horse.AbstractChestedHorse
 import net.minecraft.world.entity.animal.horse.AbstractHorse
 import net.minecraft.world.entity.animal.horse.Horse
 import net.minecraft.world.entity.animal.horse.Llama
+import net.minecraft.world.entity.animal.Panda
 import net.minecraft.world.entity.monster.Shulker
 import net.minecraft.world.entity.monster.Phantom
 import net.minecraft.world.entity.monster.Slime
@@ -279,6 +284,10 @@ object NonPokemonEntityScanner {
     }
 
     private fun resolvePrimaryVariantDisplays(entity: Entity): List<VariantDisplay> {
+        resolveCustomAccessorDisplay(entity)?.let { customDisplay ->
+            return listOf(customDisplay)
+        }
+
         if (entity is Horse) {
             return buildList {
                 formatVariantValue(entity.variant)?.let { colorLabel ->
@@ -301,7 +310,7 @@ object NonPokemonEntityScanner {
             }
         }
 
-        resolveVariantLabel(entity)?.let { variantLabel ->
+        resolveBuiltInVariantLabel(entity)?.let { variantLabel ->
             return listOf(
                 VariantDisplay(
                     headerTranslationKey = "betterpokedexscanner.header.entity.variant",
@@ -309,27 +318,23 @@ object NonPokemonEntityScanner {
                 )
             )
         }
-
-        resolveCustomAccessorDisplay(entity)?.let { customDisplay ->
-            return listOf(customDisplay)
-        }
-
         return emptyList()
     }
 
-    private fun resolveVariantLabel(entity: Entity): String? {
+    private fun resolveBuiltInVariantLabel(entity: Entity): String? {
         val variantValue =
             when (entity) {
                 is Cat -> entity.variant
+                is Fox -> entity.variant
+                is MushroomCow -> entity.variant
+                is Panda -> entity.variant
+                is Parrot -> entity.variant
+                is Rabbit -> entity.variant
                 is Shulker -> entity.variant.orElse(null)
                 is Wolf -> entity.variant
                 is Axolotl -> entity.variant
-                else -> {
-                    val method = entity.javaClass.methods.firstOrNull {
-                        it.name == "getVariant" && it.parameterCount == 0
-                    } ?: return null
-                    runCatching { method.invoke(entity) }.getOrNull()
-                }
+                is Llama -> entity.variant
+                else -> return null
             } ?: return null
 
         return formatVariantValue(variantValue)
@@ -589,11 +594,10 @@ object NonPokemonEntityScanner {
         val rawValue = resolveAccessorRawValue(accessorValue) ?: return null
         val formattedValue = formatAccessorValue(accessorValue) ?: return null
         val match = EntityAccessorRegistry.findValueLabel(group, rawValue)
-        val resolvedHeaderLabel = match?.headerLabel ?: group.accessorHeaderLabel ?: group.headerLabel
+        val resolvedHeaderLabel = match?.headerLabel ?: group.accessorHeaderLabel
         val resolvedHeaderTranslationKey =
             match?.headerTranslationKey
                 ?: group.accessorHeaderTranslationKey
-                ?: group.headerTranslationKey
                 ?: if (resolvedHeaderLabel == null) "betterpokedexscanner.header.entity.variant" else null
 
         return VariantDisplay(

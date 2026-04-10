@@ -1,8 +1,6 @@
 package com.joshiki.betterpokedexscanner.scanner
 
 data class EntityAccessorGroup(
-    val headerLabel: String? = null,
-    val headerTranslationKey: String? = null,
     val accessorHeaderLabel: String? = null,
     val accessorHeaderTranslationKey: String? = null,
     val entities: List<String> = emptyList(),
@@ -47,8 +45,8 @@ object EntityAccessorRegistry {
             .firstOrNull { normalizeKey(it.key) == normalizedValue }
             ?.let {
                 return EntityAccessorMatch(
-                    headerLabel = group.accessorHeaderLabel ?: group.headerLabel,
-                    headerTranslationKey = group.accessorHeaderTranslationKey ?: group.headerTranslationKey,
+                    headerLabel = group.accessorHeaderLabel,
+                    headerTranslationKey = group.accessorHeaderTranslationKey,
                     label = it.value
                 )
             }
@@ -60,8 +58,8 @@ object EntityAccessorRegistry {
                 ?: return null
 
         return EntityAccessorMatch(
-            headerLabel = group.accessorHeaderLabel ?: group.headerLabel,
-            headerTranslationKey = group.accessorHeaderTranslationKey ?: group.headerTranslationKey,
+            headerLabel = group.accessorHeaderLabel,
+            headerTranslationKey = group.accessorHeaderTranslationKey,
             label = translationKey,
             labelTranslationKey = translationKey
         )
