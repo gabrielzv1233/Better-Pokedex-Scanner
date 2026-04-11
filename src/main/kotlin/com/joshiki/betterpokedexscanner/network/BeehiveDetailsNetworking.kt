@@ -5,8 +5,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity
+import java.lang.reflect.Field
 
 object BeehiveDetailsNetworking {
 
@@ -55,17 +55,36 @@ object BeehiveDetailsNetworking {
     )
 
     @Suppress("UNCHECKED_CAST")
-    private fun resolveOccupants(blockEntity: BeehiveBlockEntity): List<BeehiveBlockEntity.Occupant> {
-        return try {
-            val method = blockEntity.javaClass.getDeclaredMethod("getBees")
-            method.isAccessible = true
-            method.invoke(blockEntity) as? List<BeehiveBlockEntity.Occupant> ?: emptyList()
-        } catch (_: Exception) {
-            emptyList()
+    private fun resolveOccupants(blockEntity: BeehiveBlockEntity): List<Any> {
+        val accessorNames = listOf("getBees", "getOccupants", "getStored")
+
+        accessorNames.forEach { methodName ->
+            runCatching {
+                val method = blockEntity.javaClass.getDeclaredMethod(methodName)
+                method.isAccessible = true
+                (method.invoke(blockEntity) as? List<*>)?.filterNotNull()
+            }.getOrNull()?.let { return it }
         }
+
+        return blockEntity.javaClass.declaredFields
+            .firstNotNullOfOrNull { field ->
+                extractOccupantList(field, blockEntity)
+            }
+            ?: emptyList()
     }
 
-    private fun countOccupants(occupants: List<BeehiveBlockEntity.Occupant>): OccupantCounts {
+    private fun extractOccupantList(field: Field, blockEntity: BeehiveBlockEntity): List<Any>? {
+        return runCatching {
+            if (!List::class.java.isAssignableFrom(field.type)) return@runCatching null
+            field.isAccessible = true
+            val value = field.get(blockEntity) as? List<*> ?: return@runCatching null
+            value.filterNotNull().takeIf { occupants ->
+                occupants.isNotEmpty() && occupants.first()::class.java.simpleName.contains("Bee", ignoreCase = true)
+            }
+        }.getOrNull()
+    }
+
+    private fun countOccupants(occupants: List<Any>): OccupantCounts {
         var beeCount = 0
         var combeeCount = 0
         var unknownCount = 0
@@ -73,7 +92,7 @@ object BeehiveDetailsNetworking {
         var shinyRareSpeciesId: String? = null
 
         occupants.forEach { occupant ->
-            val tag = extractEntityTag(occupant.entityData())
+            val tag = extractOccupantEntityTag(occupant)
             when (classifyOccupant(tag)) {
                 "bee" -> beeCount += 1
                 "combee" -> {
@@ -101,6 +120,61 @@ object BeehiveDetailsNetworking {
         )
     }
 
+    private fun extractOccupantEntityTag(occupant: Any): CompoundTag? {
+        resolveOccupantEntityDataObject(occupant)?.let { entityData ->
+            extractEntityTag(entityData)?.let { return it }
+        }
+
+        return occupant.javaClass.declaredFields
+            .firstNotNullOfOrNull { field ->
+                extractEntityTagFromField(field, occupant)
+            }
+    }
+
+    private fun resolveOccupantEntityDataObject(occupant: Any): Any? {
+        val accessorNames = listOf("entityData", "getEntityData", "entityTag", "getEntityTag", "data", "getData")
+
+        accessorNames.forEach { methodName ->
+            runCatching {
+                val method = occupant.javaClass.methods.firstOrNull { candidate ->
+                    candidate.name == methodName && candidate.parameterCount == 0
+                } ?: return@runCatching null
+                method.invoke(occupant)
+            }.getOrNull()?.let { return it }
+        }
+
+        return occupant.javaClass.methods
+            .firstNotNullOfOrNull { method ->
+                if (method.parameterCount != 0) return@firstNotNullOfOrNull null
+                if (method.returnType == java.lang.Boolean.TYPE) return@firstNotNullOfOrNull null
+                if (method.returnType == java.lang.Integer.TYPE) return@firstNotNullOfOrNull null
+                if (method.returnType == java.lang.Void.TYPE) return@firstNotNullOfOrNull null
+                if (method.declaringClass == Any::class.java || method.declaringClass == java.lang.Object::class.java) {
+                    return@firstNotNullOfOrNull null
+                }
+                if (method.returnType == String::class.java) return@firstNotNullOfOrNull null
+                if (method.returnType == Class::class.java) return@firstNotNullOfOrNull null
+                runCatching {
+                    method.invoke(occupant)
+                }.getOrNull()
+            }
+            ?: occupant.javaClass.declaredFields.firstNotNullOfOrNull { field ->
+                if (field.type == java.lang.Integer.TYPE) return@firstNotNullOfOrNull null
+                if (field.type == String::class.java) return@firstNotNullOfOrNull null
+                runCatching {
+                    field.isAccessible = true
+                    field.get(occupant)
+                }.getOrNull()
+            }
+    }
+
+    private fun extractEntityTagFromField(field: Field, target: Any): CompoundTag? {
+        return runCatching {
+            field.isAccessible = true
+            extractEntityTag(field.get(target))
+        }.getOrNull()
+    }
+
     private fun classifyOccupant(tag: CompoundTag?): String {
         tag ?: return "unknown"
         val entityId = tag.getString("id").lowercase()
@@ -123,6 +197,11 @@ object BeehiveDetailsNetworking {
         return resolveStringValue(
             tag = tag,
             directKeys = listOf("species", "Species", "speciesId", "species_id"),
+            nestedKeys = listOf("Pokemon", "pokemon", "Data", "data")
+        ) ?: resolveNestedIdentifierValue(
+            tag = tag,
+            holderKeys = listOf("species", "Species", "speciesId", "species_id"),
+            identifierKeys = listOf("resourceIdentifier", "identifier", "id", "value"),
             nestedKeys = listOf("Pokemon", "pokemon", "Data", "data")
         )
     }
@@ -169,6 +248,38 @@ object BeehiveDetailsNetworking {
         return null
     }
 
+    private fun resolveNestedIdentifierValue(
+        tag: CompoundTag,
+        holderKeys: List<String>,
+        identifierKeys: List<String>,
+        nestedKeys: List<String>
+    ): String? {
+        holderKeys.forEach { key ->
+            if (tag.contains(key, CompoundTag.TAG_COMPOUND.toInt())) {
+                val nested = tag.getCompound(key)
+                identifierKeys.forEach { identifierKey ->
+                    val value = nested.getString(identifierKey).takeIf { it.isNotBlank() }
+                    if (value != null) return value.lowercase()
+                }
+            }
+        }
+
+        nestedKeys.forEach { nestedKey ->
+            if (!tag.contains(nestedKey, CompoundTag.TAG_COMPOUND.toInt())) return@forEach
+            val nested = tag.getCompound(nestedKey)
+            holderKeys.forEach { holderKey ->
+                if (!nested.contains(holderKey, CompoundTag.TAG_COMPOUND.toInt())) return@forEach
+                val holder = nested.getCompound(holderKey)
+                identifierKeys.forEach { identifierKey ->
+                    val value = holder.getString(identifierKey).takeIf { it.isNotBlank() }
+                    if (value != null) return value.lowercase()
+                }
+            }
+        }
+
+        return null
+    }
+
     private fun resolveBooleanValue(
         tag: CompoundTag,
         directKeys: List<String>,
@@ -193,17 +304,85 @@ object BeehiveDetailsNetworking {
         return null
     }
 
-    private fun extractEntityTag(entityData: CustomData): CompoundTag? {
-        return try {
-            entityData.javaClass.methods
-                .firstOrNull { method ->
-                    method.parameterCount == 0 &&
-                        CompoundTag::class.java.isAssignableFrom(method.returnType)
-                }
-                ?.invoke(entityData) as? CompoundTag
-        } catch (_: Exception) {
-            null
+    private fun extractEntityTag(entityData: Any?): CompoundTag? {
+        return extractEntityTag(entityData, depth = 0)
+    }
+
+    private fun extractEntityTag(entityData: Any?, depth: Int): CompoundTag? {
+        entityData ?: return null
+        if (entityData is CompoundTag) return entityData
+        if (depth >= 3) return null
+
+        val preferredMethodNames = listOf(
+            "copyTag",
+            "copyNbt",
+            "toTag",
+            "toNbt",
+            "getTag",
+            "getNbt",
+            "nbt",
+            "copy",
+            "copyData"
+        )
+
+        preferredMethodNames.forEach { methodName ->
+            invokeCompoundTagMethod(entityData, methodName, depth)?.let { return it }
         }
+
+        entityData.javaClass.methods
+            .firstNotNullOfOrNull { method ->
+                if (method.parameterCount != 0) return@firstNotNullOfOrNull null
+                if (!CompoundTag::class.java.isAssignableFrom(method.returnType)) return@firstNotNullOfOrNull null
+                runCatching {
+                    method.invoke(entityData) as? CompoundTag
+                }.getOrNull()
+            }?.let { return it }
+
+        val preferredFieldNames = listOf("tag", "nbt", "data", "customData")
+        preferredFieldNames.forEach { fieldName ->
+            val field = entityData.javaClass.declaredFields.firstOrNull { candidate ->
+                candidate.name.equals(fieldName, ignoreCase = true)
+            } ?: return@forEach
+            extractEntityTagFromField(field, entityData)?.let { return it }
+        }
+
+        entityData.javaClass.methods
+            .firstNotNullOfOrNull { method ->
+                if (method.parameterCount != 0) return@firstNotNullOfOrNull null
+                if (method.declaringClass == Any::class.java || method.declaringClass == java.lang.Object::class.java) {
+                    return@firstNotNullOfOrNull null
+                }
+                if (method.returnType.isPrimitive) return@firstNotNullOfOrNull null
+                if (method.returnType == String::class.java) return@firstNotNullOfOrNull null
+                if (method.returnType == Class::class.java) return@firstNotNullOfOrNull null
+                runCatching {
+                    extractEntityTag(method.invoke(entityData), depth + 1)
+                }.getOrNull()
+            }?.let { return it }
+
+        entityData.javaClass.declaredFields
+            .firstNotNullOfOrNull { field ->
+                if (java.lang.reflect.Modifier.isStatic(field.modifiers)) return@firstNotNullOfOrNull null
+                if (field.type.isPrimitive) return@firstNotNullOfOrNull null
+                if (field.type == String::class.java) return@firstNotNullOfOrNull null
+                runCatching {
+                    field.isAccessible = true
+                    extractEntityTag(field.get(entityData), depth + 1)
+                }.getOrNull()
+            }?.let { return it }
+
+        return null
+    }
+
+    private fun invokeCompoundTagMethod(target: Any, methodName: String, depth: Int): CompoundTag? {
+        val method = target.javaClass.methods.firstOrNull { candidate ->
+            candidate.name.equals(methodName, ignoreCase = true) &&
+                candidate.parameterCount == 0
+        } ?: return null
+
+        return runCatching {
+            extractEntityTag(method.invoke(target), depth + 1)
+        }.getOrNull()
     }
 
     private fun hasSavedFlowerPos(blockEntity: BeehiveBlockEntity): Boolean {

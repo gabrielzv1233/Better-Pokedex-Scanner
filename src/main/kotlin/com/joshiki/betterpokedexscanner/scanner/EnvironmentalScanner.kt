@@ -28,18 +28,49 @@ data class NearbyStructureDebugResult(
 object EnvironmentalScanner {
     private const val MAX_NEARBY_STRUCTURE_DISTANCE = 25.0
     private const val MAX_NEARBY_STRUCTURE_VERTICAL_DISTANCE = 25
+    private val weatherColours =
+        mapOf(
+            "Clear" to 0x8BF0F4,
+            "Rain" to 0x85B2FD,
+            "Thunder" to 0xFFE88F
+        )
+    private val timeBandColours =
+        mapOf(
+            "Morning" to 0x74CEE2,
+            "Day" to 0x7BC1FC,
+            "Evening" to 0xE89E77,
+            "Night" to 0xB3A1E7
+        )
+    private val terrainColours =
+        mapOf(
+            "betterpokedexscanner.environment.terrain.underwater" to 0x6053AD,
+            "betterpokedexscanner.environment.terrain.on_water" to 0x2980EF,
+            "betterpokedexscanner.environment.terrain.surface" to 0x75C977,
+            "betterpokedexscanner.environment.terrain.underground" to 0x403233,
+            "betterpokedexscanner.environment.terrain.in_cave" to 0xCC8F66,
+            "betterpokedexscanner.environment.terrain.high_altitude" to 0xDCEBEF
+        )
+    private val dimensionColours =
+        mapOf(
+            "minecraft:overworld" to 0x75C977,
+            "minecraft:the_nether" to 0xD15A6B,
+            "minecraft:the_end" to 0xF0D7E8
+        )
 
     fun sample(player: LocalPlayer): EnvironmentalScanSnapshot {
         val level = player.level()
         val pos = BlockPos.containing(player.x, player.y, player.z)
 
         val biomeName = resolveBiomeName(level, pos)
-        val timeLabel = "${resolveTimeBand(level.dayTime())} - ${formatTime24(level.dayTime())}"
+        val timeBand = resolveTimeBand(level.dayTime())
+        val timeLabel = "$timeBand - ${formatTime24(level.dayTime())}"
+        val timeLabelComponent = buildTimeLabelComponent(timeBand, formatTime24(level.dayTime()))
         val weatherLabel = when {
             level.isThundering -> "Thunder"
             level.isRaining -> "Rain"
             else -> "Clear"
         }
+        val weatherLabelComponent = buildColoredLiteralComponent(weatherLabel, weatherColours[weatherLabel])
         val terrainDisplays = resolveTerrainDisplays(player, pos)
         val canSeeSky = level.canSeeSky(pos)
         val skyLight = level.getBrightness(net.minecraft.world.level.LightLayer.SKY, pos)
@@ -57,7 +88,8 @@ object EnvironmentalScanner {
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.environment.dimension",
-                        label = resolveDimensionName(level)
+                        label = resolveDimensionName(level),
+                        labelComponent = buildDimensionLabelComponent(level)
                     )
                 )
             },
@@ -65,14 +97,16 @@ object EnvironmentalScanner {
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.environment.time",
-                        label = timeLabel
+                        label = timeLabel,
+                        labelComponent = timeLabelComponent
                     )
                 )
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.environment.moon_phase",
                         label = "",
-                        labelTranslationKey = "betterpokedexscanner.environment.moon_phase.${level.moonPhase}"
+                        labelTranslationKey = "betterpokedexscanner.environment.moon_phase.${level.moonPhase}",
+                        colour = resolveMoonPhaseColour(level.moonPhase)
                     )
                 )
             },
@@ -80,7 +114,8 @@ object EnvironmentalScanner {
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.environment.weather",
-                        label = weatherLabel
+                        label = weatherLabel,
+                        labelComponent = weatherLabelComponent
                     )
                 )
                 add(
@@ -151,15 +186,51 @@ object EnvironmentalScanner {
             }
     }
 
+    private fun buildDimensionLabelComponent(level: Level): Component {
+        val dimensionId = level.dimension().location()
+        return buildColoredLiteralComponent(
+            resolveDimensionName(level),
+            dimensionColours[dimensionId.toString()]
+        )
+    }
+
     private fun resolveTimeBand(dayTime: Long): String {
         val hour = ((dayTime / 1000L + 6L) % 24L).toInt()
         return when (hour) {
-            in 6..10 -> "Day"
+            in 6..10 -> "Morning"
             in 11..17 -> "Day"
-            18, 19 -> "Dusk"
+            18, 19 -> "Evening"
             in 20..22 -> "Night"
             23, 0, 1, 2, 3 -> "Night"
-            else -> "Dawn"
+            else -> "Morning"
+        }
+    }
+
+    private fun buildTimeLabelComponent(timeBand: String, timeText: String): Component {
+        val bandColour = timeBandColours[timeBand]
+        val bandComponent =
+            Component.literal(timeBand).withStyle { style ->
+                val base = style.withBold(true)
+                if (bandColour != null) base.withColor(bandColour) else base
+            }
+
+        return Component.empty()
+            .append(bandComponent)
+            .append(Component.literal(" - ").withStyle { style -> style.withBold(true) })
+            .append(Component.literal(timeText).withStyle { style -> style.withBold(true) })
+    }
+
+    private fun buildColoredLiteralComponent(text: String, colour: Int?): Component {
+        return Component.literal(text).withStyle { style ->
+            val base = style.withBold(true)
+            if (colour != null) base.withColor(colour) else base
+        }
+    }
+
+    private fun buildColoredTranslatedComponent(translationKey: String, colour: Int?): Component {
+        return Component.translatable(translationKey).withStyle { style ->
+            val base = style.withBold(true)
+            if (colour != null) base.withColor(colour) else base
         }
     }
 
@@ -168,6 +239,18 @@ object EnvironmentalScanner {
         val hour = (totalMinutes / 60L).toInt()
         val minute = (totalMinutes % 60L).toInt()
         return "%02d:%02d".format(hour, minute)
+    }
+
+    private fun resolveMoonPhaseColour(moonPhase: Int): Int {
+        val brightness = when (moonPhase.coerceIn(0, 7)) {
+            0 -> 1.0f
+            1, 7 -> 0.82f
+            2, 6 -> 0.62f
+            3, 5 -> 0.42f
+            else -> 0.24f
+        }
+
+        return interpolateColour(0x6F7A99, 0xF4F1DE, brightness)
     }
 
     private fun formatLightLabel(lightLevel: Int): String {
@@ -217,13 +300,21 @@ object EnvironmentalScanner {
             displays += VariantDisplay(
                 headerTranslationKey = "betterpokedexscanner.header.environment.terrain",
                 label = "",
-                labelTranslationKey = "betterpokedexscanner.environment.terrain.underwater"
+                labelTranslationKey = "betterpokedexscanner.environment.terrain.underwater",
+                labelComponent = buildColoredTranslatedComponent(
+                    "betterpokedexscanner.environment.terrain.underwater",
+                    terrainColours["betterpokedexscanner.environment.terrain.underwater"]
+                )
             )
         } else if (player.isInWater) {
             displays += VariantDisplay(
                 headerTranslationKey = "betterpokedexscanner.header.environment.terrain",
                 label = "",
-                labelTranslationKey = "betterpokedexscanner.environment.terrain.on_water"
+                labelTranslationKey = "betterpokedexscanner.environment.terrain.on_water",
+                labelComponent = buildColoredTranslatedComponent(
+                    "betterpokedexscanner.environment.terrain.on_water",
+                    terrainColours["betterpokedexscanner.environment.terrain.on_water"]
+                )
             )
         }
 
@@ -231,13 +322,21 @@ object EnvironmentalScanner {
             displays += VariantDisplay(
                 headerTranslationKey = "betterpokedexscanner.header.environment.terrain",
                 label = "",
-                labelTranslationKey = "betterpokedexscanner.environment.terrain.underground"
+                labelTranslationKey = "betterpokedexscanner.environment.terrain.underground",
+                labelComponent = buildColoredTranslatedComponent(
+                    "betterpokedexscanner.environment.terrain.underground",
+                    terrainColours["betterpokedexscanner.environment.terrain.underground"]
+                )
             )
         } else if (canSeeSky) {
             displays += VariantDisplay(
                 headerTranslationKey = "betterpokedexscanner.header.environment.terrain",
                 label = "",
-                labelTranslationKey = "betterpokedexscanner.environment.terrain.surface"
+                labelTranslationKey = "betterpokedexscanner.environment.terrain.surface",
+                labelComponent = buildColoredTranslatedComponent(
+                    "betterpokedexscanner.environment.terrain.surface",
+                    terrainColours["betterpokedexscanner.environment.terrain.surface"]
+                )
             )
         }
 
@@ -245,7 +344,11 @@ object EnvironmentalScanner {
             displays += VariantDisplay(
                 headerTranslationKey = "betterpokedexscanner.header.environment.terrain",
                 label = "",
-                labelTranslationKey = "betterpokedexscanner.environment.terrain.in_cave"
+                labelTranslationKey = "betterpokedexscanner.environment.terrain.in_cave",
+                labelComponent = buildColoredTranslatedComponent(
+                    "betterpokedexscanner.environment.terrain.in_cave",
+                    terrainColours["betterpokedexscanner.environment.terrain.in_cave"]
+                )
             )
         }
 
@@ -253,7 +356,11 @@ object EnvironmentalScanner {
             displays += VariantDisplay(
                 headerTranslationKey = "betterpokedexscanner.header.environment.terrain",
                 label = "",
-                labelTranslationKey = "betterpokedexscanner.environment.terrain.high_altitude"
+                labelTranslationKey = "betterpokedexscanner.environment.terrain.high_altitude",
+                labelComponent = buildColoredTranslatedComponent(
+                    "betterpokedexscanner.environment.terrain.high_altitude",
+                    terrainColours["betterpokedexscanner.environment.terrain.high_altitude"]
+                )
             )
         }
 

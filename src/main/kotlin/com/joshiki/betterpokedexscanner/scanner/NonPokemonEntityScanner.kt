@@ -244,7 +244,8 @@ object NonPokemonEntityScanner {
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.base_color",
-                        label = formatResourcePath(entity.baseColor.name)
+                        label = formatResourcePath(entity.baseColor.name),
+                        labelComponent = MinecraftColourLabelFormatter.buildDyeComponent(entity.baseColor)
                     )
                 )
                 add(
@@ -256,7 +257,8 @@ object NonPokemonEntityScanner {
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.pattern_color",
-                        label = formatResourcePath(entity.patternColor.name)
+                        label = formatResourcePath(entity.patternColor.name),
+                        labelComponent = MinecraftColourLabelFormatter.buildDyeComponent(entity.patternColor)
                     )
                 )
                 add(
@@ -294,7 +296,8 @@ object NonPokemonEntityScanner {
                     add(
                         VariantDisplay(
                             headerTranslationKey = "betterpokedexscanner.header.entity.variant",
-                            label = colorLabel
+                            label = colorLabel,
+                            labelComponent = resolveBuiltInVariantComponent(entity, colorLabel)
                         )
                     )
                 }
@@ -310,11 +313,12 @@ object NonPokemonEntityScanner {
             }
         }
 
-        resolveBuiltInVariantLabel(entity)?.let { variantLabel ->
+        resolveBuiltInVariantPresentation(entity)?.let { (variantLabel, variantComponent) ->
             return listOf(
                 VariantDisplay(
                     headerTranslationKey = "betterpokedexscanner.header.entity.variant",
-                    label = variantLabel
+                    label = variantLabel,
+                    labelComponent = variantComponent
                 )
             )
         }
@@ -338,6 +342,95 @@ object NonPokemonEntityScanner {
             } ?: return null
 
         return formatVariantValue(variantValue)
+    }
+
+    private fun resolveBuiltInVariantPresentation(entity: Entity): Pair<String, net.minecraft.network.chat.Component?>? {
+        val label = resolveBuiltInVariantLabel(entity) ?: return null
+
+        if (entity is Axolotl) {
+            return when (label.lowercase()) {
+                "lucy" -> "Leucistic" to MinecraftColourLabelFormatter.buildLiteralComponent("Leucistic", "pink")
+                "wild" -> "Wild" to MinecraftColourLabelFormatter.buildLiteralComponent("Wild", "chestnut")
+                "brown" -> "Brown" to MinecraftColourLabelFormatter.buildLiteralComponent("Brown", "chestnut")
+                "gold" -> "Gold" to MinecraftColourLabelFormatter.buildLiteralComponent("Gold", "gold")
+                "cyan" -> "Cyan" to MinecraftColourLabelFormatter.buildLiteralComponent("Cyan", "pale_blue")
+                "blue" -> "Blue" to MinecraftColourLabelFormatter.buildLiteralComponent("Blue", "soft_blue")
+                else -> label to null
+            }
+        }
+
+        if (entity is Cat) {
+            return when (label.lowercase()) {
+                "black" -> "Tuxedo" to MinecraftColourLabelFormatter.buildSplitLabelComponent("Tuxedo", listOf("black", "white"))
+                "all black" -> "Black" to MinecraftColourLabelFormatter.buildLiteralComponent("Black", "black")
+                "british shorthair" -> "British Shorthair" to MinecraftColourLabelFormatter.buildLiteralComponent("British Shorthair", "silver")
+                "calico" -> "Calico" to MinecraftColourLabelFormatter.buildSplitLabelComponent("Calico", listOf("orange", "white", "dark_brown"))
+                "jellie" -> "Jellie" to MinecraftColourLabelFormatter.buildSplitLabelComponent("Jellie", listOf("gray", "white"))
+                "persian" -> "Persian" to MinecraftColourLabelFormatter.buildLiteralComponent("Persian", "persian_cream")
+                "ragdoll" -> "Ragdoll" to MinecraftColourLabelFormatter.buildLiteralComponent("Ragdoll", "ragdoll_gray")
+                "red" -> "Red" to MinecraftColourLabelFormatter.buildSplitLabelComponent("Red", listOf("dark_orange", "warm_orange", "white"))
+                "siamese" -> "Siamese" to MinecraftColourLabelFormatter.buildSplitLabelComponent(
+                    "Siamese",
+                    listOf("siamese_dark","siamese_brown", "siamese_taupe", "siamese_cream")
+                )
+                "tabby" -> "Tabby" to MinecraftColourLabelFormatter.buildSplitLabelComponent(
+                    "Tabby",
+                    listOf("tabby_dark", "tabby_mid", "tabby_light")
+                )
+                "gray tabby" -> "Gray Tabby" to MinecraftColourLabelFormatter.buildSplitLabelComponent(
+                    "Gray Tabby",
+                    listOf("gray_tabby_dark", "gray_tabby_mid", "gray_tabby_light")
+                )
+                "white" -> "White" to MinecraftColourLabelFormatter.buildLiteralComponent("White", "white")
+                else -> label to null
+            }
+        }
+
+        return label to resolveBuiltInVariantComponent(entity, label)
+    }
+
+    private fun resolveBuiltInVariantComponent(entity: Entity, label: String): net.minecraft.network.chat.Component? {
+        if (entity is Rabbit) {
+            return when (label.lowercase()) {
+                "brown" -> MinecraftColourLabelFormatter.buildLiteralComponent("Brown", "rabbit_brown")
+                "gold" -> MinecraftColourLabelFormatter.buildLiteralComponent("Gold", "rabbit_gold")
+                "salt" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(
+                    "Salt",
+                    listOf("rabbit_salt_light", "rabbit_salt_mid", "rabbit_salt_dark")
+                )
+                "evil" -> MinecraftColourLabelFormatter.buildLiteralComponent("Evil", "rabbit_evil")
+                "white splotched" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(
+                    "White Splotched",
+                    listOf("black", "rabbit_splotch_mid", "white")
+                )
+                else -> resolveGenericBuiltInVariantComponent(label)
+            }
+        }
+
+        return resolveGenericBuiltInVariantComponent(label)
+    }
+
+    private fun resolveGenericBuiltInVariantComponent(label: String): net.minecraft.network.chat.Component? {
+        return when (label.lowercase()) {
+            "white" -> MinecraftColourLabelFormatter.buildLiteralComponent("White", "white")
+            "creamy" -> MinecraftColourLabelFormatter.buildLiteralComponent("Creamy", "creamy")
+            "chestnut" -> MinecraftColourLabelFormatter.buildLiteralComponent("Chestnut", "chestnut")
+            "brown" -> MinecraftColourLabelFormatter.buildLiteralComponent("Brown", "brown")
+            "black" -> MinecraftColourLabelFormatter.buildLiteralComponent("Black", "black")
+            "gray" -> MinecraftColourLabelFormatter.buildLiteralComponent("Gray", "gray")
+            "dark brown" -> MinecraftColourLabelFormatter.buildLiteralComponent("Dark Brown", "dark_brown")
+            "british shorthair" -> MinecraftColourLabelFormatter.buildLiteralComponent("British Shorthair", "silver")
+            "calico" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(label, listOf("orange", "white", "dark_brown"))
+            "jellie" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(label, listOf("gray", "white"))
+            "persian" -> MinecraftColourLabelFormatter.buildLiteralComponent("Persian", "creamy")
+            "ragdoll" -> MinecraftColourLabelFormatter.buildLiteralComponent("Ragdoll", "sandy")
+            "red" -> MinecraftColourLabelFormatter.buildLiteralComponent("Red", "orange")
+            "siamese" -> MinecraftColourLabelFormatter.buildLiteralComponent("Siamese", "pale_brown")
+            "tabby" -> MinecraftColourLabelFormatter.buildLiteralComponent("Tabby", "brown")
+            "tuxedo" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(label, listOf("black", "white"))
+            "gold" -> MinecraftColourLabelFormatter.buildLiteralComponent("Gold", "gold")
+            else -> null
+        }
     }
 
     private fun shouldIgnoreEntity(entity: Entity): Boolean {
@@ -463,7 +556,8 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.entity.collar_color",
-            label = formatResourcePath(dyeColor.name)
+            label = formatResourcePath(dyeColor.name),
+            labelComponent = MinecraftColourLabelFormatter.buildDyeComponent(dyeColor)
         )
     }
 
@@ -472,7 +566,8 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.wool_color",
-            label = formatResourcePath(dyeColor.name)
+            label = formatResourcePath(dyeColor.name),
+            labelComponent = MinecraftColourLabelFormatter.buildDyeComponent(dyeColor)
         )
     }
 
@@ -481,7 +576,8 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.shell_color",
-            label = formatResourcePath(dyeColor.name)
+            label = formatResourcePath(dyeColor.name),
+            labelComponent = MinecraftColourLabelFormatter.buildDyeComponent(dyeColor)
         )
     }
 
@@ -536,7 +632,8 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.carpet_color",
-            label = formatResourcePath(dyeColor.name)
+            label = formatResourcePath(dyeColor.name),
+            labelComponent = MinecraftColourLabelFormatter.buildDyeComponent(dyeColor)
         )
     }
 
@@ -566,10 +663,12 @@ object NonPokemonEntityScanner {
 
         val bodyItem = living.getItemBySlot(EquipmentSlot.BODY)
         if (bodyItem.isEmpty) return null
+        val itemPath = BuiltInRegistries.ITEM.getKey(bodyItem.item).path
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.entity.armor",
-            label = bodyItem.hoverName.string
+            label = bodyItem.hoverName.string,
+            labelComponent = MinecraftColourLabelFormatter.buildVanillaMaterialComponent(bodyItem.hoverName.string, itemPath)
         )
     }
 
@@ -580,10 +679,12 @@ object NonPokemonEntityScanner {
     ): VariantDisplay? {
         val itemStack = entity.getItemBySlot(slot)
         if (itemStack.isEmpty) return null
+        val itemPath = BuiltInRegistries.ITEM.getKey(itemStack.item).path
 
         return VariantDisplay(
             headerTranslationKey = headerTranslationKey,
-            label = itemStack.hoverName.string
+            label = itemStack.hoverName.string,
+            labelComponent = MinecraftColourLabelFormatter.buildVanillaMaterialComponent(itemStack.hoverName.string, itemPath)
         )
     }
 
@@ -604,6 +705,7 @@ object NonPokemonEntityScanner {
             headerLabel = resolvedHeaderLabel,
             headerTranslationKey = resolvedHeaderTranslationKey,
             label = match?.label ?: formattedValue,
+            labelComponent = match?.labelComponent,
             labelTranslationKey = match?.labelTranslationKey
         )
     }

@@ -441,7 +441,7 @@
     },
 
     {
-      "headerTranslationKey": "Model",
+      "headerLabel": "Model",
       "species": ["cobblemon:magearna"],
       "aspectTranslationKeys": {
         "original-color": "betterpokedexscanner.aspectLabel.original_color"
@@ -449,7 +449,7 @@
     },
 
     {
-      "headerTranslationKey": "Chirality",
+      "headerLabel": "Chirality",
       "species": ["cobblemon:clauncher","cobblemon:clawitzer"],
       "aspectLabels": {
         "claw-left": "Left Clawed",
@@ -782,7 +782,7 @@
       "headerLabel": "Family Composition",
       "species": ["cobblemon:maushold","cobblemon:tandemaus"],
       "aspectLabels": {
-        "maushold-family-three": "Family of Free",
+        "maushold-family-three": "Family of Three",
         "maushold-family-four": "Family of Four"
       }
     },
@@ -1055,7 +1055,7 @@
         "mega_z": "Mega Evolution Z",
         "primal": "Primal Reversion",
         "Ash": "Bond Phenomenon",
-        "eternamax": "Etermamax Form",
+        "eternamax": "Eternamax Form",
         "embody-aspect": "Embodied Aspect",
         "terastal-form": "Terastal Form",
         "stellar-form": "Stellar Form"

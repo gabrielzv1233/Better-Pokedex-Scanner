@@ -14,6 +14,13 @@ Resolved accessor displays are added as a normal non-Pokemon variant-style page.
 
 This path is explicit-only. If an entity is not declared here, the scanner will not try to discover arbitrary custom accessor fields automatically.
 
+Accessor value displays can now be declared in four ways:
+
+1. Plain literal text
+2. Plain translation key text
+3. Styled `parts`
+4. Styled translated templates with `translationKey` and `args`
+
 ## File Shape
 
 ```json
@@ -23,6 +30,13 @@ This path is explicit-only. If an entity is not declared here, the scanner will 
       "entities": ["examplemod:example_mob"],
       "accessor": "variant",
       "accessorHeaderLabel": "Mutation",
+      "valueDisplays": {
+        "red": {
+          "parts": [
+            { "text": "Red", "color": "FF0000" }
+          ]
+        }
+      },
       "valueLabels": {
         "red": "Red",
         "blue": "Blue"
@@ -69,6 +83,58 @@ This path is explicit-only. If an entity is not declared here, the scanner will 
   - Map of raw accessor values to translation keys.
   - If present for a matching value, the translated text is shown instead of a literal label.
 
+- `valueDisplays`
+  - Map of raw accessor values to structured styled displays.
+  - If present for a matching value, it takes priority over `valueTranslationKeys` and `valueLabels`.
+
+## Styled Display Shape
+
+A styled display can be declared in one of two ways.
+
+### 1. `parts`
+
+Use this for straightforward English-first labels or when only part of the value should be colored.
+
+```json
+{
+  "parts": [
+    { "text": "Blue", "color": "4A90E2" },
+    { "text": " Wool" }
+  ]
+}
+```
+
+Each part supports:
+
+- `text`
+  - Literal text for that segment.
+- `translationKey`
+  - Translation key for that segment instead of literal text.
+- `color`
+  - Optional six-digit hex color such as `"4A90E2"` or `"#4A90E2"`.
+
+### 2. `translationKey` + `args`
+
+Use this when the full phrase should be controlled by the language file.
+
+```json
+{
+  "translationKey": "betterpokedexscanner.entityAccessor.colour_variant",
+  "args": [
+    { "translationKey": "betterpokedexscanner.colour.blue", "color": "4A90E2" }
+  ]
+}
+```
+
+Then in your lang file:
+
+```json
+{
+  "betterpokedexscanner.entityAccessor.colour_variant": "%s Variant",
+  "betterpokedexscanner.colour.blue": "Blue"
+}
+```
+
 ## Matching Rules
 
 - Entity ids are compared case-insensitively.
@@ -84,7 +150,8 @@ This path is explicit-only. If an entity is not declared here, the scanner will 
 
 ## Value Behavior
 
-- If the raw accessor value matches `valueTranslationKeys`, the translated text is used.
+- If the raw accessor value matches `valueDisplays`, the structured styled display is used.
+- Otherwise, if it matches `valueTranslationKeys`, the translated text is used.
 - Otherwise, if it matches `valueLabels`, the literal label is used.
 - Otherwise, the scanner falls back to formatting the raw value automatically.
 
@@ -122,9 +189,34 @@ Then define those keys in your language files:
 }
 ```
 
+Styled template example:
+
+```json
+{
+  "groups": [
+    {
+      "entities": ["examplemod:example_mob"],
+      "accessor": "variant",
+      "valueDisplays": {
+        "blue": {
+          "translationKey": "betterpokedexscanner.entityAccessor.colour_variant",
+          "args": [
+            { "translationKey": "betterpokedexscanner.colour.blue", "color": "4A90E2" }
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
 ## Notes
 
 - This system is best used for custom mobs with stable accessors.
 - It is explicit-only. New custom accessors must be declared here to appear.
 - Built-in hardcoded entity handling still exists for the vanilla cases the scanner already knows how to present.
 - Accessor traversal is reflective, so keep paths simple and predictable.
+- For any single value, resolution priority is:
+  1. styled display
+  2. translation key
+  3. literal label

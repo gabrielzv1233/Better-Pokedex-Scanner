@@ -10,6 +10,7 @@ import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity
 import com.joshiki.betterpokedexscanner.scanner.VariantCycleAccess
 import com.joshiki.betterpokedexscanner.scanner.CarouselSlotState
 import com.joshiki.betterpokedexscanner.scanner.VariantLabelResolver
+import com.joshiki.betterpokedexscanner.scanner.PokemonBlockScanPresentation
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
@@ -26,7 +27,7 @@ import com.joshiki.betterpokedexscanner.client.RestorationTankScanState
 import com.joshiki.betterpokedexscanner.client.EnvironmentalScanState
 import com.joshiki.betterpokedexscanner.client.BeehiveScanState
 import com.joshiki.betterpokedexscanner.client.NonPokemonEntityScanState
-import com.joshiki.betterpokedexscanner.scanner.RestorationTankScanner
+import com.joshiki.betterpokedexscanner.scanner.PokemonBlockScanner
 import com.joshiki.betterpokedexscanner.scanner.EnvironmentalScanner
 import com.joshiki.betterpokedexscanner.scanner.BeehiveScanner
 import com.joshiki.betterpokedexscanner.scanner.NonPokemonEntityScanner
@@ -70,7 +71,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
     @Unique
     private var carouselSlotStates: MutableList<CarouselSlotState>? = null
     @Unique
-    private var carouselNextFlipDelayTicks: Float = 80F
+    private var carouselNextFlipDelayTicks: Float = 50F
 
     @Shadow
     abstract fun resetFocusedPokemonState()
@@ -140,7 +141,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         }
 
         if (candidates.isEmpty()) {
-            carouselNextFlipDelayTicks = 24F
+            carouselNextFlipDelayTicks = 14F
             return
         }
 
@@ -148,10 +149,10 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
         val chosenState = states[chosen.first]
         chosenState.nextPage = (chosenState.currentPage + 1) % chosen.second
         chosenState.transitionProgress = 0.01F
-        chosenState.cooldownTicks = 70F + Random.nextFloat() * 35F
+        chosenState.cooldownTicks = 40F + Random.nextFloat() * 20F
         chosenState.ticksSinceFlip = 0F
 
-        carouselNextFlipDelayTicks = 48F + Random.nextFloat() * 32F
+        carouselNextFlipDelayTicks = 28F + Random.nextFloat() * 18F
     }
 
     override fun resetCarouselScheduler() {
@@ -162,7 +163,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
             it.cooldownTicks = 0F
             it.ticksSinceFlip = 0F
         }
-        carouselNextFlipDelayTicks = 80F
+        carouselNextFlipDelayTicks = 50F
     }
 
     @Unique
@@ -505,6 +506,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                         if (BeehiveScanState.focusIntervals >= PokedexUsageContext.FOCUS_INTERVALS) {
                             BeehiveScanState.focusIntervals = PokedexUsageContext.FOCUS_INTERVALS
                             val snapshot = BeehiveScanState.snapshot
+                            ensureInfoFrameCount(snapshot?.frameDisplays?.size ?: beehiveScan.frameDisplays.size)
                             val framePageCounts = snapshot?.frameDisplays?.map { it.size } ?: emptyList()
                             val rarePageCounts =
                                 if (snapshot == null) {
@@ -529,7 +531,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     }
                 }
             } else {
-            val tankScan = RestorationTankScanner.findRestorationTankTarget(user)
+            val tankScan = PokemonBlockScanner.findTarget(user)
 
             if (tankScan != null) {
                 EnvironmentalScanState.suspendForTarget()
@@ -540,7 +542,19 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                             RestorationTankScanState.blockPos != tankScan.blockPos
 
                 val knownKnowledge = CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(tankScan.speciesId)
-                val speciesUnknown = knownKnowledge == PokedexEntryProgress.NONE
+                val blockNewInformation =
+                    tankScan.resolvedPokemon?.let {
+                        CobblemonClient.clientPokedexData.getNewInformation(
+                            com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData(it, null)
+                        )
+                    }
+                val needsRegistration =
+                    when {
+                        !tankScan.validSpecies -> false
+                        blockNewInformation != null -> blockNewInformation != PokedexLearnedInformation.NONE
+                        else -> knownKnowledge == PokedexEntryProgress.NONE
+                    }
+                val canShowTankTyping = knownKnowledge == PokedexEntryProgress.CAUGHT
 
                 if (isNewTankTarget) {
                     resetFocusedPokemonState()
@@ -552,7 +566,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     BeehiveScanState.beginClosing()
                     RestorationTankRegistrationState.clear()
 
-                    if (speciesUnknown && tankScan.validSpecies) {
+                    if (needsRegistration) {
                         RestorationTankRegistrationState.setTarget(tankScan.blockPos, tankScan.speciesId)
                     } else {
                         RestorationTankRegistrationState.clear()
@@ -565,15 +579,25 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                         validSpecies = tankScan.validSpecies,
                         formName = tankScan.formName,
                         aspects = tankScan.aspects,
-                        shiny = tankScan.shiny
+                        shiny = tankScan.shiny,
+                        scanKind = tankScan.scanKind,
+                        level = tankScan.level,
+                        containerName = tankScan.containerName,
+                        gender = tankScan.gender,
+                        typeLabel = tankScan.typeLabel,
+                        typeLabelComponent = tankScan.typeLabelComponent,
+                        extraMirroredDisplays = tankScan.extraMirroredDisplays
                     )
 
                     RestorationTankScanState.focusIntervals = 0F
 
                     isPokemonInFocusOwned = false
-                    val canShowTankTyping = knownKnowledge == PokedexEntryProgress.CAUGHT
-                    val frameCount = if (canShowTankTyping) 4 else 3
-                    assignRandomInfoFrames(frameCount)
+                    val snapshot = PokemonBlockScanPresentation.build(canShowTankTyping)
+                    if (snapshot != null) {
+                        assignRandomInfoFrames(snapshot.frameCount)
+                    } else {
+                        assignRandomInfoFrames(if (canShowTankTyping) 4 else 3)
+                    }
 
                     newPokemonInfo = PokedexLearnedInformation.NONE
 
@@ -627,6 +651,12 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                             PokedexUsageContext.CENTER_INFO_LINGER_INTERVALS
                         ) {
                             RestorationTankRegistrationState.clear()
+                        }
+                    } else if (RestorationTankScanState.focusIntervals >= PokedexUsageContext.FOCUS_INTERVALS) {
+                        val snapshot = PokemonBlockScanPresentation.build(canShowTankTyping)
+                        if (snapshot != null) {
+                            ensureInfoFrameCount(snapshot.frameCount)
+                            tickCarouselScheduler(snapshot.pageCounts)
                         }
                     }
                 }

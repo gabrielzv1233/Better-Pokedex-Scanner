@@ -2,14 +2,18 @@ package com.joshiki.betterpokedexscanner.scanner
 
 import net.minecraft.client.resources.language.I18n
 import com.cobblemon.mod.common.pokemon.Gender
+import net.minecraft.network.chat.Component
 
 data class VariantDisplay(
     val headerLabel: String? = null,
     val headerTranslationKey: String? = null,
     val label: String,
+    val labelComponent: Component? = null,
     val labelTranslationKey: String? = null,
     val showShinyIcon: Boolean = false,
+    val showCaughtIcon: Boolean = false,
     val genderIcon: Gender? = null,
+    val trailingGenderIcon: Boolean = false,
     val needsSeparateShinyTag: Boolean = false,
     val colour: Int? = null
 )
@@ -31,6 +35,7 @@ object VariantLabelResolver {
                 headerLabel = match.headerLabel,
                 headerTranslationKey = match.headerTranslationKey,
                 label = resolveDisplayLabel(match),
+                labelComponent = match.labelComponent,
                 labelTranslationKey = match.labelTranslationKey,
                 showShinyIcon = false,
                 needsSeparateShinyTag = false
@@ -42,6 +47,7 @@ object VariantLabelResolver {
                 headerLabel = match.headerLabel,
                 headerTranslationKey = match.headerTranslationKey,
                 label = resolveDisplayLabel(match),
+                labelComponent = match.labelComponent,
                 labelTranslationKey = match.labelTranslationKey,
                 showShinyIcon = false,
                 needsSeparateShinyTag = false
@@ -88,10 +94,12 @@ object VariantLabelResolver {
     }
 
     private fun resolveDisplayLabel(match: VariantLabelMatch): String {
-        return if (!match.labelTranslationKey.isNullOrBlank()) {
+        return when {
+            match.labelComponent != null -> match.labelComponent.string
+            !match.labelTranslationKey.isNullOrBlank() -> {
             I18n.get(match.labelTranslationKey)
-        } else {
-            match.label
+            }
+            else -> match.label
         }
     }
 

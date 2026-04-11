@@ -1,7 +1,11 @@
 package com.joshiki.betterpokedexscanner.client
 
+import com.cobblemon.mod.common.pokemon.Gender
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
+import com.joshiki.betterpokedexscanner.scanner.PokemonBlockScanKind
+import com.joshiki.betterpokedexscanner.scanner.VariantDisplay
 
 object RestorationTankScanState {
     var active: Boolean = false
@@ -14,6 +18,13 @@ object RestorationTankScanState {
     var formName: String? = null
     var aspects: Set<String> = emptySet()
     var shiny: Boolean? = null
+    var scanKind: PokemonBlockScanKind = PokemonBlockScanKind.RESTORATION_TANK
+    var level: Int? = null
+    var containerName: String? = null
+    var gender: Gender? = null
+    var typeLabel: String? = null
+    var typeLabelComponent: MutableComponent? = null
+    var extraMirroredDisplays: List<VariantDisplay> = emptyList()
 
 
     fun clear() {
@@ -27,6 +38,13 @@ object RestorationTankScanState {
         formName = null
         aspects = emptySet()
         shiny = null
+        scanKind = PokemonBlockScanKind.RESTORATION_TANK
+        level = null
+        containerName = null
+        gender = null
+        typeLabel = null
+        typeLabelComponent = null
+        extraMirroredDisplays = emptyList()
     }
 
     fun set(
@@ -36,7 +54,14 @@ object RestorationTankScanState {
         validSpecies: Boolean,
         formName: String?,
         aspects: Set<String>,
-        shiny: Boolean?
+        shiny: Boolean?,
+        scanKind: PokemonBlockScanKind,
+        level: Int?,
+        containerName: String?,
+        gender: Gender?,
+        typeLabel: String?,
+        typeLabelComponent: MutableComponent?,
+        extraMirroredDisplays: List<VariantDisplay>
     ) {
         active = true
         this.blockPos = blockPos
@@ -46,6 +71,13 @@ object RestorationTankScanState {
         this.formName = formName
         this.aspects = aspects
         this.shiny = shiny
+        this.scanKind = scanKind
+        this.level = level
+        this.containerName = containerName
+        this.gender = gender
+        this.typeLabel = typeLabel
+        this.typeLabelComponent = typeLabelComponent
+        this.extraMirroredDisplays = extraMirroredDisplays
         this.focusIntervals = 0F
         this.closing = false
     }

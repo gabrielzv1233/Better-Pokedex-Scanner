@@ -1,8 +1,6 @@
 package com.joshiki.betterpokedexscanner.network.serverhandling
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.block.entity.RestorationTankBlockEntity
-import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.joshiki.betterpokedexscanner.network.FinishTankScanningPayload
@@ -27,16 +25,10 @@ object FinishTankScanningHandler {
         val ticksScan = server.tickCount - startTick
         if (ticksScan < PokedexUsageContext.SUCCESS_SCAN_SERVER_TICKS) return
 
-        val resolvedSpeciesId = resolveTankSpeciesId(player, payload.blockPos) ?: return
-        if (resolvedSpeciesId != payload.speciesId) return
+        val resolvedPokemon = resolveScannedBlockPokemon(player, payload.blockPos) ?: return
+        if (resolvedPokemon.species.resourceIdentifier != payload.speciesId) return
 
-        val blockEntity = player.level().getBlockEntity(payload.blockPos) as? RestorationTankBlockEntity ?: return
-        val struct = blockEntity.multiblockStructure as? FossilMultiblockStructure ?: return
-        val fossil = struct.resultingFossil ?: return
-
-
-        val tempPokemon = fossil.result.create(player)
-        val scanData = PokedexEntityData(tempPokemon, null)
+        val scanData = PokedexEntityData(resolvedPokemon, null)
         val dex = Cobblemon.playerDataManager.getPokedexData(player)
         val newInformation = dex.getNewInformation(scanData)
         dex.encounter(scanData)

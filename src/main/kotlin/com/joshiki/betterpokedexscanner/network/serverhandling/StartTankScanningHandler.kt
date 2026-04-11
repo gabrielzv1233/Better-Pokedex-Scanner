@@ -11,7 +11,7 @@ object StartTankScanningHandler {
         server: MinecraftServer,
         player: ServerPlayer
     ) {
-        val resolvedSpeciesId = resolveTankSpeciesId(player, payload.blockPos) ?: return
+        val resolvedSpeciesId = resolveScannedBlockSpeciesId(player, payload.blockPos) ?: return
         if (resolvedSpeciesId != payload.speciesId) return
 
         PlayerTankScanningDetails.playerToBlockPos[player.uuid] = payload.blockPos

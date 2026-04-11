@@ -46,6 +46,8 @@
   "betterpokedexscanner.header.armor_stand.off_hand": "Off Hand",
   "betterpokedexscanner.header.entity.collar_color": "Collar Colour",
   "betterpokedexscanner.header.item_name": "Item Name",
+  "betterpokedexscanner.header.occupied_ball.subject": "Contained Pokemon",
+  "betterpokedexscanner.header.occupied_ball.state": "Pokeball State",
   "betterpokedexscanner.environment.sky_visibility.visible": "Visible",
   "betterpokedexscanner.environment.sky_visibility.not_visible": "Not Visible",
   "betterpokedexscanner.environment.terrain.on_water": "On Water",
