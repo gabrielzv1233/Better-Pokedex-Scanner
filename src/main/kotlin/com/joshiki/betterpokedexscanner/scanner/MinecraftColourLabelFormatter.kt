@@ -150,7 +150,17 @@ object MinecraftColourLabelFormatter {
 
     fun buildVanillaMaterialComponent(label: String, itemPath: String): MutableComponent? {
         val colourKey = vanillaItemMaterials[normalizeKey(itemPath)] ?: return null
-        return buildLiteralComponent(label, colourKey)
+        val firstSpace = label.indexOf(' ')
+        if (firstSpace <= 0 || firstSpace >= label.lastIndex) {
+            return buildLiteralComponent(label, colourKey)
+        }
+
+        val materialLabel = label.substring(0, firstSpace)
+        val itemLabel = label.substring(firstSpace)
+
+        return Component.empty()
+            .append(buildLiteralComponent(materialLabel, colourKey))
+            .append(Component.literal(itemLabel).withStyle { style -> style.withBold(true) })
     }
 
     fun buildSplitLabelComponent(label: String, colourKeys: List<String>): MutableComponent {

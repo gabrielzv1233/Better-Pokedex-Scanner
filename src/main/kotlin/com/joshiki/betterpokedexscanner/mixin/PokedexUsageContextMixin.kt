@@ -337,7 +337,6 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                         completedProgress = PokedexUsageContext.MAX_SCAN_PROGRESS.toFloat()
                     )
                 } else {
-                    NonPokemonEntityScanState.clearCached()
                     NonPokemonEntityScanState.set(targetNonPokemonEntity)
                 }
 

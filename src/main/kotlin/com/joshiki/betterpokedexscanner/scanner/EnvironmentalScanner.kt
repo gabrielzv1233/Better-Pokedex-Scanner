@@ -36,10 +36,14 @@ object EnvironmentalScanner {
         )
     private val timeBandColours =
         mapOf(
-            "Morning" to 0x74CEE2,
-            "Day" to 0x7BC1FC,
-            "Evening" to 0xE89E77,
-            "Night" to 0xB3A1E7
+            "Dawn" to 0xA5DFEC,
+            "Morning" to 0xA9D7FD,
+            "Noon" to 0xD5E9FF,
+            "Afternoon" to 0xF2C692,
+            "Sunset" to 0xF0C0A7,
+            "Night" to 0xCEC2EF,
+            "Midnight" to 0xA79ACD,
+            "Sunrise" to 0xF5D5B3
         )
     private val terrainColours =
         mapOf(
@@ -195,14 +199,15 @@ object EnvironmentalScanner {
     }
 
     private fun resolveTimeBand(dayTime: Long): String {
-        val hour = ((dayTime / 1000L + 6L) % 24L).toInt()
-        return when (hour) {
-            in 6..10 -> "Morning"
-            in 11..17 -> "Day"
-            18, 19 -> "Evening"
-            in 20..22 -> "Night"
-            23, 0, 1, 2, 3 -> "Night"
-            else -> "Morning"
+        return when ((dayTime % 24000L).toInt()) {
+            in 0..1999 -> "Dawn"
+            in 2000..5999 -> "Morning"
+            in 6000..8999 -> "Noon"
+            in 9000..11999 -> "Afternoon"
+            in 12000..12999 -> "Sunset"
+            in 13000..17999 -> "Night"
+            in 18000..22999 -> "Midnight"
+            else -> "Sunrise"
         }
     }
 

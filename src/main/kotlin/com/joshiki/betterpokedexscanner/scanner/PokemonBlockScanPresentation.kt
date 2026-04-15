@@ -156,10 +156,8 @@ object PokemonBlockScanPresentation {
             }
 
             RestorationTankScanState.aspects
-                .map { it.trim().lowercase().replace('_', '-') }
-                .filter { it != "shiny" }
-                .mapNotNull { VariantLabelRegistry.findAspectLabel(it, speciesId) }
-                .distinctBy { Triple(it.headerLabel, it.headerTranslationKey, it.labelTranslationKey ?: it.label) }
+                .filter { !it.equals("shiny", ignoreCase = true) }
+                .let { VariantLabelResolver.resolveAspectMatchesForSpecies(speciesId, it) }
                 .forEach { match ->
                     displays += VariantDisplay(
                         headerLabel = match.headerLabel,

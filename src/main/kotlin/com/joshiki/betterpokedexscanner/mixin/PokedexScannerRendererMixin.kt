@@ -1045,7 +1045,9 @@ abstract class PokedexScannerRendererMixin {
                             val variantDisplay =
                                 if (inTransition && transitionProgress >= 0.5f) primaryDisplays[nextPageIndex]
                                 else primaryDisplays[basePageIndex]
-                            val variantText = Component.literal(variantDisplay.label).copy().bold()
+                            val variantText =
+                                variantDisplay.labelComponent?.copy()
+                                    ?: Component.literal(variantDisplay.label).copy().bold()
                             val headerY = centerY + yOffset + 40
                             val valueY = centerY + yOffset + 44
                             val noHeaderValueY = centerY + yOffset + 42
@@ -1161,17 +1163,29 @@ abstract class PokedexScannerRendererMixin {
                                 )
                             }
 
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = variantText,
-                                x = textCenterX,
-                                y = primaryValueY,
-                                colour = variantDisplay.colour ?: 0xFFFFFF,
-                                shadow = true,
-                                centered = true,
-                                scale = animatedTextScale
-                            )
+                            if (variantDisplay.labelComponent != null) {
+                                drawScaledStyledText(
+                                    graphics = graphics,
+                                    text = variantText,
+                                    x = textCenterX,
+                                    y = primaryValueY.toFloat(),
+                                    scale = animatedTextScale,
+                                    shadow = true,
+                                    centered = true
+                                )
+                            } else {
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = variantText,
+                                    x = textCenterX,
+                                    y = primaryValueY,
+                                    colour = variantDisplay.colour ?: 0xFFFFFF,
+                                    shadow = true,
+                                    centered = true,
+                                    scale = animatedTextScale
+                                )
+                            }
 
                             // Fake 5th slot: mirrored shiny tag on the opposite side of slot 4
                             if (index == 3 && renderState.showSeparateShinyTag) {
@@ -1637,6 +1651,29 @@ abstract class PokedexScannerRendererMixin {
         )
     }
 
+    private fun drawScaledStyledText(
+        graphics: GuiGraphics,
+        text: Component,
+        x: Int,
+        y: Float,
+        scale: Float,
+        shadow: Boolean,
+        centered: Boolean
+    ) {
+        if (scale <= 0F) return
+
+        val styledText = text.copy().font(CobblemonResources.DEFAULT_LARGE)
+        val font = Minecraft.getInstance().font
+        val width = font.width(styledText)
+        val drawX = if (centered) (-(width / 2F)).roundToInt() else 0
+
+        graphics.pose().pushPose()
+        graphics.pose().translate(x.toFloat(), y, 0F)
+        graphics.pose().scale(scale, scale, 1F)
+        graphics.drawString(font, styledText, drawX, 0, 0xFFFFFF, shadow)
+        graphics.pose().popPose()
+    }
+
     private fun renderPrimaryDisplayFrame(
         graphics: GuiGraphics,
         poseStack: PoseStack,
@@ -1702,7 +1739,7 @@ abstract class PokedexScannerRendererMixin {
         val variantDisplay =
             if (inTransition && transitionProgress >= 0.5f) primaryDisplays[nextPageIndex]
             else primaryDisplays[basePageIndex]
-        val variantText = Component.literal(variantDisplay.label).copy().bold()
+        val variantText = variantDisplay.labelComponent?.copy() ?: Component.literal(variantDisplay.label).copy().bold()
         val headerComponent = if (!variantDisplay.headerTranslationKey.isNullOrBlank()) {
             Component.translatable(variantDisplay.headerTranslationKey)
         } else {
@@ -1791,17 +1828,29 @@ abstract class PokedexScannerRendererMixin {
             )
         }
 
-        drawScaledText(
-            context = graphics,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = variantText,
-            x = textCenterX,
-            y = if (isShinyOnlyDisplay) shinyValueY else primaryValueY,
-            colour = variantDisplay.colour ?: 0xFFFFFF,
-            shadow = true,
-            centered = true,
-            scale = animatedTextScale
-        )
+        if (variantDisplay.labelComponent != null) {
+            drawScaledStyledText(
+                graphics = graphics,
+                text = variantText,
+                x = textCenterX,
+                y = if (isShinyOnlyDisplay) shinyValueY else primaryValueY,
+                scale = animatedTextScale,
+                shadow = true,
+                centered = true
+            )
+        } else {
+            drawScaledText(
+                context = graphics,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = variantText,
+                x = textCenterX,
+                y = if (isShinyOnlyDisplay) shinyValueY else primaryValueY,
+                colour = variantDisplay.colour ?: 0xFFFFFF,
+                shadow = true,
+                centered = true,
+                scale = animatedTextScale
+            )
+        }
 
         if (!renderState.showSeparateShinyTag) return
 
@@ -2041,17 +2090,29 @@ abstract class PokedexScannerRendererMixin {
             )
         }
 
-        drawScaledText(
-            context = graphics,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = value,
-            x = textCenterX,
-            y = resolvedValueY,
-            colour = display.colour ?: 0xFFFFFF,
-            shadow = true,
-            centered = true,
-            scale = animatedTextScale
-        )
+        if (display.labelComponent != null) {
+            drawScaledStyledText(
+                graphics = graphics,
+                text = value,
+                x = textCenterX,
+                y = resolvedValueY,
+                scale = animatedTextScale,
+                shadow = true,
+                centered = true
+            )
+        } else {
+            drawScaledText(
+                context = graphics,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = value,
+                x = textCenterX,
+                y = resolvedValueY,
+                colour = display.colour ?: 0xFFFFFF,
+                shadow = true,
+                centered = true,
+                scale = animatedTextScale
+            )
+        }
     }
 
     private fun renderEnvironmentalStructureTag(

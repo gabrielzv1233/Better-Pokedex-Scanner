@@ -2,11 +2,11 @@
   "groups": [
     {
       "headerLabel": "Regional Variation",
-      "aspectLabels": {
-        "alolan": "Alolan",
-        "galarian": "Galarian",
-        "hisuian": "Hisuian",
-        "paldean": "Paldean"
+      "aspectDisplays": {
+        "alolan": { "parts": [ { "text": "Alolan", "color": "DC5A40" } ] },
+        "galarian": { "parts": [ { "text": "Galarian", "color": "AC379E" } ] },
+        "hisuian": { "parts": [ { "text": "Hisuian", "color": "36597B" } ] },
+        "paldean": { "parts": [ { "text": "Paldean", "color": "DCB000" } ] }
       }
     },
     {
@@ -24,14 +24,23 @@
     {
       "headerTranslationKey": "betterpokedexscanner.header.flower_color",
       "species": ["cobblemon:flabebe","cobblemon:floette","cobblemon:florges"],
-      "aspectLabels": {
-        "flower-red": "Red Flower",
-        "flower-pink": "Pink Flower",
-        "flower-orange": "Orange Flower",
-        "flower-yellow": "Yellow Flower",
-        "flower-blue": "Blue Flower",
-        "flower-white": "White Flower",
-        "flower-eternal": "Eternal Flower"
+      "aspectDisplays": {
+        "flower-red": { "parts": [ { "text": "Red", "color": "FF0000" }, { "text": " Flower" } ] },
+        "flower-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" }, { "text": " Flower" } ] },
+        "flower-orange": { "parts": [ { "text": "Orange", "color": "F9801D" }, { "text": " Flower" } ] },
+        "flower-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" }, { "text": " Flower" } ] },
+        "flower-blue": { "parts": [ { "text": "Blue", "color": "2980EF" }, { "text": " Flower" } ] },
+        "flower-white": { "parts": [ { "text": "White", "color": "F9FFFE" }, { "text": " Flower" } ] },
+        "flower-eternal": {
+          "parts": [
+            { "text": "E", "color": "1D1D21" },
+            { "text": "te", "color": "B02E26" },
+            { "text": "r", "color": "1D1D21" },
+            { "text": "na", "color": "B02E26" },
+            { "text": "l", "color": "1D1D21" },
+            { "text": " Flower"}
+          ]
+        }
       }
     },
     {
@@ -119,25 +128,25 @@
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:squirtle","cobblemon:wartortle","cobblemon:blastoise"],
-      "aspectLabels": {
-        "cosmetic_item-wise_glasses": "Squirtle Squad",
-        "cosmetic_item-black_glasses": "Squirtle Squad Leader"
+      "aspectDisplays": {
+        "cosmetic_item-wise_glasses": { "parts": [ { "text": "Squirtle Squad", "color": "182C6F" } ] },
+        "cosmetic_item-black_glasses": { "parts": [ { "text": "Squirtle Squad Leader", "color": "19182C" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:jigglypuff","cobblemon:alakazam"],
-      "aspectLabels": {
-        "color-black": "Ancient Pokémopolis"
+      "aspectDisplays": {
+        "color-black": { "parts": [ { "text": "Ancient Pokémopolis", "color": "41222F" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:gengar"],
-      "aspectLabels": {
-        "color-green": "Ancient Pokémopolis"
+      "aspectDisplays": {
+        "color-green": { "parts": [ { "text": "Ancient Pokémopolis", "color": "3E5748" } ] }
       }
     },
 
@@ -157,174 +166,346 @@
         "cosmetic_item-leather_helmet": "Detective Cap",
         "cosmetic_item-sinister_tea": "Detective Cap",
         "cosmetic_item-cocoa_beans": "Detective Cap",
-        "cosmetic_item-shears": "Hair Cut - Sparky",
-        "cosmetic_item-music": "Ukulele"
+        "cosmetic_item-shears": "Hair Cut - Sparky"
+      },
+      "aspectDisplays": {
+        "cosmetic_item-music": { "parts": [
+          { "text": "U", "color": "FFF25E" },
+          { "text": "k", "color": "5EB0CC" },
+          { "text": "u", "color": "B57D8A" },
+          { "text": "l", "color": "5EB0CC" },
+          { "text": "e", "color": "B57D8A" },
+          { "text": "l", "color": "5EB0CC" },
+          { "text": "e", "color": "FFF25E" }
+        ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:electrode"],
-      "aspectLabels": {
-        "color-lime": "Lime Watermelon",
-        "color-green": "Green Watermelon"
+      "aspectDisplays": {
+        "color-lime": {
+          "parts": [
+            { "text": "L", "color": "647A22" },
+            { "text": "i", "color": "B6BB2B" },
+            { "text": "m", "color": "48701A" },
+            { "text": "e", "color": "B6BB2B" },
+            { "text": " W", "color": "647A22" },
+            { "text": "a", "color": "B6BB2B" },
+            { "text": "t", "color": "48701A" },
+            { "text": "e", "color": "B6BB2B" },
+            { "text": "r", "color": "647A22" },
+            { "text": "m", "color": "B6BB2B" },
+            { "text": "e", "color": "48701A" },
+            { "text": "l", "color": "B6BB2B" },
+            { "text": "o", "color": "647A22" },
+            { "text": "n", "color": "B6BB2B" }
+          ]
+        },
+        "color-green": {
+          "parts": [
+            { "text": "Gr", "color": "3A572F" },
+            { "text": "ee", "color": "283E20" },
+            { "text": "n W", "color": "3A572F" },
+            { "text": "at", "color": "283E20" },
+            { "text": "er", "color": "3A572F" },
+            { "text": "me", "color": "283E20" },
+            { "text": "lo", "color": "3A572F" },
+            { "text": "n", "color": "283E20" }
+          ]
+        }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:dragonite"],
-      "aspectLabels": {
-        "cosmetic_item-bundle": "Messenger"
+      "aspectDisplays": {
+        "cosmetic_item-bundle": { "parts": [ { "text": "Messenger", "color": "43403D" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:sudowoodo"],
-      "aspectLabels": {
-        "cosmetic_item-gold_armor": "Golden"
+      "aspectDisplays": {
+        "cosmetic_item-gold_armor": { "parts": [ { "text": "Golden", "color": "F6D04D" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:treecko","cobblemon:grovyle","cobblemon:sceptile"],
-      "aspectLabels": {
-        "cosmetic_item-stick": "Twig"
+      "aspectDisplays": {
+        "cosmetic_item-stick": { "parts": [ { "text": "Twig", "color": "553F18" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:spoink"],
-      "aspectLabels": {
-        "cosmetic_item-ender_pearl": "Ender Pearl"
+      "aspectDisplays": {
+        "cosmetic_item-ender_pearl": { "parts": [ { "text": "Ender Pearl", "color": "0C3A33" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:timburr","cobblemon:komala"],
-      "aspectLabels": {
-        "tree-oak": "Oak Log",
-        "tree-spruce": "Spruce Log",
-        "tree-acacia": "Acacia Log",
-        "tree-birch": "Birch Log",
-        "tree-darkoak": "Dark Oak Log",
-        "tree-jungle": "Jungle Log",
-        "tree-mangrove": "Mangrove Log",
-        "tree-cherry": "Cherry Log",
-        "tree-crimson": "Crimson Log",
-        "tree-warped": "Warped Log",
-        "tree-apricorn": "Apricorn Log",
-        "tree-saccharine": "Saccharine Log"
+      "aspectDisplays": {
+        "tree-oak": { "parts": [
+          { "text": "O", "color": "5D482A" },
+          { "text": "a", "color": "B6925E" },
+          { "text": "k", "color": "5D482A" },
+          { "text": " Log" }
+        ]
+        },
+        "tree-spruce": { "parts": [
+          { "text": "Sp", "color": "54391F" },
+          { "text": "ru", "color": "806039" },
+          { "text": "ce", "color": "54391F" },
+          { "text": " Log" }
+        ] },
+        "tree-acacia": { "parts": [
+          { "text": "Ac", "color": "686158" },
+          { "text": "ac", "color": "AB5C31" },
+          { "text": "ia", "color": "686158" },
+          { "text": " Log" }
+        ] },
+        "tree-birch": { "parts": [
+          { "text": "B", "color": "A4A4A4" },
+          { "text": "ir", "color": "D4BF83" },
+          { "text": "ch", "color": "A4A4A4" },
+          { "text": " Log" }
+        ] },
+        "tree-darkoak": { "parts": [
+          { "text": "Da", "color": "49371E" },
+          { "text": "rk O", "color": "482E17" },
+          { "text": "ak", "color": "49371E" },
+          { "text": " Log" }
+        ] },
+        "tree-jungle": { "parts": [
+          { "text": "Ju", "color": "7C5C26" },
+          { "text": "ng", "color": "B68563" },
+          { "text": "le", "color": "7C5C26" },
+          { "text": " Log" }
+        ] },
+        "tree-mangrove": { "parts": [
+          { "text": "Man", "color": "66512F" },
+          { "text": "gro", "color": "763833" },
+          { "text": "ve", "color": "66512F" },
+          { "text": " Log" }
+        ] },
+        "tree-cherry": { "parts": [
+          { "text": "Ch", "color": "560303" },
+          { "text": "er", "color": "E3B3AB" },
+          { "text": "ry", "color": "560303" },
+          { "text": " Log" } ] },
+        "tree-crimson": { "parts": [
+          { "text": "Cr", "color": "560303" },
+          { "text": "ims", "color": "7A3852" },
+          { "text": "on", "color": "560303" },
+          { "text": " Log" } ] },
+        "tree-warped": { "parts": [
+          { "text": "Wa", "color": "442332" },
+          { "text": "rp", "color": "35817F" },
+          { "text": "ed", "color": "442332" },
+          { "text": " Log" } ] },
+        "tree-apricorn": { "parts": [
+          { "text": "Ap", "color": "654E26" },
+          { "text": "ric", "color": "BC924B" },
+          { "text": "orn", "color": "654E26" },
+          { "text": " Log" }
+        ] },
+        "tree-saccharine": { "parts": [
+          { "text": "Sac", "color": "3F292C" },
+          { "text": "char", "color": "44589E" },
+          { "text": "ine", "color": "3F292C" },
+          { "text": " Log" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:gurdurr"],
-      "aspectLabels": {
-        "metals-copper": "Copper Girder",
-        "metals-iron": "Iron Girder",
-        "metals-gold": "Gold Girder",
-        "metals-netherite": "Netherite Girder"
+      "aspectDisplays": {
+        "metals-copper": { "parts": [ { "text": "Copper", "color": "B87333" }, { "text": " Girder" } ] },
+        "metals-iron": { "parts": [ { "text": "Iron", "color": "D8D8D8" }, { "text": " Girder" } ] },
+        "metals-gold": { "parts": [ { "text": "Gold", "color": "F6D04D" }, { "text": " Girder" } ] },
+        "metals-netherite": { "parts": [ { "text": "Netherite", "color": "5B4B4F" }, { "text": " Girder" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:conkeldurr"],
-      "aspectLabels": {
-        "color-white": "White Concrete",
-        "color-orange": "Orange Concrete",
-        "color-magenta": "Magenta Concrete",
-        "color-light_blue": "Light Blue Concrete",
-        "color-yellow": "Yellow Concrete",
-        "color-lime": "Lime Concrete",
-        "color-pink": "Pink Concrete",
-        "color-purple": "Purple Concrete",
-        "color-blue": "Blue Concrete",
-        "color-brown": "Brown Concrete",
-        "color-green": "Green Concrete",
-        "color-red": "Red Concrete",
-        "color-black": "Black Concrete",
-        "color-cyan": "Cyan Concrete"
-      },
-      "aspectTranslationKeys": {
-        "color-gray": "betterpokedexscanner.aspectLabel.gray_concrete",
-        "color-light_gray": "betterpokedexscanner.aspectLabel.light_gray_concrete"
+      "aspectDisplays": {
+        "color-white": { "parts": [ { "text": "White", "color": "F9FFFE" }, { "text": " Concrete" } ] },
+        "color-orange": { "parts": [ { "text": "Orange", "color": "F9801D" }, { "text": " Concrete" } ] },
+        "color-magenta": { "parts": [ { "text": "Magenta", "color": "C74EBD" }, { "text": " Concrete" } ] },
+        "color-light_blue": { "parts": [ { "text": "Light Blue", "color": "3AB3DA" }, { "text": " Concrete" } ] },
+        "color-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" }, { "text": " Concrete" } ] },
+        "color-lime": { "parts": [ { "text": "Lime", "color": "80C71F" }, { "text": " Concrete" } ] },
+        "color-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" }, { "text": " Concrete" } ] },
+        "color-purple": { "parts": [ { "text": "Purple", "color": "8932B8" }, { "text": " Concrete" } ] },
+        "color-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" }, { "text": " Concrete" } ] },
+        "color-brown": { "parts": [ { "text": "Brown", "color": "835432" }, { "text": " Concrete" } ] },
+        "color-green": { "parts": [ { "text": "Green", "color": "5E7C16" }, { "text": " Concrete" } ] },
+        "color-red": { "parts": [ { "text": "Red", "color": "B02E26" }, { "text": " Concrete" } ] },
+        "color-black": { "parts": [ { "text": "Black", "color": "1D1D21" }, { "text": " Concrete" } ] },
+        "color-cyan": { "parts": [ { "text": "Cyan", "color": "169C9C" }, { "text": " Concrete" } ] },
+        "color-gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.gray", "color": "474F52" }, { "text": " Concrete" } ] },
+        "color-light_gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.light_gray", "color": "9D9D97" }, { "text": " Concrete" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:sandile","cobblemon:krokorok","cobblemon:krookodile"],
-      "aspectLabels": {
-        "cosmetic_item-black_glasses": "Red Sunglasses"
+      "aspectDisplays": {
+        "cosmetic_item-black_glasses": { "parts": [
+          { "text": "Red", "color": "8D212F" },
+          { "text": "Sunglasses", "color": "183E4D" }
+        ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:braixen","cobblemon:delphox"],
-      "aspectLabels": {
-        "cosmetic_item-silk_scarf": "Ribboned Stick"
+      "aspectDisplays": {
+        "cosmetic_item-silk_scarf": { "parts": [
+          { "text": "Ribboned", "color": "821A1E" },
+          { "text": " Stick", "color": "634E3A" }
+        ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:hawlucha"],
-      "aspectLabels": {
-        "cosmetic_item-leaves": "Leaf Mask"
+      "aspectDisplays": {
+        "cosmetic_item-leaves": { "parts": [ { "text": "Leaf Mask", "color": "0C9339" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:tinkatink","cobblemon:tinkatuff","cobblemon:tinkaton"],
-      "aspectLabels": {
-        "cosmetic_item-music": "Microphone Hammer"
+      "aspectDisplays": {
+        "cosmetic_item-music": { "parts": [
+          { "text": "Mic", "color": "B35791" },
+          { "text": "roph", "color": "8C7E9E" },
+          { "text": "one", "color": "B35791" },
+          { "text": " Ha", "color": "B35791" },
+          { "text": "mm", "color": "8C7E9E" },
+          { "text": "er", "color": "B35791" }
+        ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:sneasler"],
-      "aspectLabels": {
-        "cosmetic_item-composter": "Thatch Basket"
+      "aspectDisplays": {
+        "cosmetic_item-composter": { "parts": [ { "text": "Thatch Basket", "color": "EDD789" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:zarude"],
-      "aspectLabels": {
-        "dada-cape": "251 Cape"
+      "aspectDisplays": {
+        "dada-cape": { "parts": [ { "text": "251 Cape", "color": "D189C8" } ] }
       }
     },
 
     {
       "headerLabel": "Cosmetic Appearance",
       "species": ["cobblemon:gimmighoul","cobblemon:gholdengo"],
-      "aspectLabels": {
-        "minecraft": "Minecraft Chest",
-        "red-gilded-chest": "Red Gilded Chest",
-        "yellow-gilded-chest": "Yellow Gilded Chest",
-        "green-gilded-chest": "Green Gilded Chest",
-        "blue-gilded-chest": "Blue Gilded Chest",
-        "pink-gilded-chest": "Pink Gilded Chest",
-        "black-gilded-chest": "Black Gilded Chest",
-        "white-gilded-chest": "White Gilded Chest"
+      "aspectDisplays": {
+        "minecraft": {
+          "parts": [
+            { "text": "Mi", "color": "383228" },
+            { "text": "necra", "color": "8A5A19" },
+            { "text": "ft", "color": "9F9FA0" },
+            { "text": " Che", "color": "8A5A19" },
+            { "text": "st", "color": "383228" }
+          ]
+        },
+        "red-gilded-chest": {
+          "parts": [
+            { "text": "Re", "color": "B49C4A" },
+            { "text": "d Gil", "color": "B14040" },
+            { "text": "de", "color": "A3ABC6" },
+            { "text": "d Che", "color": "B14040" },
+            { "text": "st", "color": "B49C4A" }
+          ]
+        },
+        "yellow-gilded-chest": {
+          "parts": [
+            { "text": "Yel", "color": "B49C4A" },
+            { "text": "low Gi", "color": "C89530" },
+            { "text": "ld", "color": "A3ABC6" },
+            { "text": "ed Ch", "color": "C89530" },
+            { "text": "est", "color": "B49C4A" }
+          ]
+        },
+        "green-gilded-chest": {
+          "parts": [
+            { "text": "Gre", "color": "B49C4A" },
+            { "text": "en Gi", "color": "4E8F1A" },
+            { "text": "ld", "color": "A3ABC6" },
+            { "text": "ed Ch", "color": "4E8F1A" },
+            { "text": "est", "color": "B49C4A" }
+          ]
+        },
+        "blue-gilded-chest": {
+          "parts": [
+            { "text": "Blu", "color": "B49C4A" },
+            { "text": "e Gi", "color": "0B539F" },
+            { "text": "lde", "color": "A3ABC6" },
+            { "text": "d Ch", "color": "0B539F" },
+            { "text": "est", "color": "B49C4A" }
+          ]
+        },
+        "pink-gilded-chest": {
+          "parts": [
+            { "text": "Pi", "color": "B49C4A" },
+            { "text": "nk Gi", "color": "CB80AC" },
+            { "text": "lde", "color": "A3ABC6" },
+            { "text": "d Che", "color": "CB80AC" },
+            { "text": "st", "color": "B49C4A" }
+          ]
+        },
+        "black-gilded-chest": {
+          "parts": [
+            { "text": "Bla", "color": "B49C4A" },
+            { "text": "ck Gi", "color": "3B4356" },
+            { "text": "ld", "color": "A3ABC6" },
+            { "text": "ed Ch", "color": "3B4356" },
+            { "text": "est", "color": "B49C4A" }
+          ]
+        },
+        "white-gilded-chest": {
+          "parts": [
+            { "text": "Whi", "color": "B49C4A" },
+            { "text": "te Gi", "color": "AFA9AF" },
+            { "text": "ld", "color": "A3ABC6" },
+            { "text": "ed Ch", "color": "AFA9AF" },
+            { "text": "est", "color": "B49C4A" }
+          ]
+        }
       }
     },
 
     {
       "headerLabel": "Regional Appearance",
+      "aspectDisplays": {
+        "valencian": { "parts": [ { "text": "Valencian", "color": "9D272C" } ] }
+      },
       "aspectLabels": {
-        "valencian": "Valencian",
         "west-sea": "West Sea",
         "east-sea": "East Sea"
       }
@@ -332,21 +513,21 @@
 
     {
       "headerLabel": "Breed",
-      "aspectLabels": {
-        "combat-breed": "Combat",
-        "blaze-breed": "Blaze",
-        "aqua-breed": "Aqua",
-        "mooshtank-red": "Red Mooshtank",
-        "mooshtank-brown": "Brown Mooshtank"
+      "aspectDisplays": {
+        "mooshtank-red": { "parts": [ { "text": "Red", "color": "B02E26" }, { "text": " Mooshtank" } ] },
+        "mooshtank-brown": { "parts": [ { "text": "Brown", "color": "835432" }, { "text": " Mooshtank" } ] },
+        "combat-breed": { "parts": [ { "text": "Combat", "color": "FFAC59" } ] },
+        "blaze-breed": { "parts": [ { "text": "Blaze", "color": "EF7374" } ] },
+        "aqua-breed": { "parts": [ { "text": "Aqua", "color": "2980EF" } ] }
       }
     },
 
     {
       "headerTranslationKey": "betterpokedexscanner.header.eye_color",
       "species": ["cobblemon:gyarados"],
-      "aspectLabels": {
-        "gyarados-eye-color-purple": "Purple",
-        "gyarados-eye-color-red": "Red"
+      "aspectDisplays": {
+        "gyarados-eye-color-purple": { "parts": [ { "text": "Purple", "color": "A453AF" } ] },
+        "gyarados-eye-color-red": { "parts": [ { "text": "Red", "color": "5D252F" } ] }
       }
     },
 
@@ -388,43 +569,41 @@
     {
       "headerTranslationKey": "betterpokedexscanner.header.signature_paint_color",
       "species": ["cobblemon:smeargle"],
-      "aspectLabels": {
-        "rainbow-light_blue": "Light Blue",
-        "rainbow-pink": "Pink",
-        "rainbow-magenta": "Magenta",
-        "rainbow-purple": "Purple",
-        "rainbow-blue": "Blue",
-        "rainbow-cyan": "Cyan",
-        "rainbow-green": "Green",
-        "rainbow-lime": "Lime",
-        "rainbow-yellow": "Yellow",
-        "rainbow-orange": "Orange",
-        "rainbow-red": "Red"
+      "aspectDisplays": {
+        "rainbow-light_blue": { "parts": [ { "text": "Light Blue", "color": "3AB3DA" } ] },
+        "rainbow-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" } ] },
+        "rainbow-magenta": { "parts": [ { "text": "Magenta", "color": "C74EBD" } ] },
+        "rainbow-purple": { "parts": [ { "text": "Purple", "color": "8932B8" } ] },
+        "rainbow-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
+        "rainbow-cyan": { "parts": [ { "text": "Cyan", "color": "169C9C" } ] },
+        "rainbow-green": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
+        "rainbow-lime": { "parts": [ { "text": "Lime", "color": "80C71F" } ] },
+        "rainbow-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
+        "rainbow-orange": { "parts": [ { "text": "Orange", "color": "F9801D" } ] },
+        "rainbow-red": { "parts": [ { "text": "Red", "color": "B02E26" } ] }
       }
     },
 
     {
       "headerTranslationKey": "betterpokedexscanner.header.cosmetic_paint_color",
       "species": ["cobblemon:smeargle"],
-      "aspectLabels": {
-        "color-light_blue": "Light Blue",
-        "color-pink": "Pink",
-        "color-magenta": "Magenta",
-        "color-purple": "Purple",
-        "color-blue": "Blue",
-        "color-cyan": "Cyan",
-        "color-green": "Green",
-        "color-lime": "Lime",
-        "color-yellow": "Yellow",
-        "color-orange": "Orange",
-        "color-red": "Red",
-        "color-black": "Black",
-        "color-brown": "Brown",
-        "color-white": "White"
-      },
-      "aspectTranslationKeys": {
-        "color-light_gray": "betterpokedexscanner.aspectLabel.light_gray",
-        "color-gray": "betterpokedexscanner.aspectLabel.gray"
+      "aspectDisplays": {
+        "color-light_blue": { "parts": [ { "text": "Light Blue", "color": "3AB3DA" } ] },
+        "color-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" } ] },
+        "color-magenta": { "parts": [ { "text": "Magenta", "color": "C74EBD" } ] },
+        "color-purple": { "parts": [ { "text": "Purple", "color": "8932B8" } ] },
+        "color-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
+        "color-cyan": { "parts": [ { "text": "Cyan", "color": "169C9C" } ] },
+        "color-green": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
+        "color-lime": { "parts": [ { "text": "Lime", "color": "80C71F" } ] },
+        "color-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
+        "color-orange": { "parts": [ { "text": "Orange", "color": "F9801D" } ] },
+        "color-red": { "parts": [ { "text": "Red", "color": "B02E26" } ] },
+        "color-black": { "parts": [ { "text": "Black", "color": "1D1D21" } ] },
+        "color-brown": { "parts": [ { "text": "Brown", "color": "835432" } ] },
+        "color-white": { "parts": [ { "text": "White", "color": "F9FFFE" } ] },
+        "color-light_gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.light_gray", "color": "9D9D97" } ] },
+        "color-gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.gray", "color": "474F52" } ] }
       }
     },
 
@@ -443,8 +622,8 @@
     {
       "headerLabel": "Model",
       "species": ["cobblemon:magearna"],
-      "aspectTranslationKeys": {
-        "original-color": "betterpokedexscanner.aspectLabel.original_color"
+      "aspectDisplays": {
+        "original-color": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.original_color", "color": "FA583F" } ] }
       }
     },
 
@@ -460,18 +639,54 @@
     {
       "headerLabel": "Shell Flora",
       "species": ["cobblemon:torterra"],
-      "aspectLabels": {
-        "tree-cherry": "Cherry Tree",
-        "tree-birch": "Birch Tree",
-        "tree-darkoak": "Dark Oak Tree",
-        "tree-oak": "Oak Tree",
-        "tree-spruce": "Spruce Tree",
-        "tree-jungle": "Jungle Tree",
-        "tree-swamp": "Swamped Tree",
-        "tree-acacia": "Acacia Tree",
-        "tree-azalea": "Azalea Tree",
-        "tree-mangrove": "Mangrove Tree",
-        "tree-none": "Sinnohan Tree"
+      "aspectDisplays": {
+        "tree-cherry": { "parts": [
+          { "text": "Ch", "color": "560303" },
+          { "text": "er", "color": "E3B3AB" },
+          { "text": "ry", "color": "560303" },
+          { "text": " Tree" } ] },
+        "tree-birch": { "parts": [
+          { "text": "B", "color": "A4A4A4" },
+          { "text": "ir", "color": "D4BF83" },
+          { "text": "ch", "color": "A4A4A4" },
+          { "text": " Tree" } ] },
+        "tree-darkoak": { "parts": [
+          { "text": "Da", "color": "49371E" },
+          { "text": "rk O", "color": "482E17" },
+          { "text": "ak", "color": "49371E" },
+          { "text": " Tree" } ] },
+        "tree-oak": { "parts": [
+          { "text": "O", "color": "5D482A" },
+          { "text": "a", "color": "B6925E" },
+          { "text": "k", "color": "5D482A" },
+          { "text": " Tree" } ] },
+        "tree-spruce": { "parts": [
+          { "text": "Sp", "color": "54391F" },
+          { "text": "ru", "color": "806039" },
+          { "text": "ce", "color": "54391F" },
+          { "text": " Tree" } ] },
+        "tree-jungle": { "parts": [
+          { "text": "Ju", "color": "7C5C26" },
+          { "text": "ng", "color": "B68563" },
+          { "text": "le", "color": "7C5C26" },
+          { "text": " Tree" } ] },
+        "tree-swamp": { "parts": [
+          { "text": "Sw", "color": "6B745A" },
+          { "text": "amp", "color": "9E9677" },
+          { "text": "ed", "color": "6B745A" },
+          { "text": " Tree" } ] },
+        "tree-acacia": { "parts": [
+          { "text": "Ac", "color": "686158" },
+          { "text": "ac", "color": "AB5C31" },
+          { "text": "ia", "color": "686158" },
+          { "text": " Tree" } ] },
+        "tree-azalea": { "parts": [ { "text": "Azalea", "color": "B88BC0" }, { "text": " Tree" } ] },
+        "tree-mangrove": { "parts": [
+          { "text": "Man", "color": "66512F" },
+          { "text": "gro", "color": "763833" },
+          { "text": "ve", "color": "66512F" },
+          { "text": " Tree" } ] },
+        "tree-none": { "parts": [ { "text": "Sinnohan", "color": "9072A3" }, { "text": " Tree" } ] }
       }
     },
 
@@ -489,45 +704,45 @@
       "headerLabel": "Appliance",
       "species": ["cobblemon:rotom"],
       "baseFormLabel": "Light Bulb",
-      "aspectLabels": {
-        "heat-appliance": "Microwave Oven",
-        "wash-appliance": "Washing Machine",
-        "frost-appliance": "Fridge-Freezer",
-        "fan-appliance": "Electric Fan",
-        "mow-appliance": "Lawn Mower"
+      "aspectDisplays": {
+        "heat-appliance": { "parts": [ { "text": "Microwave Oven", "color": "EF7374" } ] },
+        "wash-appliance": { "parts": [ { "text": "Washing Machine", "color": "2980EF" } ] },
+        "frost-appliance": { "parts": [ { "text": "Fridge-Freezer", "color": "81DFF7" } ] },
+        "fan-appliance": { "parts": [ { "text": "Electric Fan", "color": "ADD2F5" } ] },
+        "mow-appliance": { "parts": [ { "text": "Lawn Mower", "color": "82C274" } ] }
       }
     },
     {
       "headerLabel": "Seasonal Appearance",
       "species": ["cobblemon:deerling","cobblemon:sawsbuck"],
-      "aspectLabels": {
-        "autumn": "Autumn",
-        "summer": "Summer",
-        "winter": "Winter",
-        "spring": "Spring"
+      "aspectDisplays": {
+        "autumn": { "parts": [ { "text": "Autumn", "color": "F89058" } ] },
+        "summer": { "parts": [ { "text": "Summer", "color": "78D0F8" } ] },
+        "winter": { "parts": [ { "text": "Winter", "color": "F0D8F8" } ] },
+        "spring": { "parts": [ { "text": "Spring", "color": "B0F858" } ] }
       }
     },
 
     {
       "headerLabel": "Fur Style",
       "species": ["cobblemon:furfrou"],
-      "aspectLabels": {
-        "natural-trim": "Natural",
-        "heart-trim": "Heart Trim",
-        "star-trim": "Star Trim",
-        "diamond-trim": "Diamond Trim",
-        "debutante-trim": "Debutante Trim",
-        "matron-trim": "Matron Trim",
-        "dandy-trim": "Dandy Trim",
-        "la_reine-trim": "La Reine Trim",
-        "kabuki-trim": "Kabuki Trim",
-        "pharaoh-trim": "Pharaoh Trim",
-        "cinnamon-trim": "Cinnamon Trim",
-        "crusader-trim": "Crusader Trim",
-        "lavender-trim": "Lavender Trim",
-        "matcha-trim": "Matcha Trim",
-        "mourner-trim": "Mourner Trim",
-        "rocker-trim": "Rocker Trim"
+      "aspectDisplays": {
+        "natural-trim": { "parts": [ { "text": "Natural", "color": "F9FFFE" } ] },
+        "heart-trim": { "parts": [ { "text": "Heart Trim", "color": "F38BAA" }, { "text": " Trim" } ] },
+        "star-trim": { "parts": [ { "text": "Star Trim", "color": "3AB3DA" }, { "text": " Trim" } ] },
+        "diamond-trim": { "parts": [ { "text": "Diamond Trim", "color": "F9801D" }, { "text": " Trim" } ] },
+        "debutante-trim": { "parts": [ { "text": "Debutante Trim", "color": "FED83D" }, { "text": " Trim" } ] },
+        "matron-trim": { "parts": [ { "text": "Matron Trim", "color": "C74EBD" }, { "text": " Trim" } ] },
+        "dandy-trim": { "parts": [ { "text": "Dandy Trim", "color": "80C71F" }, { "text": " Trim" } ] },
+        "la_reine-trim": { "parts": [ { "text": "La Reine Trim", "color": "169C9C" }, { "text": " Trim" } ] },
+        "kabuki-trim": { "parts": [ { "text": "Kabuki Trim", "color": "B02E26" }, { "text": " Trim" } ] },
+        "pharaoh-trim": { "parts": [ { "text": "Pharaoh Trim", "color": "3C44AA" }, { "text": " Trim" } ] },
+        "cinnamon-trim": { "parts": [ { "text": "Cinnamon Trim", "color": "835432" }, { "text": " Trim" } ] },
+        "crusader-trim": { "parts": [ { "text": "Crusader Trim", "color": "9D9D97" }, { "text": " Trim" } ] },
+        "lavender-trim": { "parts": [ { "text": "Lavender Trim", "color": "8932B8" }, { "text": " Trim" } ] },
+        "matcha-trim": { "parts": [ { "text": "Matcha Trim", "color": "5E7C16" }, { "text": " Trim" } ] },
+        "mourner-trim": { "parts": [ { "text": "Mourner Trim", "color": "1D1D21" }, { "text": " Trim" } ] },
+        "rocker-trim": { "parts": [ { "text": "Rocker Trim", "color": "474F52" }, { "text": " Trim" } ] }
       }
     },
 
@@ -544,27 +759,24 @@
     {
       "headerTranslationKey": "betterpokedexscanner.header.wool_color",
       "species": ["cobblemon:wooloo","cobblemon:dubwool"],
-      "aspectLabels": {
-        "color-black": "Black",
-        "color-blue": "Blue",
-        "color-brown": "Brown",
-        "color-cyan": "Cyan",
-        "color-green": "Green",
-        "color-light_blue": "Light Blue",
-        "color-lime": "Lime",
-        "color-magenta": "Magenta",
-        "color-orange": "Orange",
-        "color-pink": "Pink",
-        "color-purple": "Purple",
-        "color-red": "Red",
-        "color-white": "White",
-        "color-white shiny": "White",
-        "color-yellow": "Yellow",
-        "color-none": "Natural"
-      },
-      "aspectTranslationKeys": {
-        "color-gray": "betterpokedexscanner.aspectLabel.gray",
-        "color-light_gray": "betterpokedexscanner.aspectLabel.light_gray"
+      "aspectDisplays": {
+        "color-black": { "parts": [ { "text": "Black", "color": "1D1D21" } ] },
+        "color-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
+        "color-brown": { "parts": [ { "text": "Brown", "color": "835432" } ] },
+        "color-cyan": { "parts": [ { "text": "Cyan", "color": "169C9C" } ] },
+        "color-green": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
+        "color-light_blue": { "parts": [ { "text": "Light Blue", "color": "3AB3DA" } ] },
+        "color-lime": { "parts": [ { "text": "Lime", "color": "80C71F" } ] },
+        "color-magenta": { "parts": [ { "text": "Magenta", "color": "C74EBD" } ] },
+        "color-orange": { "parts": [ { "text": "Orange", "color": "F9801D" } ] },
+        "color-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" } ] },
+        "color-purple": { "parts": [ { "text": "Purple", "color": "8932B8" } ] },
+        "color-red": { "parts": [ { "text": "Red", "color": "B02E26" } ] },
+        "color-white": { "parts": [ { "text": "White", "color": "F9FFFE" } ] },
+        "color-white shiny": { "parts": [ { "text": "White", "color": "F9FFFE" } ] },
+        "color-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
+        "color-gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.gray", "color": "474F52" } ] },
+        "color-light_gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.light_gray", "color": "9D9D97" } ] }
       }
     },
 
@@ -584,159 +796,250 @@
     {
       "headerLabel": "Decoration",
       "species": ["cobblemon:alcremie"],
-      "aspectLabels": {
-        "decoration-strawberry": "Strawberry Sweet",
-        "decoration-berry": "Berry Sweet",
-        "decoration-clover": "Clover Sweet",
-        "decoration-flower": "Flower Sweet",
-        "decoration-love": "Love Sweet",
-        "decoration-ribbon": "Ribbon Sweet",
-        "decoration-star": "Star Sweet"
+      "aspectDisplays": {
+        "decoration-strawberry": { "parts": [ { "text": "Strawberry", "color": "DD5668" }, { "text": " Sweet" } ] },
+        "decoration-berry": { "parts": [ { "text": "Berry", "color": "2E4D93" }, { "text": " Sweet" } ] },
+        "decoration-clover": { "parts": [ { "text": "Clover", "color": "5C8B28" }, { "text": " Sweet" } ] },
+        "decoration-flower": { "parts": [ { "text": "Flower", "color": "EC893A" }, { "text": " Sweet" } ] },
+        "decoration-love": { "parts": [ { "text": "Love", "color": "FA9FBB" }, { "text": " Sweet" } ] },
+        "decoration-ribbon": { "parts": [ { "text": "Ribbon", "color": "994EC4" }, { "text": " Sweet" } ] },
+        "decoration-star": { "parts": [ { "text": "Star", "color": "FAD91D" }, { "text": " Sweet" } ] }
       }
     },
 
     {
       "headerLabel": "Cream",
       "species": ["cobblemon:alcremie"],
-      "aspectLabels": {
-        "cream-vanilla": "Vanilla Cream",
-        "cream-caramel_swirl": "Caramel Swirl",
-        "cream-ruby": "Ruby Cream",
-        "cream-matcha": "Matcha Cream",
-        "cream-mint": "Mint Cream",
-        "cream-lemon": "Lemon Cream",
-        "cream-salted": "Salted Cream",
-        "cream-ruby_swirl": "Ruby Swirl",
-        "cream-rainbow_swirl": "Rainbow Swirl"
+      "aspectDisplays": {
+        "cream-vanilla": {
+          "parts": [
+            { "text": "Van", "color": "F9F9DE" },
+            { "text": "i", "color": "FBD5DA" },
+            { "text": "lla C", "color": "F9F9DE" },
+            { "text": "r", "color": "FBD5DA" },
+            { "text": "eam", "color": "F9F9DE" }
+          ]
+        },
+        "cream-caramel_swirl": {
+          "parts": [
+            { "text": "Ca", "color": "FFFFFF" },
+            { "text": "ra", "color": "FBF4C1" },
+            { "text": "m", "color": "DEA986" },
+            { "text": "el", "color": "FBF4C1" },
+            { "text": " S", "color": "DEA986" },
+            { "text": "wi", "color": "FBF4C1" },
+            { "text": "rl", "color": "FFFFFF" }
+          ]
+        },
+        "cream-ruby": {
+          "parts": [
+            { "text": "Rub", "color": "F0D1DC" },
+            { "text": "y", "color": "F8959C" },
+            { "text": " Cr", "color": "F0D1DC" },
+            { "text": "e", "color": "F8959C" },
+            { "text": "am", "color": "F0D1DC" }
+          ]
+        },
+        "cream-matcha": {
+          "parts": [
+            { "text": "Mat", "color": "D4E1B4" },
+            { "text": "c", "color": "93AB50" },
+            { "text": "ha Cr", "color": "D4E1B4" },
+            { "text": "e", "color": "93AB50" },
+            { "text": "am", "color": "D4E1B4" }
+          ]
+        },
+        "cream-mint": {
+          "parts": [
+            { "text": "Mi", "color": "FFFFFF" },
+            { "text": "nt", "color": "B0D3EB" },
+            { "text": " C", "color": "9AB0DD" },
+            { "text": "re", "color": "B0D3EB" },
+            { "text": "am", "color": "FFFFFF" }
+          ]
+        },
+        "cream-lemon": {
+          "parts": [
+            { "text": "Le", "color": "FFFFFF" },
+            { "text": "mo", "color": "E7E36E" },
+            { "text": "n C", "color": "D6D15E" },
+            { "text": "re", "color": "E7E36E" },
+            { "text": "am", "color": "FFFFFF" }
+          ]
+        },
+        "cream-salted": {
+          "parts": [
+            { "text": "Sal", "color": "DAD7DB" },
+            { "text": "t", "color": "BCBEDC" },
+            { "text": "ed Cr", "color": "DAD7DB" },
+            { "text": "e", "color": "BCBEDC" },
+            { "text": "am", "color": "DAD7DB" }
+          ]
+        },
+        "cream-ruby_swirl": {
+          "parts": [
+            { "text": "Ru", "color": "D1B6C0" },
+            { "text": "by", "color": "E6E7DF" },
+            { "text": " S", "color": "D1B6C0" },
+            { "text": "wi", "color": "E6E7DF" },
+            { "text": "rl", "color": "D1B6C0" }
+          ]
+        },
+        "cream-rainbow_swirl": {
+          "parts": [
+            { "text": "Ra", "color": "D7BBC5" },
+            { "text": "inb", "color": "F4F0CB" },
+            { "text": "ow S", "color": "FBF5B6" },
+            { "text": "wi", "color": "F4F0CB" },
+            { "text": "rl", "color": "C6E3FA" }
+          ]
+        }
       }
     },
 
     {
       "headerTranslationKey": "betterpokedexscanner.header.plumage_color",
       "species": ["cobblemon:squawkabilly"],
-      "aspectLabels": {
-        "squawkabilly-color-blue": "Blue",
-        "squawkabilly-color-green": "Green",
-        "squawkabilly-color-yellow": "Yellow"
-      },
-      "aspectTranslationKeys": {
-        "squawkabilly-color-gray": "betterpokedexscanner.aspectLabel.gray"
+      "aspectDisplays": {
+        "squawkabilly-color-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
+        "squawkabilly-color-green": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
+        "squawkabilly-color-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
+        "squawkabilly-color-gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.gray", "color": "474F52" } ] }
       }
     },
 
     {
       "headerLabel": "Regional Bias",
-      "aspectLabels": {
-        "region-bias-alola": "Alolan",
-        "region-bias-galar": "Galarian",
-        "region-bias-hisui": "Hisuian"
+      "aspectDisplays": {
+        "region-bias-alola": { "parts": [ { "text": "Alolan", "color": "DC5A40" } ] },
+        "region-bias-galar": { "parts": [ { "text": "Galarian", "color": "AC379E" } ] },
+        "region-bias-hisui": { "parts": [ { "text": "Hisuian", "color": "36597B" } ] }
       }
     },
 
     {
       "headerLabel": "Cocoon Silk",
       "species": ["cobblemon:wurmple"],
-      "aspectLabels": {
-        "silcoon-cocoon": "Silcoon",
-        "cascoon-cocoon": "Cascoon"
+      "aspectDisplays": {
+        "silcoon-cocoon": { "parts": [ { "text": "Silcoon", "color": "E6E4D7" } ] },
+        "cascoon-cocoon": { "parts": [ { "text": "Cascoon", "color": "DDBFCD" } ] }
       }
     },
 
     {
       "headerLabel": "Forecast Form",
       "species": ["cobblemon:castform","cobblemon:cherrim"],
-      "aspectLabels": {
-        "normal-form": "Normal",
-        "sunny-form": "Sunny",
-        "rainy-form": "Rainy",
-        "snowy-form": "Snowy",
-        "overcast-form": "Overcast",
-        "sunshine-form": "Sunshine"
+      "aspectDisplays": {
+        "normal-form": { "parts": [ { "text": "Normal", "color": "C1C2C1" } ] },
+        "sunny-form": { "parts": [ { "text": "Sunny", "color": "FFE88F" } ] },
+        "rainy-form": { "parts": [ { "text": "Rainy", "color": "85B2FD" } ] },
+        "snowy-form": { "parts": [ { "text": "Snowy", "color": "A5DFEC" } ] },
+        "overcast-form": { "parts": [ { "text": "Overcast", "color": "C1C2C1" } ] },
+        "sunshine-form": { "parts": [ { "text": "Sunshine", "color": "FFE88F" } ] }
       }
     },
 
     {
       "headerLabel": "Morphology",
       "species": ["cobblemon:deoxys","cobblemon:palafin"],
-      "aspectLabels": {
-        "normal-forme": "Normal Forme",
-        "attack-forme": "Attack Forme",
-        "defense-forme": "Defense Forme",
-        "speed-forme": "Speed Forme"
+      "aspectDisplays": {
+        "normal-forme": { "parts": [
+          { "text": "Normal", "color": "C1C2C1" },
+          { "text": " Forme" }
+        ] },
+        "attack-forme": { "parts": [
+          { "text": "Attack", "color": "F5DE69" },
+          { "text": " Forme" }
+        ] },
+        "defense-forme": { "parts": [
+          { "text": "Defense", "color": "F09A65"},
+          { "text": " Forme" }
+        ] },
+        "speed-forme": { "parts": [
+          { "text": "Speed", "color": "E46CCA" },
+          { "text": " Forme" }
+        ] }
       }
     },
 
     {
       "headerLabel": "Multitype",
       "species": ["cobblemon:arceus"],
-      "aspectLabels": {
-        "fighting-plate": "Fighting Plate",
-        "flying-plate": "Flying Plate",
-        "poison-plate": "Poison Plate",
-        "ground-plate": "Ground Plate",
-        "rock-plate": "Rock Plate",
-        "bug-plate": "Bug Plate",
-        "ghost-plate": "Ghost Plate",
-        "steel-plate": "Steel Plate",
-        "fire-plate": "Fire Plate",
-        "water-plate": "Water Plate",
-        "grass-plate": "Grass Plate",
-        "electric-plate": "Electric Plate",
-        "psychic-plate": "Psychic Plate",
-        "ice-plate": "Ice Plate",
-        "dragon-plate": "Dragon Plate",
-        "dark-plate": "Dark Plate",
-        "fairy-plate": "Fairy Plate",
-        "normal-plate": "Normal Plate"
+      "aspectDisplays": {
+        "fighting-plate": { "parts": [ { "text": "Fighting", "color": "FFAC59" }, { "text": " Plate" } ] },
+        "flying-plate": { "parts": [ { "text": "Flying", "color": "ADD2F5" }, { "text": " Plate" } ] },
+        "poison-plate": { "parts": [ { "text": "Poison", "color": "B884DD" }, { "text": " Plate" } ] },
+        "ground-plate": { "parts": [ { "text": "Ground", "color": "B88E6F" }, { "text": " Plate" } ] },
+        "rock-plate": { "parts": [ { "text": "Rock", "color": "AFA981" }, { "text": " Plate" } ] },
+        "bug-plate": { "parts": [ { "text": "Bug", "color": "B8C26A" }, { "text": " Plate" } ] },
+        "ghost-plate": { "parts": [ { "text": "Ghost", "color": "A284A2" }, { "text": " Plate" } ] },
+        "steel-plate": { "parts": [ { "text": "Steel", "color": "98C2D1" }, { "text": " Plate" } ] },
+        "fire-plate": { "parts": [ { "text": "Fire", "color": "EF7374" }, { "text": " Plate" } ] },
+        "water-plate": { "parts": [ { "text": "Water", "color": "2980EF" }, { "text": " Plate" } ] },
+        "grass-plate": { "parts": [ { "text": "Grass", "color": "82C274" }, { "text": " Plate" } ] },
+        "electric-plate": { "parts": [ { "text": "Electric", "color": "FCD659" }, { "text": " Plate" } ] },
+        "psychic-plate": { "parts": [ { "text": "Psychic", "color": "F584A8" }, { "text": " Plate" } ] },
+        "ice-plate": { "parts": [ { "text": "Ice", "color": "81DFF7" }, { "text": " Plate" } ] },
+        "dragon-plate": { "parts": [ { "text": "Dragon", "color": "8D98EC" }, { "text": " Plate" } ] },
+        "dark-plate": { "parts": [ { "text": "Dark", "color": "998B8C" }, { "text": " Plate" } ] },
+        "fairy-plate": { "parts": [ { "text": "Fairy", "color": "F5A2F5" }, { "text": " Plate" } ] },
+        "normal-plate": { "parts": [ { "text": "Normal", "color": "C1C2C1" }, { "text": " Plate" } ] }
       }
     },
 
     {
       "headerLabel": "Cloak Material",
       "species": ["cobblemon:burmy","cobblemon:wormadam","cobblemon:mothim"],
-      "aspectLabels": {
-        "sandy-cloak": "Sandy",
-        "plant-cloak": "Plant",
-        "trash-cloak": "Trash"
+      "aspectDisplays": {
+        "sandy-cloak": { "parts": [ { "text": "Sandy", "color": "D0C284" } ] },
+        "plant-cloak": { "parts": [ { "text": "Plant", "color": "639643" } ] },
+        "trash-cloak": { "parts": [ { "text": "Trash", "color": "F59AB1" } ] }
       }
     },
 
     {
       "headerLabel": "Techno Drive",
       "species": ["cobblemon:genesect"],
-      "aspectLabels": {
-        "water-drive": "Douse Drive",
-        "electric-drive": "Shock Drive",
-        "fire-drive": "Burn Drive",
-        "ice-drive": "Chill Drive"
+      "aspectDisplays": {
+        "water-drive": { "parts": [ { "text": "Douse", "color": "2980EF" }, { "text": " Drive" } ] },
+        "electric-drive": { "parts": [ { "text": "Shock", "color": "FCD659" }, { "text": " Drive" } ] },
+        "fire-drive": { "parts": [ { "text": "Burn", "color": "EF7374" }, { "text": " Drive" } ] },
+        "ice-drive": { "parts": [ { "text": "Chill", "color": "81DFF7" }, { "text": " Drive" } ] }
       }
     },
 
     {
       "headerLabel": "Fusion Aspects",
-      "aspectLabels": {
-        "white-fusion": "Reshiram",
-        "black-fusion": "Zekrom",
-        "dusk-fusion": "Solgaleo",
-        "dawn-fusion": "Lunala"
+      "aspectDisplays": {
+        "white-fusion": { "parts": [ { "text": "Reshiram", "color": "E1E1E1" } ] },
+        "black-fusion": { "parts": [ { "text": "Zekrom", "color": "444444" } ] },
+        "dusk-fusion": { "parts": [ { "text": "Solgaleo", "color": "F1912B" } ] },
+        "dawn-fusion": { "parts": [ { "text": "Lunala", "color": "5599CA" } ] }
       }
     },
 
     {
       "headerLabel": "Hunger Level",
       "species": ["cobblemon:morpeko"],
-      "aspectLabels": {
-        "full_belly-mode": "Full Belly",
-        "hangry-mode": "Hangry"
+      "aspectDisplays": {
+        "full_belly-mode": { "parts": [ { "text": "Full Belly", "color": "FDFAAF" } ] },
+        "hangry-mode": { "parts": [ { "text": "Hangry", "color": "805493" } ] }
       }
     },
 
     {
       "headerLabel": "Lifeforce Radiance",
       "species": ["cobblemon:xerneas"],
-      "aspectLabels": {
-        "neutral-mode": "Neutral",
-        "active-mode": "Active"
+      "aspectDisplays": {
+        "neutral-mode": { "parts": [ { "text": "Neutral", "color": "BBE0E1" } ] },
+        "active-mode": {
+          "parts": [
+            { "text": "Ac", "color": "55A5B9" },
+            { "text": "t", "color": "BC8CB4" },
+            { "text": "i", "color": "E84B46" },
+            { "text": "ve", "color": "EB8730" }
+          ]
+        }
       }
     },
 
@@ -772,9 +1075,9 @@
     {
       "headerLabel": "Ice Face status",
       "species": ["cobblemon:eiscue"],
-      "aspectLabels": {
-        "ice_face": "Ice",
-        "noice_face": "Noice"
+      "aspectDisplays": {
+        "ice_face": { "parts": [ { "text": "Ice", "color": "81DFF7" } ] },
+        "noice_face": { "parts": [ { "text": "Noice", "color": "81DFF7" } ] }
       }
     },
 
@@ -790,15 +1093,54 @@
     {
       "headerLabel": "Netherite Coating",
       "species": ["cobblemon:gholdengo"],
-      "aspectLabels": {
-        "netherite-coating-stage1": "12.5%",
-        "netherite-coating-stage2": "25%",
-        "netherite-coating-stage3": "37.5%",
-        "netherite-coating-stage4": "50%",
-        "netherite-coating-stage5": "62.5%",
-        "netherite-coating-stage6": "75%",
-        "netherite-coating-stage7": "87.5%",
-        "netherite-coating-full": "Complete"
+      "aspectDisplays": {
+        "netherite-coating-stage1": {
+          "parts": [
+            { "text": "1", "color": "5B4B4F" },
+            { "text": "2.5 Percent", "color": "F6D04D" }
+          ]
+        },
+        "netherite-coating-stage2": {
+          "parts": [
+            { "text": "25", "color": "5B4B4F" },
+            { "text": " Percent", "color": "F6D04D" }
+          ]
+        },
+        "netherite-coating-stage3": {
+          "parts": [
+            { "text": "37.5", "color": "5B4B4F" },
+            { "text": " Percent", "color": "F6D04D" }
+          ]
+        },
+        "netherite-coating-stage4": {
+          "parts": [
+            { "text": "50 Pe", "color": "5B4B4F" },
+            { "text": "rcent", "color": "F6D04D" }
+          ]
+        },
+        "netherite-coating-stage5": {
+          "parts": [
+            { "text": "62.5 Pe", "color": "5B4B4F" },
+            { "text": "rcent", "color": "F6D04D" }
+          ]
+        },
+        "netherite-coating-stage6": {
+          "parts": [
+            { "text": "75 Perc", "color": "5B4B4F" },
+            { "text": "ent", "color": "F6D04D" }
+          ]
+        },
+        "netherite-coating-stage7": {
+          "parts": [
+            { "text": "87.5 Perce", "color": "5B4B4F" },
+            { "text": "nt", "color": "F6D04D" }
+          ]
+        },
+        "netherite-coating-full": {
+          "parts": [
+            { "text": "Complete", "color": "5B4B4F" }
+          ]
+        }
       }
     },
 
@@ -814,25 +1156,25 @@
     {
       "headerLabel": "Mask",
       "species": ["cobblemon:ogerpon"],
-      "aspectLabels": {
-        "teal-mask": "Teal Mask",
-        "wellspring-mask": "Wellspring Mask",
-        "hearthflame-mask": "Hearthflame Mask",
-        "cornerstone-mask": "Cornerstone Mask"
+      "aspectDisplays": {
+        "teal-mask": { "parts": [ { "text": "Teal", "color": "46B744" }, { "text": " Mask" } ] },
+        "wellspring-mask": { "parts": [ { "text": "Wellspring", "color": "25C7E8" }, { "text": " Mask" } ] },
+        "hearthflame-mask": { "parts": [ { "text": "Hearthflame", "color": "B31609" }, { "text": " Mask" } ] },
+        "cornerstone-mask": { "parts": [ { "text": "Cornerstone", "color": "4C5051" }, { "text": " Mask" } ] }
       }
     },
 
     {
       "headerTranslationKey": "betterpokedexscanner.header.core_color",
       "species": ["cobblemon:minior"],
-      "aspectLabels": {
-        "red-core": "Red",
-        "orange-core": "Orange",
-        "yellow-core": "Yellow",
-        "green-core": "Green",
-        "blue-core": "Blue",
-        "indigo-core": "Indigo",
-        "violet-core": "Violet"
+      "aspectDisplays": {
+        "red-core": { "parts": [ { "text": "Red", "color": "B02E26" } ] },
+        "orange-core": { "parts": [ { "text": "Orange", "color": "F9801D" } ] },
+        "yellow-core": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
+        "green-core": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
+        "blue-core": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
+        "indigo-core": { "parts": [ { "text": "Indigo", "color": "6D5DD3" } ] },
+        "violet-core": { "parts": [ { "text": "Violet", "color": "A453AF" } ] }
       }
     },
 
@@ -848,45 +1190,45 @@
     {
       "headerLabel": "Dance Style",
       "species": ["cobblemon:oricorio"],
-      "aspectLabels": {
-        "baile-style": "Baile",
-        "pom_pom-style": "Pom-Pom",
-        "pa'u-style": "Pa'u",
-        "sensu-style": "Sensu"
+      "aspectDisplays": {
+        "baile-style": { "parts": [ { "text": "Baile", "color": "DD5958" } ] },
+        "pom_pom-style": { "parts": [ { "text": "Pom-Pom", "color": "FEFAA3" } ] },
+        "pa'u-style": { "parts": [ { "text": "Pa'u", "color": "D07C93" } ] },
+        "sensu-style": { "parts": [ { "text": "Sensu", "color": "878BC5" } ] }
       }
     },
 
     {
       "headerLabel": "RKS System",
       "species": ["cobblemon:silvally"],
-      "aspectLabels": {
-        "fighting-memory": "Fighting Memory",
-        "flying-memory": "Flying Memory",
-        "poison-memory": "Poison Memory",
-        "ground-memory": "Ground Memory",
-        "rock-memory": "Rock Memory",
-        "bug-memory": "Bug Memory",
-        "ghost-memory": "Ghost Memory",
-        "steel-memory": "Steel Memory",
-        "fire-memory": "Fire Memory",
-        "water-memory": "Water Memory",
-        "grass-memory": "Grass Memory",
-        "electric-memory": "Electric Memory",
-        "psychic-memory": "Psychic Memory",
-        "ice-memory": "Ice Memory",
-        "dragon-memory": "Dragon Memory",
-        "dark-memory": "Dark Memory",
-        "fairy-memory": "Fairy Memory",
-        "normal-memory": "Normal Memory"
+      "aspectDisplays": {
+        "fighting-memory": { "parts": [ { "text": "Fighting", "color": "FFAC59" }, { "text": " Memory" } ] },
+        "flying-memory": { "parts": [ { "text": "Flying", "color": "ADD2F5" }, { "text": " Memory" } ] },
+        "poison-memory": { "parts": [ { "text": "Poison", "color": "B884DD" }, { "text": " Memory" } ] },
+        "ground-memory": { "parts": [ { "text": "Ground", "color": "B88E6F" }, { "text": " Memory" } ] },
+        "rock-memory": { "parts": [ { "text": "Rock", "color": "AFA981" }, { "text": " Memory" } ] },
+        "bug-memory": { "parts": [ { "text": "Bug", "color": "B8C26A" }, { "text": " Memory" } ] },
+        "ghost-memory": { "parts": [ { "text": "Ghost", "color": "A284A2" }, { "text": " Memory" } ] },
+        "steel-memory": { "parts": [ { "text": "Steel", "color": "98C2D1" }, { "text": " Memory" } ] },
+        "fire-memory": { "parts": [ { "text": "Fire", "color": "EF7374" }, { "text": " Memory" } ] },
+        "water-memory": { "parts": [ { "text": "Water", "color": "2980EF" }, { "text": " Memory" } ] },
+        "grass-memory": { "parts": [ { "text": "Grass", "color": "82C274" }, { "text": " Memory" } ] },
+        "electric-memory": { "parts": [ { "text": "Electric", "color": "FCD659" }, { "text": " Memory" } ] },
+        "psychic-memory": { "parts": [ { "text": "Psychic", "color": "F584A8" }, { "text": " Memory" } ] },
+        "ice-memory": { "parts": [ { "text": "Ice", "color": "81DFF7" }, { "text": " Memory" } ] },
+        "dragon-memory": { "parts": [ { "text": "Dragon", "color": "8D98EC" }, { "text": " Memory" } ] },
+        "dark-memory": { "parts": [ { "text": "Dark", "color": "998B8C" }, { "text": " Memory" } ] },
+        "fairy-memory": { "parts": [ { "text": "Fairy", "color": "F5A2F5" }, { "text": " Memory" } ] },
+        "normal-memory": { "parts": [ { "text": "Normal", "color": "C1C2C1" }, { "text": " Memory" } ] }
       }
     },
 
     {
       "headerLabel": "Wushu Style",
       "species": ["cobblemon:urshifu"],
-      "aspectLabels": {
-        "single_strike-style": "Single Strike",
-        "rapid_strike-style": "Rapid Strike"
+      "aspectDisplays": {
+        "single_strike-style": { "parts": [ { "text": "Single Strike", "color": "998B8C" } ] },
+        "rapid_strike-style": { "parts": [ { "text": "Rapid Strike", "color": "74ACF5" } ] }
       }
     },
 
@@ -917,19 +1259,19 @@
     {
       "headerLabel": "King's Steed",
       "species": ["cobblemon:calyrex"],
-      "aspectLabels": {
-        "ice-rider": "Glastrier",
-        "shadow-rider": "Spectrier"
+      "aspectDisplays": {
+        "ice-rider": { "parts": [ { "text": "Glastrier", "color": "81DFF7" } ] },
+        "shadow-rider": { "parts": [ { "text": "Spectrier", "color": "A284A2" } ] }
       }
     },
 
     {
       "headerLabel": "Presentation",
       "species": ["cobblemon:tatsugiri"],
-      "aspectLabels": {
-        "tatsugiri-texture-curly": "Curly",
-        "tatsugiri-texture-droopy": "Droopy",
-        "tatsugiri-texture-stretchy": "Stretchy"
+      "aspectDisplays": {
+        "tatsugiri-texture-curly": { "parts": [ { "text": "Curly", "color": "F3B082" } ] },
+        "tatsugiri-texture-droopy": { "parts": [ { "text": "Droopy", "color": "E3567F" } ] },
+        "tatsugiri-texture-stretchy": { "parts": [ { "text": "Stretchy", "color": "EFE052" } ] }
       }
     },
 
@@ -999,40 +1341,42 @@
     {
       "headerLabel": "Chronotype",
       "species": ["cobblemon:lycanroc"],
-      "aspectLabels": {
-        "midday-form": "Midday",
-        "midnight-form": "Midnight",
-        "dusk-form": "Dusk"
+      "aspectDisplays": {
+        "midday-form": { "parts": [ { "text": "Midday", "color": "D5E9FF" } ] },
+        "midnight-form": { "parts": [ { "text": "Midnight", "color": "A79ACD" } ] },
+        "dusk-form": { "parts": [ { "text": "Dusk", "color": "F0C0A7" } ] }
       }
     },
 
     {
       "headerLabel": "Unique Form",
       "species": ["cobblemon:rockruff"],
-      "aspectLabels": {
-        "dusk-form": "Own Tempo"
+      "aspectDisplays": {
+        "dusk-form": { "parts": [ { "text": "Own Tempo", "color": "F0C0A7" } ] }
       }
     },
 
     {
       "headerLabel": "Prismatic Aura",
       "species": ["cobblemon:necrozma"],
-      "baseFormLabel": "Depleted",
-      "aspectLabels": {
-        "ultra-fusion": "Ultra"
+      "baseFormDisplay":
+        { "parts": [ { "text": "Depleted", "color": "2E2C2F" } ] }
+      ,
+      "aspectDisplays": {
+        "ultra-fusion": { "parts": [ { "text": "Ultra", "color": "F1D069" } ] }
       },
-      "formLabels": {
-        "Dusk-Mane": "Restored",
-        "Dawn-Wings": "Restored"
+      "formDisplays": {
+        "Dusk-Mane": { "parts": [ { "text": "Restored", "color": "FCFBA7" } ] },
+        "Dawn-Wings": { "parts": [ { "text": "Restored", "color": "96FEFF" } ] }
       }
     },
 
     {
       "headerLabel": "Temperament",
       "species": ["cobblemon:toxtricity"],
-      "aspectLabels": {
-        "low_key": "Low Key",
-        "amped-form": "Amped"
+      "aspectDisplays": {
+        "low_key-form": { "parts": [ { "text": "Low Key", "color": "DBF9FC" } ] },
+        "amped-form": { "parts": [ { "text": "Amped", "color": "FFFF62" } ] }
       }
     },
 
