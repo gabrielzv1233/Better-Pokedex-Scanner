@@ -49,7 +49,6 @@ object RestorationTankScanner {
     fun findRestorationTankTarget(user: LocalPlayer): RestorationTankScanData? {
         val hit = net.minecraft.client.Minecraft.getInstance().hitResult as? BlockHitResult
         if (hit == null) {
-            println("BPS tank scan: crosshair hit was not a BlockHitResult")
             return null
         }
 
@@ -57,60 +56,43 @@ object RestorationTankScanner {
         var pos = hit.blockPos
         var state = level.getBlockState(pos)
 
-        println("BPS tank scan: raw hit pos=$pos block=${state.block}")
-
         if (state.block != CobblemonBlocks.RESTORATION_TANK) {
-            println("BPS tank scan: hit block was not restoration tank")
             return null
         }
 
         if (state.getValue(RestorationTankBlock.PART) == RestorationTankBlock.TankPart.TOP) {
             pos = pos.below()
             state = level.getBlockState(pos)
-            println("BPS tank scan: normalized from TOP to BOTTOM at pos=$pos block=${state.block}")
 
             if (state.block != CobblemonBlocks.RESTORATION_TANK) {
-                println("BPS tank scan: normalized bottom block was not restoration tank")
                 return null
             }
 
             if (state.getValue(RestorationTankBlock.PART) != RestorationTankBlock.TankPart.BOTTOM) {
-                println("BPS tank scan: normalized block was not bottom half")
                 return null
             }
         }
 
         val blockEntity = level.getBlockEntity(pos)
-        println("BPS tank scan: blockEntity=$blockEntity")
 
         val tankEntity = blockEntity as? RestorationTankBlockEntity
         if (tankEntity == null) {
-            println("BPS tank scan: block entity was not RestorationTankBlockEntity")
             return null
         }
 
         val struct = tankEntity.multiblockStructure
-        println("BPS tank scan: multiblockStructure=$struct")
 
         val fossilStruct = struct as? FossilMultiblockStructure
         if (fossilStruct == null) {
-            println("BPS tank scan: structure was not FossilMultiblockStructure")
             return null
         }
 
-        println(
-            "BPS tank scan: running=${fossilStruct.isRunning()} created=${fossilStruct.hasCreatedPokemon} " +
-                    "resultingFossil=${fossilStruct.resultingFossil} timeRemaining=${fossilStruct.timeRemaining}"
-        )
-
         val fossil = fossilStruct.resultingFossil
         if (fossil == null) {
-            println("BPS tank scan: resultingFossil was null")
             return null
         }
 
         if (!(fossilStruct.isRunning() || fossilStruct.hasCreatedPokemon)) {
-            println("BPS tank scan: structure not running and no created pokemon")
             return null
         }
 
@@ -118,7 +100,6 @@ object RestorationTankScanner {
 
         val declaredSpeciesString = resultProps.species
         if (declaredSpeciesString.isNullOrBlank()) {
-            println("BPS tank scan: result species was null/blank")
             return RestorationTankScanData(
                 blockPos = pos,
                 speciesId = fossil.identifier,
@@ -143,7 +124,6 @@ object RestorationTankScanner {
         val validDeclaredSpecies = declaredSpeciesId?.let(::isValidSpeciesId) == true
 
         if (!validDeclaredSpecies) {
-            println("BPS tank scan: invalid declared result species=$declaredSpeciesString")
             return RestorationTankScanData(
                 blockPos = pos,
                 speciesId = fossil.identifier,
@@ -162,7 +142,6 @@ object RestorationTankScanner {
         }
 
         if (resolvedPokemon == null) {
-            println("BPS tank scan: failed to create result pokemon from result properties")
             return RestorationTankScanData(
                 blockPos = pos,
                 speciesId = declaredSpeciesId,
@@ -183,11 +162,6 @@ object RestorationTankScanner {
         val resolvedAspects = resolvedPokemon.aspects.toSet()
         val resolvedShiny = resolvedPokemon.shiny
         val resolvedTypeLabel = buildPokemonTypeLabel(resolvedPokemon)
-
-        println(
-            "BPS tank scan: SUCCESS declared=$declaredSpeciesId resolved=$resolvedSpeciesId " +
-                    "form=$resolvedFormName aspects=$resolvedAspects shiny=$resolvedShiny time=${fossilStruct.timeRemaining}"
-        )
 
         return RestorationTankScanData(
             blockPos = pos,
