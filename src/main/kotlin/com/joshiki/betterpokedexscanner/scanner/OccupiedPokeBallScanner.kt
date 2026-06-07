@@ -21,6 +21,7 @@ object OccupiedPokeBallScanner {
             scanKind = PokemonBlockScanKind.OCCUPIED_BALL,
             level = pokemon.level,
             containerName = resolved.ballDisplayName,
+            containerNameComponent = resolved.ballDisplayNameComponent.copy(),
             gender = pokemon.gender,
             typeLabel = RestorationTankScanner.buildPokemonTypeLabel(pokemon),
             typeLabelComponent = RestorationTankScanner.buildPokemonTypeLabelComponent(pokemon),

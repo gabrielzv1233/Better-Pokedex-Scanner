@@ -25,6 +25,7 @@ data class RestorationTankScanData(
     val scanKind: PokemonBlockScanKind = PokemonBlockScanKind.RESTORATION_TANK,
     val level: Int? = null,
     val containerName: String? = null,
+    val containerNameComponent: MutableComponent? = null,
     val gender: Gender? = null,
     val typeLabel: String? = null,
     val typeLabelComponent: MutableComponent? = null,
@@ -179,17 +180,11 @@ object RestorationTankScanner {
     }
 
     internal fun buildPokemonTypeLabel(pokemon: Pokemon): String {
-        val labels = pokemon.form.types.map { it.displayName.string }
-        return if (labels.isEmpty()) "Unknown Type" else "${labels.joinToString("/")} Type"
+        return buildPokemonTypeLabelComponent(pokemon).string
     }
 
     internal fun buildPokemonTypeLabelComponent(pokemon: Pokemon): MutableComponent {
-        val labels = pokemon.form.types.map { it.displayName.string }
-        return if (labels.isEmpty()) {
-            PokemonTypeLabelFormatter.buildUnknownTypeComponent()
-        } else {
-            PokemonTypeLabelFormatter.buildTypeComponent(labels)
-        }
+        return PokemonTypeLabelFormatter.buildTypeComponentFromTypes(pokemon.form.types)
     }
 
     internal fun buildAbilityDisplay(pokemon: Pokemon): VariantDisplay? {
@@ -198,7 +193,7 @@ object RestorationTankScanner {
             ?: pokemon.ability.name.takeIf { it.isNotBlank() }
             ?: return null
         return VariantDisplay(
-            headerLabel = "Ability",
+            headerTranslationKey = "cobblemon.ui.info.ability",
             label = abilityLabel,
             labelTranslationKey = abilityTranslationKey?.takeIf { it.contains('.') }
         )
@@ -239,7 +234,7 @@ object RestorationTankScanner {
         }
 
         return VariantDisplay(
-            headerLabel = "IVs",
+            headerTranslationKey = "cobblemon.ui.stats.ivs",
             label = valueComponent.string,
             labelComponent = valueComponent
         )

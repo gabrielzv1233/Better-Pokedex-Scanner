@@ -818,9 +818,14 @@ abstract class PokedexScannerRendererMixin {
                     } else {
                         val entityData = pokedexEntityData ?: return@forEachIndexed
                         if (pokemonTypeVisible) {
-                            val typeLabels = entityData.getApparentForm().types.map { it.displayName.string }
+                            val typeTokens = entityData.getApparentForm().types.map {
+                                com.joshiki.betterpokedexscanner.scanner.PokemonTypeLabelFormatter.TypeToken(
+                                    it.displayName,
+                                    it.name
+                                )
+                            }
                             val typeText = com.joshiki.betterpokedexscanner.scanner.PokemonTypeLabelFormatter
-                                .buildTypeComponent(typeLabels)
+                                .buildTypeTokenComponent(typeTokens)
 
                             val typeWidth =
                                 Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
@@ -828,13 +833,13 @@ abstract class PokedexScannerRendererMixin {
                             if (typeWidth > (PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH - 8) &&
                                 entityData.getApparentForm().secondaryType != null
                             ) {
-                                val splitLines = typeLabels
+                                val splitLines = typeTokens
 
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
                                     text = com.joshiki.betterpokedexscanner.scanner.PokemonTypeLabelFormatter
-                                        .buildTypeNamesComponent(listOf(splitLines[0]))
+                                        .buildTypeTokenNamesComponent(listOf(splitLines[0]))
                                         .append(Component.literal("/").withStyle { style -> style.withBold(true) }),
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText - 4,
@@ -846,8 +851,7 @@ abstract class PokedexScannerRendererMixin {
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
                                     text = com.joshiki.betterpokedexscanner.scanner.PokemonTypeLabelFormatter
-                                        .buildTypeNamesComponent(listOf(splitLines[1]))
-                                        .append(Component.literal(" Type").withStyle { style -> style.withBold(true) }),
+                                        .buildTypeTokenComponent(listOf(splitLines[1])),
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText + 3,
                                     shadow = true,
@@ -969,28 +973,25 @@ abstract class PokedexScannerRendererMixin {
                                 add(
                                     when {
                                         percent <= 0 -> VariantDisplay(
-                                            headerLabel = "Tail Health",
-                                            headerTranslationKey = null,
+                                            headerTranslationKey = "betterpokedexscanner.header.tail_health",
                                             label = "Sheared",
-                                            labelTranslationKey = null,
+                                            labelTranslationKey = "betterpokedexscanner.variant.sheared",
                                             showShinyIcon = false,
                                             needsSeparateShinyTag = false,
                                             colour = interpolateRedToGreen(percent)
                                         )
 
                                         percent >= 100 -> VariantDisplay(
-                                            headerLabel = "Tail Health",
-                                            headerTranslationKey = null,
+                                            headerTranslationKey = "betterpokedexscanner.header.tail_health",
                                             label = "Fully Grown",
-                                            labelTranslationKey = null,
+                                            labelTranslationKey = "betterpokedexscanner.variant.fully_grown",
                                             showShinyIcon = false,
                                             needsSeparateShinyTag = false,
                                             colour = interpolateRedToGreen(percent)
                                         )
 
                                         else -> VariantDisplay(
-                                            headerLabel = "Tail Regrowth",
-                                            headerTranslationKey = null,
+                                            headerTranslationKey = "betterpokedexscanner.header.tail_regrowth",
                                             label = "$percent%",
                                             labelTranslationKey = null,
                                             showShinyIcon = false,
@@ -1047,12 +1048,20 @@ abstract class PokedexScannerRendererMixin {
                                 else primaryDisplays[basePageIndex]
                             val variantText =
                                 variantDisplay.labelComponent?.copy()
-                                    ?: Component.literal(variantDisplay.label).copy().bold()
+                                    ?: if (!variantDisplay.labelTranslationKey.isNullOrBlank()) {
+                                        Component.translatable(variantDisplay.labelTranslationKey).copy().bold()
+                                    } else {
+                                        Component.literal(variantDisplay.label).copy().bold()
+                                    }
                             val headerY = centerY + yOffset + 40
                             val valueY = centerY + yOffset + 44
                             val noHeaderValueY = centerY + yOffset + 42
+                            val isShinyOnlyDisplay =
+                                variantDisplay.showShinyIcon &&
+                                    !variantDisplay.needsSeparateShinyTag &&
+                                    variantDisplay.labelTranslationKey == "betterpokedexscanner.label.shiny"
                             val primaryValueY =
-                                if (variantDisplay.showShinyIcon && !variantDisplay.needsSeparateShinyTag && variantDisplay.label == "Shiny")
+                                if (isShinyOnlyDisplay)
                                     noHeaderValueY
                                 else
                                     valueY
@@ -1060,7 +1069,8 @@ abstract class PokedexScannerRendererMixin {
                             val headerComponent = if (!variantDisplay.headerTranslationKey.isNullOrBlank()) {
                                 Component.translatable(variantDisplay.headerTranslationKey)
                             } else {
-                                Component.literal(variantDisplay.headerLabel ?: "Variant")
+                                variantDisplay.headerLabel?.let(Component::literal)
+                                    ?: Component.translatable("cobblemon.pokedex.variation.variant")
                             }
 
                             if (index == 3 && primaryDisplays.size > 1) {
@@ -1103,7 +1113,7 @@ abstract class PokedexScannerRendererMixin {
                                 }
 
                             // Primary frame header - skip for shiny-only display
-                            if (!(variantDisplay.showShinyIcon && !variantDisplay.needsSeparateShinyTag && variantDisplay.label == "Shiny")) {
+                            if (!isShinyOnlyDisplay) {
                                 drawScaledText(
                                     context = graphics,
                                     text = headerComponent,
@@ -1192,7 +1202,7 @@ abstract class PokedexScannerRendererMixin {
                                 val shinySide = !isLeftSide
                                 val shinyXOffset = -120 + if (shinySide) 0 else 148
                                 val shinyYOffset = 25
-                                val shinyText = Component.literal("Shiny").copy().bold()
+                                val shinyText = Component.translatable("betterpokedexscanner.label.shiny").copy().bold()
                                 val shinyValueY = centerY + shinyYOffset + 42
                                 val shinyTextCenterX =
                                     centerX + shinyXOffset + (PokedexScannerRenderer.OUTER_INFO_FRAME_WIDTH / 2)
@@ -1349,7 +1359,10 @@ abstract class PokedexScannerRendererMixin {
                 if (mirroredSide) 0 else if (slotIndex == 1 || slotIndex == 2) 234 else 148
 
         snapshot.mirroredDisplayGroups.forEachIndexed { mirroredGroupIndex, mirroredGroup ->
-            if (mirroredGroup.anchorDisplayIndex != anchorIndex) return@forEachIndexed
+            val isAnchoredHere =
+                mirroredGroup.anchorSlotIndex?.let { it == slotIndex }
+                    ?: (mirroredGroup.anchorDisplayIndex == anchorIndex)
+            if (!isAnchoredHere) return@forEachIndexed
             if (mirroredGroup.displays.isEmpty()) return@forEachIndexed
 
             renderCyclingInfoDisplay(
@@ -1465,9 +1478,7 @@ abstract class PokedexScannerRendererMixin {
         snapshot: BeehiveScanSnapshot?,
         index: Int
     ): Boolean {
-        return getBeehiveDisplaysForFrame(snapshot, index)
-            .firstOrNull()
-            ?.headerLabel == "Inhabitants"
+        return snapshot?.isInhabitantsFrame(index) == true
     }
 
     private fun getInfoFrameTextOffset(index: Int, isLeftSide: Boolean): Int {
@@ -1612,26 +1623,23 @@ abstract class PokedexScannerRendererMixin {
                 add(
                     when {
                         percent <= 0 -> VariantDisplay(
-                            headerLabel = "Tail Health",
-                            headerTranslationKey = null,
+                            headerTranslationKey = "betterpokedexscanner.header.tail_health",
                             label = "Sheared",
-                            labelTranslationKey = null,
+                            labelTranslationKey = "betterpokedexscanner.variant.sheared",
                             showShinyIcon = false,
                             needsSeparateShinyTag = false,
                             colour = interpolateRedToGreen(percent)
                         )
                         percent >= 100 -> VariantDisplay(
-                            headerLabel = "Tail Health",
-                            headerTranslationKey = null,
+                            headerTranslationKey = "betterpokedexscanner.header.tail_health",
                             label = "Fully Grown",
-                            labelTranslationKey = null,
+                            labelTranslationKey = "betterpokedexscanner.variant.fully_grown",
                             showShinyIcon = false,
                             needsSeparateShinyTag = false,
                             colour = interpolateRedToGreen(percent)
                         )
                         else -> VariantDisplay(
-                            headerLabel = "Tail Regrowth",
-                            headerTranslationKey = null,
+                            headerTranslationKey = "betterpokedexscanner.header.tail_regrowth",
                             label = "$percent%",
                             labelTranslationKey = null,
                             showShinyIcon = false,
@@ -1739,11 +1747,16 @@ abstract class PokedexScannerRendererMixin {
         val variantDisplay =
             if (inTransition && transitionProgress >= 0.5f) primaryDisplays[nextPageIndex]
             else primaryDisplays[basePageIndex]
-        val variantText = variantDisplay.labelComponent?.copy() ?: Component.literal(variantDisplay.label).copy().bold()
+        val variantText = variantDisplay.labelComponent?.copy() ?: if (!variantDisplay.labelTranslationKey.isNullOrBlank()) {
+            Component.translatable(variantDisplay.labelTranslationKey).copy().bold()
+        } else {
+            Component.literal(variantDisplay.label).copy().bold()
+        }
         val headerComponent = if (!variantDisplay.headerTranslationKey.isNullOrBlank()) {
             Component.translatable(variantDisplay.headerTranslationKey)
         } else {
-            Component.literal(variantDisplay.headerLabel ?: "Variant")
+            variantDisplay.headerLabel?.let(Component::literal)
+                ?: Component.translatable("cobblemon.pokedex.variation.variant")
         }
         val headerY = if (index == 3) centerY + yOffset + 40 else centerY + yOffset + when (index) {
             0 -> 3
@@ -1758,15 +1771,15 @@ abstract class PokedexScannerRendererMixin {
             else -> 7
         }
         val noHeaderValueY = if (index == 3) centerY + yOffset + 42f else valueY.toFloat()
-        val primaryValueY =
-            if (variantDisplay.showShinyIcon && !variantDisplay.needsSeparateShinyTag && variantDisplay.label == "Shiny")
-                noHeaderValueY
-            else
-                valueY.toFloat()
         val isShinyOnlyDisplay =
             variantDisplay.showShinyIcon &&
                 !variantDisplay.needsSeparateShinyTag &&
-                variantDisplay.label == "Shiny"
+                variantDisplay.labelTranslationKey == "betterpokedexscanner.label.shiny"
+        val primaryValueY =
+            if (isShinyOnlyDisplay)
+                noHeaderValueY
+            else
+                valueY.toFloat()
         val shinyValueY = when {
             index == 3 -> primaryValueY.toFloat() - 2f
             isInnerFrame -> primaryValueY.toFloat() - 2.4f
@@ -1796,7 +1809,7 @@ abstract class PokedexScannerRendererMixin {
                 }
             }
 
-        if (!(variantDisplay.showShinyIcon && !variantDisplay.needsSeparateShinyTag && variantDisplay.label == "Shiny")) {
+        if (!isShinyOnlyDisplay) {
             drawScaledText(
                 context = graphics,
                 text = headerComponent,
@@ -1859,7 +1872,7 @@ abstract class PokedexScannerRendererMixin {
         val shinyXOffset =
             (if (isInnerFrame) -177 else -120) + if (shinySide) 0 else if (isInnerFrame) 234 else 148
         val shinyTextCenterX = centerX + shinyXOffset + shinyXOffsetText
-        val shinyText = Component.literal("Shiny").copy().bold()
+        val shinyText = Component.translatable("betterpokedexscanner.label.shiny").copy().bold()
         val shinyTextWidth = Minecraft.getInstance().font.width(shinyText.font(CobblemonResources.DEFAULT_LARGE))
         val shinyTextScale = if (shinyTextWidth > maxWidth) 0.75F else 1.0F
         val shinyScaledTextWidth = (shinyTextWidth * shinyTextScale).toInt()
@@ -1984,15 +1997,16 @@ abstract class PokedexScannerRendererMixin {
             } else {
                 0.5f
             }
-        val maxWidth = frameWidth - 8
+        val labelWidth =
+            if (isInnerFrame) frameWidth - PokedexScannerRenderer.INNER_INFO_FRAME_STEM_WIDTH
+            else frameWidth
+        val maxWidth = labelWidth - 8
         val baseTextWidth = Minecraft.getInstance().font.width(value.font(CobblemonResources.DEFAULT_LARGE))
         val textScale =
-            if (display.headerLabel == "IVs") {
+            if (display.headerTranslationKey == "cobblemon.ui.stats.ivs" || display.headerLabel == "IVs") {
                 1.0F
-            } else if (baseTextWidth > maxWidth) {
-                0.75F
             } else {
-                1.0F
+                (maxWidth.toFloat() / baseTextWidth.coerceAtLeast(1)).coerceAtMost(1.0F)
             }
         val animatedTextScale =
             if (!inTransition) {

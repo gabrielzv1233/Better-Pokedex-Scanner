@@ -5,16 +5,21 @@ import com.cobblemon.mod.common.pokedex.scanner.PokemonScanner
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.client.player.LocalPlayer
+import net.minecraft.client.resources.language.I18n
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.entity.Saddleable
 import net.minecraft.world.entity.animal.Cat
 import net.minecraft.world.entity.animal.Fox
 import net.minecraft.world.entity.animal.MushroomCow
 import net.minecraft.world.entity.animal.Parrot
+import net.minecraft.world.entity.animal.Pufferfish
 import net.minecraft.world.entity.animal.Rabbit
 import net.minecraft.world.entity.animal.Sheep
 import net.minecraft.world.entity.animal.TropicalFish
@@ -27,11 +32,15 @@ import net.minecraft.world.entity.animal.horse.Llama
 import net.minecraft.world.entity.animal.Panda
 import net.minecraft.world.entity.monster.Shulker
 import net.minecraft.world.entity.monster.Phantom
+import net.minecraft.world.entity.monster.Creeper
+import net.minecraft.world.entity.monster.EnderMan
 import net.minecraft.world.entity.monster.Slime
 import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.entity.decoration.ArmorStand
+import net.minecraft.world.entity.decoration.Painting
 import net.minecraft.world.entity.boss.EnderDragonPart
 import net.minecraft.world.entity.vehicle.Boat
+import net.minecraft.world.phys.AABB
 
 data class NonPokemonEntityScanSnapshot(
     val entityId: Int,
@@ -45,13 +54,21 @@ data class NonPokemonEntityScanSnapshot(
 
 data class MirroredDisplayGroup(
     val anchorDisplayIndex: Int,
-    val displays: List<VariantDisplay>
+    val displays: List<VariantDisplay>,
+    val anchorSlotIndex: Int? = null
 )
 
 object NonPokemonEntityScanner {
+    private const val PAINTING_TARGET_TOLERANCE = 0.15
 
     fun findTarget(user: LocalPlayer, zoomLevel: Int): NonPokemonEntityScanSnapshot? {
-        val detectedEntity = PokemonScanner.detectEntity(user, zoomLevel * 2) ?: return null
+        val preciselyTargetedPainting = findPreciselyTargetedPainting(user, zoomLevel)
+        val detectedEntity =
+            preciselyTargetedPainting
+                ?: PokemonScanner.detectEntity(user, zoomLevel * 2)
+                ?: return null
+        if (detectedEntity is Painting && preciselyTargetedPainting == null) return null
+
         val entity = normalizeScanTarget(detectedEntity)
         if (entity is PokemonEntity || shouldIgnoreEntity(entity)) return null
 
@@ -63,8 +80,12 @@ object NonPokemonEntityScanner {
             entityName = entity.displayName?.string ?: entity.type.description.string,
             frameDisplays = frameDisplays,
             mirroredDisplayGroups = buildMirroredDisplayGroups(entity, frameDisplays),
-            useFixedSlotLayout = entity is ArmorStand,
-            fixedVisibleSlots = if (entity is ArmorStand) resolveArmorStandVisibleSlots(entity) else emptyList()
+            useFixedSlotLayout = entity is ArmorStand || entity is Painting,
+            fixedVisibleSlots = when (entity) {
+                is ArmorStand -> resolveArmorStandVisibleSlots(entity)
+                is Painting -> listOf(true, true, true, false)
+                else -> emptyList()
+            }
         )
     }
 
@@ -72,19 +93,26 @@ object NonPokemonEntityScanner {
         if (entity is ArmorStand) {
             return buildArmorStandFrameDisplays(entity)
         }
+        if (entity is Painting) {
+            return buildPaintingFrameDisplays(entity)
+        }
 
         val displays = mutableListOf<List<VariantDisplay>>()
         val isItemEntity = entity is ItemEntity
         val entityTypeName = resolveEntityTypeLabel(entity)
+        val entityTypeComponent = resolveEntityTypeComponent(entity)
         val baseEntityTypeName = entity.type.description.string
-        val entityDisplayName = entity.displayName?.string ?: entityTypeName
+        val entityDisplayNameComponent = entity.displayName ?: entityTypeComponent
+        val entityDisplayName = entityDisplayNameComponent.string
         val villagerProfessionLabel = resolveVillagerProfessionLabel(entity)
         val hasDistinctName =
             entityDisplayName != baseEntityTypeName &&
                 entityDisplayName != entityTypeName &&
                 entityDisplayName != villagerProfessionLabel
         val detailDisplays = buildList {
-            if (hasDistinctName) {
+            resolvePaintingTitleDisplay(entity)?.let(::add)
+
+            if (hasDistinctName && entity !is Painting) {
                 add(
                     VariantDisplay(
                         headerTranslationKey = if (isItemEntity) {
@@ -92,7 +120,8 @@ object NonPokemonEntityScanner {
                         } else {
                             "betterpokedexscanner.header.entity.name"
                         },
-                        label = entityDisplayName
+                        label = entityDisplayName,
+                        labelComponent = entityDisplayNameComponent
                     )
                 )
             }
@@ -111,7 +140,8 @@ object NonPokemonEntityScanner {
                 listOf(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.entity.category",
-                        label = resolveCategoryLabel(entity)
+                        label = resolveCategoryLabel(entity),
+                        labelTranslationKey = resolveCategoryTranslationKey(entity)
                     )
                 )
             }
@@ -120,7 +150,8 @@ object NonPokemonEntityScanner {
             listOf(
                 VariantDisplay(
                     headerTranslationKey = "betterpokedexscanner.header.entity.type",
-                    label = entityTypeName
+                    label = entityTypeName,
+                    labelComponent = entityTypeComponent
                 )
             )
 
@@ -139,6 +170,13 @@ object NonPokemonEntityScanner {
     ): List<MirroredDisplayGroup> {
         if (entity is ArmorStand) {
             return buildArmorStandMirroredDisplayGroups(entity)
+        }
+        if (entity is Painting) {
+            return listOfNotNull(
+                resolvePaintingTitleDisplay(entity)?.let { titleDisplay ->
+                    MirroredDisplayGroup(anchorDisplayIndex = 0, displays = listOf(titleDisplay))
+                }
+            )
         }
 
         val groups = mutableListOf<MirroredDisplayGroup>()
@@ -162,17 +200,72 @@ object NonPokemonEntityScanner {
             )
         }
 
+        resolveEndermanCarriedBlockDisplay(entity)?.let { carriedBlockDisplay ->
+            groups += MirroredDisplayGroup(
+                anchorDisplayIndex = -1,
+                displays = listOf(carriedBlockDisplay),
+                anchorSlotIndex = 3
+            )
+        }
+
+        resolvePufferfishInflationDisplay(entity)?.let { inflationDisplay ->
+            groups += MirroredDisplayGroup(
+                anchorDisplayIndex = -1,
+                displays = listOf(inflationDisplay),
+                anchorSlotIndex = 3
+            )
+        }
+
         return groups
+    }
+
+    private fun buildPaintingFrameDisplays(entity: Painting): List<List<VariantDisplay>> {
+        val typeDisplays = listOf(
+            VariantDisplay(
+                headerTranslationKey = "betterpokedexscanner.header.entity.type",
+                label = entity.type.description.string,
+                labelComponent = entity.type.description.copy().withStyle { style -> style.withBold(true) }
+            )
+        )
+        val artistDisplays = listOfNotNull(resolvePaintingArtistDisplay(entity))
+        val classificationDisplays = listOf(
+            VariantDisplay(
+                headerTranslationKey = "betterpokedexscanner.header.entity.category",
+                label = resolveCategoryLabel(entity),
+                labelTranslationKey = resolveCategoryTranslationKey(entity)
+            )
+        )
+
+        return listOf(typeDisplays, artistDisplays, classificationDisplays, emptyList())
+    }
+
+    private fun findPreciselyTargetedPainting(user: LocalPlayer, zoomLevel: Int): Painting? {
+        val start = user.eyePosition
+        val scanRange = (zoomLevel * 2).toDouble()
+        val end = start.add(user.lookAngle.scale(scanRange))
+        val searchBox = AABB(start, end).inflate(PAINTING_TARGET_TOLERANCE)
+
+        return user.level()
+            .getEntitiesOfClass(Painting::class.java, searchBox)
+            .mapNotNull { painting ->
+                painting.boundingBox.inflate(PAINTING_TARGET_TOLERANCE).clip(start, end).orElse(null)?.let { hit ->
+                    painting to start.distanceToSqr(hit)
+                }
+            }
+            .minByOrNull { (_, distance) -> distance }
+            ?.first
     }
 
     private fun buildArmorStandFrameDisplays(entity: ArmorStand): List<List<VariantDisplay>> {
         val baseEntityTypeName = entity.type.description.string
-        val entityDisplayName = entity.displayName?.string ?: baseEntityTypeName
+        val entityDisplayNameComponent = entity.displayName ?: entity.type.description
+        val entityDisplayName = entityDisplayNameComponent.string
         val typeDisplays = buildList {
             add(
                 VariantDisplay(
                     headerTranslationKey = "betterpokedexscanner.header.entity.type",
-                    label = baseEntityTypeName
+                    label = baseEntityTypeName,
+                    labelComponent = entity.type.description
                 )
             )
 
@@ -180,7 +273,8 @@ object NonPokemonEntityScanner {
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.entity.name",
-                        label = entityDisplayName
+                        label = entityDisplayName,
+                        labelComponent = entityDisplayNameComponent
                     )
                 )
             }
@@ -239,6 +333,7 @@ object NonPokemonEntityScanner {
     private fun resolveTypeMirroredDisplays(entity: Entity): List<VariantDisplay> {
         return buildList {
             resolveVillagerProfessionDisplay(entity)?.let(::add)
+            resolvePaintingArtistDisplay(entity)?.let(::add)
 
             if (entity is TropicalFish) {
                 add(
@@ -251,7 +346,8 @@ object NonPokemonEntityScanner {
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.pattern",
-                        label = entity.variant.displayName().string
+                        label = entity.variant.displayName().string,
+                        labelComponent = entity.variant.displayName()
                     )
                 )
                 add(
@@ -264,11 +360,13 @@ object NonPokemonEntityScanner {
                 add(
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.size",
-                        label = formatResourcePath(entity.variant.base().name)
+                        label = formatResourcePath(entity.variant.base().name),
+                        labelTranslationKey = resolveTropicalFishBaseTranslationKey(entity.variant.base().name)
                     )
                 )
             } else {
                 addAll(resolvePrimaryVariantDisplays(entity))
+                addAll(resolveCreeperStatusDisplays(entity))
                 resolveLifeStageDisplay(entity)?.let(::add)
                 resolveSizeDisplay(entity)?.let(::add)
                 resolveLlamaCarpetDisplay(entity)?.let(::add)
@@ -281,8 +379,35 @@ object NonPokemonEntityScanner {
         return buildList {
             resolveSaddledDisplay(entity)?.let(::add)
             resolveArmoredDisplay(entity)?.let(::add)
+            addAll(resolveHostileEquipmentDisplays(entity))
             addAll(resolvePassengerDisplays(entity))
         }
+    }
+
+    private fun resolveEndermanCarriedBlockDisplay(entity: Entity): VariantDisplay? {
+        val enderman = entity as? EnderMan ?: return null
+        val blockName = enderman.carriedBlock?.block?.name ?: return null
+
+        return VariantDisplay(
+            headerTranslationKey = "betterpokedexscanner.header.carried_block",
+            label = blockName.string,
+            labelComponent = blockName.copy().withStyle { style -> style.withBold(true) }
+        )
+    }
+
+    private fun resolvePufferfishInflationDisplay(entity: Entity): VariantDisplay? {
+        val pufferfish = entity as? Pufferfish ?: return null
+        val (label, translationKey) = when (pufferfish.puffState) {
+            0 -> "Deflated" to "betterpokedexscanner.label.inflation.deflated"
+            1 -> "Inflated" to "betterpokedexscanner.label.inflation.inflated"
+            else -> "Fully Inflated" to "betterpokedexscanner.label.inflation.fully_inflated"
+        }
+
+        return VariantDisplay(
+            headerTranslationKey = "betterpokedexscanner.header.inflation_state",
+            label = label,
+            labelTranslationKey = translationKey
+        )
     }
 
     private fun resolvePrimaryVariantDisplays(entity: Entity): List<VariantDisplay> {
@@ -293,11 +418,13 @@ object NonPokemonEntityScanner {
         if (entity is Horse) {
             return buildList {
                 formatVariantValue(entity.variant)?.let { colorLabel ->
+                    val translationKey = resolveHorseVariantTranslationKey(colorLabel)
                     add(
                         VariantDisplay(
                             headerTranslationKey = "betterpokedexscanner.header.entity.variant",
                             label = colorLabel,
-                            labelComponent = resolveBuiltInVariantComponent(entity, colorLabel)
+                            labelComponent = resolveBuiltInVariantComponent(entity, colorLabel, translationKey),
+                            labelTranslationKey = translationKey
                         )
                     )
                 }
@@ -306,7 +433,8 @@ object NonPokemonEntityScanner {
                     add(
                         VariantDisplay(
                             headerTranslationKey = "betterpokedexscanner.header.pattern",
-                            label = formatResourcePath(entity.markings.name)
+                            label = formatResourcePath(entity.markings.name),
+                            labelComponent = resolveHorseMarkingsComponent(entity.markings.name)
                         )
                     )
                 }
@@ -318,7 +446,8 @@ object NonPokemonEntityScanner {
                 VariantDisplay(
                     headerTranslationKey = "betterpokedexscanner.header.entity.variant",
                     label = variantLabel,
-                    labelComponent = variantComponent
+                    labelComponent = variantComponent,
+                    labelTranslationKey = resolveBuiltInVariantTranslationKey(entity, variantLabel)
                 )
             )
         }
@@ -344,92 +473,125 @@ object NonPokemonEntityScanner {
         return formatVariantValue(variantValue)
     }
 
-    private fun resolveBuiltInVariantPresentation(entity: Entity): Pair<String, net.minecraft.network.chat.Component?>? {
-        val label = resolveBuiltInVariantLabel(entity) ?: return null
-
-        if (entity is Axolotl) {
-            return when (label.lowercase()) {
-                "lucy" -> "Leucistic" to MinecraftColourLabelFormatter.buildLiteralComponent("Leucistic", "pink")
-                "wild" -> "Wild" to MinecraftColourLabelFormatter.buildLiteralComponent("Wild", "chestnut")
-                "brown" -> "Brown" to MinecraftColourLabelFormatter.buildLiteralComponent("Brown", "chestnut")
-                "gold" -> "Gold" to MinecraftColourLabelFormatter.buildLiteralComponent("Gold", "gold")
-                "cyan" -> "Cyan" to MinecraftColourLabelFormatter.buildLiteralComponent("Cyan", "pale_blue")
-                "blue" -> "Blue" to MinecraftColourLabelFormatter.buildLiteralComponent("Blue", "soft_blue")
-                else -> label to null
-            }
+    private fun resolveBuiltInVariantPresentation(entity: Entity): Pair<String, Component?>? {
+        val rawLabel = resolveBuiltInVariantLabel(entity) ?: return null
+        val label = when {
+            entity is Axolotl && rawLabel.equals("lucy", ignoreCase = true) -> "Leucistic"
+            entity is Cat && rawLabel.equals("black", ignoreCase = true) -> "Tuxedo"
+            entity is Cat && rawLabel.equals("all black", ignoreCase = true) -> "Black"
+            else -> rawLabel
         }
+        val translationKey = resolveBuiltInVariantTranslationKey(entity, label)
 
         if (entity is Cat) {
-            return when (label.lowercase()) {
-                "black" -> "Tuxedo" to MinecraftColourLabelFormatter.buildSplitLabelComponent("Tuxedo", listOf("black", "white"))
-                "all black" -> "Black" to MinecraftColourLabelFormatter.buildLiteralComponent("Black", "black")
-                "british shorthair" -> "British Shorthair" to MinecraftColourLabelFormatter.buildLiteralComponent("British Shorthair", "silver")
-                "calico" -> "Calico" to MinecraftColourLabelFormatter.buildSplitLabelComponent("Calico", listOf("orange", "white", "dark_brown"))
-                "jellie" -> "Jellie" to MinecraftColourLabelFormatter.buildSplitLabelComponent("Jellie", listOf("gray", "white"))
-                "persian" -> "Persian" to MinecraftColourLabelFormatter.buildLiteralComponent("Persian", "persian_cream")
-                "ragdoll" -> "Ragdoll" to MinecraftColourLabelFormatter.buildLiteralComponent("Ragdoll", "ragdoll_gray")
-                "red" -> "Red" to MinecraftColourLabelFormatter.buildSplitLabelComponent("Red", listOf("dark_orange", "warm_orange", "white"))
-                "siamese" -> "Siamese" to MinecraftColourLabelFormatter.buildSplitLabelComponent(
-                    "Siamese",
-                    listOf("siamese_dark","siamese_brown", "siamese_taupe", "siamese_cream")
+            val colours = when (label.lowercase()) {
+                "tuxedo" -> listOf("black", "white")
+                "calico" -> listOf("orange", "white", "dark_brown")
+                "jellie" -> listOf("gray", "white")
+                "red" -> listOf("dark_orange", "warm_orange", "white")
+                "siamese" -> listOf("siamese_dark", "siamese_brown", "siamese_taupe", "siamese_cream")
+                "tabby" -> listOf("tabby_dark", "tabby_mid", "tabby_light")
+                else -> emptyList()
+            }
+            if (colours.isNotEmpty() && translationKey != null) {
+                return label to MinecraftColourLabelFormatter.buildSplitComponent(
+                    Component.translatable(translationKey),
+                    colours
                 )
-                "tabby" -> "Tabby" to MinecraftColourLabelFormatter.buildSplitLabelComponent(
-                    "Tabby",
-                    listOf("tabby_dark", "tabby_mid", "tabby_light")
-                )
-                "gray tabby" -> "Gray Tabby" to MinecraftColourLabelFormatter.buildSplitLabelComponent(
-                    "Gray Tabby",
-                    listOf("gray_tabby_dark", "gray_tabby_mid", "gray_tabby_light")
-                )
-                "white" -> "White" to MinecraftColourLabelFormatter.buildLiteralComponent("White", "white")
-                else -> label to null
             }
         }
 
-        return label to resolveBuiltInVariantComponent(entity, label)
-    }
-
-    private fun resolveBuiltInVariantComponent(entity: Entity, label: String): net.minecraft.network.chat.Component? {
         if (entity is Rabbit) {
-            return when (label.lowercase()) {
-                "brown" -> MinecraftColourLabelFormatter.buildLiteralComponent("Brown", "rabbit_brown")
-                "gold" -> MinecraftColourLabelFormatter.buildLiteralComponent("Gold", "rabbit_gold")
-                "salt" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(
-                    "Salt",
-                    listOf("rabbit_salt_light", "rabbit_salt_mid", "rabbit_salt_dark")
+            val colours = when (label.lowercase()) {
+                "salt" -> listOf("rabbit_salt_light", "rabbit_salt_mid", "rabbit_salt_dark")
+                "white splotched" -> listOf("black", "rabbit_splotch_mid", "white")
+                else -> emptyList()
+            }
+            if (colours.isNotEmpty() && translationKey != null) {
+                return label to MinecraftColourLabelFormatter.buildSplitComponent(
+                    Component.translatable(translationKey),
+                    colours
                 )
-                "evil" -> MinecraftColourLabelFormatter.buildLiteralComponent("Evil", "rabbit_evil")
-                "white splotched" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(
-                    "White Splotched",
-                    listOf("black", "rabbit_splotch_mid", "white")
-                )
-                else -> resolveGenericBuiltInVariantComponent(label)
             }
         }
 
-        return resolveGenericBuiltInVariantComponent(label)
+        if (entity is Parrot) {
+            val colours = when (label.lowercase()) {
+                "red blue" -> listOf("red", "blue")
+                "yellow blue" -> listOf("yellow", "blue")
+                else -> emptyList()
+            }
+            if (colours.isNotEmpty()) {
+                return label to buildColourListComponent(colours)
+            }
+        }
+
+        return label to resolveBuiltInVariantComponent(entity, label, translationKey)
     }
 
-    private fun resolveGenericBuiltInVariantComponent(label: String): net.minecraft.network.chat.Component? {
-        return when (label.lowercase()) {
-            "white" -> MinecraftColourLabelFormatter.buildLiteralComponent("White", "white")
-            "creamy" -> MinecraftColourLabelFormatter.buildLiteralComponent("Creamy", "creamy")
-            "chestnut" -> MinecraftColourLabelFormatter.buildLiteralComponent("Chestnut", "chestnut")
-            "brown" -> MinecraftColourLabelFormatter.buildLiteralComponent("Brown", "brown")
-            "black" -> MinecraftColourLabelFormatter.buildLiteralComponent("Black", "black")
-            "gray" -> MinecraftColourLabelFormatter.buildLiteralComponent("Gray", "gray")
-            "dark brown" -> MinecraftColourLabelFormatter.buildLiteralComponent("Dark Brown", "dark_brown")
-            "british shorthair" -> MinecraftColourLabelFormatter.buildLiteralComponent("British Shorthair", "silver")
-            "calico" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(label, listOf("orange", "white", "dark_brown"))
-            "jellie" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(label, listOf("gray", "white"))
-            "persian" -> MinecraftColourLabelFormatter.buildLiteralComponent("Persian", "creamy")
-            "ragdoll" -> MinecraftColourLabelFormatter.buildLiteralComponent("Ragdoll", "sandy")
-            "red" -> MinecraftColourLabelFormatter.buildLiteralComponent("Red", "orange")
-            "siamese" -> MinecraftColourLabelFormatter.buildLiteralComponent("Siamese", "pale_brown")
-            "tabby" -> MinecraftColourLabelFormatter.buildLiteralComponent("Tabby", "brown")
-            "tuxedo" -> MinecraftColourLabelFormatter.buildSplitLabelComponent(label, listOf("black", "white"))
-            "gold" -> MinecraftColourLabelFormatter.buildLiteralComponent("Gold", "gold")
-            else -> null
+    private fun buildColourListComponent(colours: List<String>): Component {
+        return Component.empty().also { component ->
+            colours.forEachIndexed { index, colour ->
+                if (index > 0) component.append(Component.literal("/").withStyle { style -> style.withBold(true) })
+                component.append(MinecraftColourLabelFormatter.buildComponent(
+                    Component.translatable("color.minecraft.$colour"),
+                    colour
+                ))
+            }
+        }
+    }
+
+    private fun resolveBuiltInVariantComponent(
+        entity: Entity,
+        label: String,
+        translationKey: String? = resolveBuiltInVariantTranslationKey(entity, label)
+    ): Component? {
+        val colourKey = when {
+            entity is Axolotl -> when (label.lowercase()) {
+                "leucistic" -> "pink"
+                "wild", "brown" -> "chestnut"
+                "gold" -> "gold"
+                "cyan" -> "pale_blue"
+                "blue" -> "soft_blue"
+                else -> null
+            }
+            entity is Rabbit -> when (label.lowercase()) {
+                "brown" -> "rabbit_brown"
+                "gold" -> "rabbit_gold"
+                "evil" -> "rabbit_evil"
+                else -> null
+            }
+            entity is Cat -> when (label.lowercase()) {
+                "black" -> "black"
+                "british shorthair" -> "silver"
+                "persian" -> "persian_cream"
+                "ragdoll" -> "ragdoll_gray"
+                "white" -> "white"
+                else -> null
+            }
+            else -> when (label.lowercase()) {
+                "white" -> "white"
+                "creamy" -> "creamy"
+                "chestnut" -> "chestnut"
+                "brown" -> "brown"
+                "black" -> "black"
+                "gray" -> "gray"
+                "dark brown" -> "dark_brown"
+                "red" -> "red"
+                "blue" -> "blue"
+                "green" -> "green"
+                "gold" -> "gold"
+                else -> null
+            }
+        }
+
+        return when {
+            translationKey == null -> null
+            colourKey != null -> MinecraftColourLabelFormatter.buildComponent(
+                Component.translatable(translationKey),
+                colourKey
+            )
+            else -> Component.translatable(translationKey).withStyle { style -> style.withBold(true) }
         }
     }
 
@@ -464,6 +626,15 @@ object NonPokemonEntityScanner {
         }
     }
 
+    private fun resolveEntityTypeComponent(entity: Entity): MutableComponent {
+        val typeComponent = entity.type.description.copy()
+        return if (isEntityTamed(entity)) {
+            Component.translatable("betterpokedexscanner.label.entity.tamed", typeComponent).withStyle { it.withBold(true) }
+        } else {
+            typeComponent.withStyle { it.withBold(true) }
+        }
+    }
+
     private fun isEntityTamed(entity: Entity): Boolean {
         return when (entity) {
             is AbstractHorse -> entity.isTamed
@@ -479,6 +650,7 @@ object NonPokemonEntityScanner {
 
     private fun resolveVillagerProfessionDisplay(entity: Entity): VariantDisplay? {
         val villager = entity as? Villager ?: return null
+        val professionPath = resolveVillagerProfessionPath(villager)
         val professionLabel = resolveVillagerProfessionLabel(villager) ?: return null
         val levelLabel = resolveVillagerLevelLabel(villager)
         val label =
@@ -490,13 +662,18 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.entity.profession",
-            label = label
+            label = label,
+            labelComponent = buildVillagerProfessionComponent(professionPath, levelLabel)
         )
+    }
+
+    private fun resolveVillagerProfessionPath(villager: Villager): String {
+        return BuiltInRegistries.VILLAGER_PROFESSION.getKey(villager.villagerData.profession).path
     }
 
     private fun resolveVillagerProfessionLabel(entity: Entity): String? {
         val villager = entity as? Villager ?: return null
-        val professionPath = BuiltInRegistries.VILLAGER_PROFESSION.getKey(villager.villagerData.profession).path
+        val professionPath = resolveVillagerProfessionPath(villager)
         return when (professionPath) {
             "none" -> "Unemployed"
             else -> formatResourcePath(professionPath)
@@ -512,6 +689,31 @@ object NonPokemonEntityScanner {
             4 -> "Expert"
             5 -> "Master"
             else -> null
+        }
+    }
+
+    private fun buildVillagerProfessionComponent(professionPath: String, levelLabel: String?): MutableComponent {
+        val professionComponent = Component.translatable("entity.minecraft.villager.$professionPath")
+        return if (levelLabel == null) {
+            professionComponent.withStyle { it.withBold(true) }
+        } else {
+            Component.empty()
+                .append(professionComponent)
+                .append(Component.literal(" ("))
+                .append(Component.translatable("merchant.level.${resolveVillagerLevelNumber(levelLabel)}"))
+                .append(Component.literal(")"))
+                .withStyle { it.withBold(true) }
+        }
+    }
+
+    private fun resolveVillagerLevelNumber(levelLabel: String): Int {
+        return when (levelLabel) {
+            "Novice" -> 1
+            "Apprentice" -> 2
+            "Journeyman" -> 3
+            "Expert" -> 4
+            "Master" -> 5
+            else -> 1
         }
     }
 
@@ -587,7 +789,8 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.life_stage",
-            label = "Baby"
+            label = "Baby",
+            labelTranslationKey = "betterpokedexscanner.label.baby"
         )
     }
 
@@ -601,7 +804,8 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.size",
-            label = sizeLabel
+            label = sizeLabel,
+            labelTranslationKey = resolveSizeTranslationKey(sizeLabel)
         )
     }
 
@@ -625,6 +829,16 @@ object NonPokemonEntityScanner {
         }
     }
 
+    private fun resolveSizeTranslationKey(sizeLabel: String): String? {
+        return when (sizeLabel) {
+            "Small" -> "betterpokedexscanner.label.size.small"
+            "Medium" -> "betterpokedexscanner.label.size.medium"
+            "Semi-Large" -> "betterpokedexscanner.label.size.semi_large"
+            "Large" -> "betterpokedexscanner.label.size.large"
+            else -> null
+        }
+    }
+
     private fun resolveLlamaCarpetDisplay(entity: Entity): VariantDisplay? {
         val llama = entity as? Llama ?: return null
         if (!llama.isTamed) return null
@@ -643,7 +857,8 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.chest",
-            label = "Attached"
+            label = "Attached",
+            labelTranslationKey = "betterpokedexscanner.label.attached"
         )
     }
 
@@ -653,7 +868,8 @@ object NonPokemonEntityScanner {
 
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.entity.saddle",
-            label = "Equipped"
+            label = "Equipped",
+            labelTranslationKey = "betterpokedexscanner.label.equipped"
         )
     }
 
@@ -668,7 +884,8 @@ object NonPokemonEntityScanner {
         return VariantDisplay(
             headerTranslationKey = "betterpokedexscanner.header.entity.armor",
             label = bodyItem.hoverName.string,
-            labelComponent = MinecraftColourLabelFormatter.buildVanillaMaterialComponent(bodyItem.hoverName.string, itemPath)
+            labelComponent = MinecraftColourLabelFormatter.buildVanillaMaterialComponent(bodyItem.hoverName, itemPath)
+                ?: bodyItem.hoverName.copy().withStyle { it.withBold(true) }
         )
     }
 
@@ -684,7 +901,8 @@ object NonPokemonEntityScanner {
         return VariantDisplay(
             headerTranslationKey = headerTranslationKey,
             label = itemStack.hoverName.string,
-            labelComponent = MinecraftColourLabelFormatter.buildVanillaMaterialComponent(itemStack.hoverName.string, itemPath)
+            labelComponent = MinecraftColourLabelFormatter.buildVanillaMaterialComponent(itemStack.hoverName, itemPath)
+                ?: itemStack.hoverName.copy().withStyle { it.withBold(true) }
         )
     }
 
@@ -775,10 +993,12 @@ object NonPokemonEntityScanner {
     private fun resolvePassengerDisplays(entity: Entity): List<VariantDisplay> {
         return entity.passengers.map { passenger ->
             val typeName = passenger.type.description.string
-            val displayName = passenger.displayName?.string ?: typeName
+            val displayNameComponent = passenger.displayName ?: passenger.type.description
+            val displayName = displayNameComponent.string
             VariantDisplay(
                 headerTranslationKey = "betterpokedexscanner.header.entity.passenger",
-                label = if (displayName == typeName) typeName else displayName
+                label = if (displayName == typeName) typeName else displayName,
+                labelComponent = displayNameComponent.copy().withStyle { it.withBold(true) }
             )
         }
     }
@@ -786,6 +1006,189 @@ object NonPokemonEntityScanner {
     private fun resolveCategoryLabel(entity: Entity): String {
         val categoryName = entity.type.category.serializedName
         return formatResourcePath(categoryName)
+    }
+
+    private fun resolveCategoryTranslationKey(entity: Entity): String {
+        return "betterpokedexscanner.entity.category.${entity.type.category.serializedName.lowercase()}"
+    }
+
+    private fun resolveTropicalFishBaseTranslationKey(baseName: String): String? {
+        return when (baseName.lowercase()) {
+            "small" -> "betterpokedexscanner.label.size.small"
+            "large" -> "betterpokedexscanner.label.size.large"
+            else -> null
+        }
+    }
+
+    private fun resolveHorseVariantTranslationKey(label: String): String? {
+        val key = label.lowercase().replace(' ', '_')
+        return when (key) {
+            "white", "brown", "black", "gray" -> "color.minecraft.$key"
+            "creamy", "chestnut", "dark_brown" -> "betterpokedexscanner.entity.variant.horse.$key"
+            else -> null
+        }
+    }
+
+    private fun resolveHorseMarkingsComponent(markingsName: String): Component? {
+        return when (markingsName.lowercase()) {
+            "white" -> MinecraftColourLabelFormatter.buildComponent(
+                Component.translatable("color.minecraft.white"),
+                "white"
+            )
+            "white_field" -> MinecraftColourLabelFormatter.buildComponent(
+                Component.translatable("betterpokedexscanner.entity.horse.markings.white_field"),
+                "white"
+            )
+            "white_dots" -> MinecraftColourLabelFormatter.buildComponent(
+                Component.translatable("betterpokedexscanner.entity.horse.markings.white_spots"),
+                "white"
+            )
+            "black_dots" -> MinecraftColourLabelFormatter.buildComponent(
+                Component.translatable("betterpokedexscanner.entity.horse.markings.black_spots"),
+                "black"
+            )
+            else -> null
+        }
+    }
+
+    private fun resolvePaintingTitleDisplay(entity: Entity): VariantDisplay? {
+        val painting = entity as? Painting ?: return null
+        val variantId = painting.variant.unwrapKey().orElse(null)?.location() ?: return null
+        val titleKey = "painting.${variantId.namespace}.${variantId.path}.title"
+        val titleComponent =
+            if (I18n.exists(titleKey)) Component.translatable(titleKey)
+            else Component.literal(formatResourcePath(variantId.path))
+
+        return VariantDisplay(
+            headerTranslationKey = "betterpokedexscanner.header.painting_name",
+            label = titleComponent.string,
+            labelComponent = titleComponent.withStyle { style -> style.withBold(true) }
+        )
+    }
+
+    private fun resolvePaintingArtistDisplay(entity: Entity): VariantDisplay? {
+        val painting = entity as? Painting ?: return null
+        val variantId = painting.variant.unwrapKey().orElse(null)?.location() ?: return null
+        val authorKey = "painting.${variantId.namespace}.${variantId.path}.author"
+        if (!I18n.exists(authorKey)) return null
+
+        return VariantDisplay(
+            headerTranslationKey = "betterpokedexscanner.header.artist",
+            label = I18n.get(authorKey),
+            labelComponent = Component.translatable(authorKey).withStyle { style -> style.withBold(true) }
+        )
+    }
+
+    private fun resolveCreeperStatusDisplays(entity: Entity): List<VariantDisplay> {
+        val creeper = entity as? Creeper ?: return emptyList()
+        return buildList {
+            if (creeper.isPowered) {
+                add(
+                    VariantDisplay(
+                        headerTranslationKey = "betterpokedexscanner.header.status",
+                        label = "Charged",
+                        labelTranslationKey = "betterpokedexscanner.label.charged",
+                        colour = 0x7FE3E1
+                    )
+                )
+            }
+            if (creeper.isIgnited) {
+                add(
+                    VariantDisplay(
+                        headerTranslationKey = "betterpokedexscanner.header.status",
+                        label = "Ignited",
+                        labelTranslationKey = "betterpokedexscanner.label.ignited",
+                        colour = 0xF9801D
+                    )
+                )
+            }
+        }
+    }
+
+    private fun resolveHostileEquipmentDisplays(entity: Entity): List<VariantDisplay> {
+        val living = entity as? LivingEntity ?: return emptyList()
+        if (entity.type.category != MobCategory.MONSTER) return emptyList()
+
+        val slots = listOf(
+            EquipmentSlot.MAINHAND,
+            EquipmentSlot.OFFHAND,
+            EquipmentSlot.HEAD,
+            EquipmentSlot.CHEST,
+            EquipmentSlot.LEGS,
+            EquipmentSlot.FEET
+        )
+        return slots.mapNotNull { slot ->
+            val headerKey = when (slot) {
+                EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND -> "betterpokedexscanner.header.weapon"
+                else -> "betterpokedexscanner.header.equipment"
+            }
+            resolveEquipmentDisplay(living, slot, headerKey)
+        }
+    }
+
+    private fun resolveBuiltInVariantTranslationKey(entity: Entity, label: String): String? {
+        val key = label.lowercase().replace(' ', '_')
+        return when (entity) {
+            is Cat -> when (key) {
+                "black", "red", "white" -> "color.minecraft.$key"
+                "tuxedo", "british_shorthair", "calico", "jellie", "persian", "ragdoll", "siamese", "tabby" ->
+                    "betterpokedexscanner.entity.variant.cat.$key"
+                else -> null
+            }
+            is Rabbit -> when (key) {
+                "brown", "black", "white" -> "color.minecraft.$key"
+                "evil" -> "entity.minecraft.killer_bunny"
+                "gold" -> "betterpokedexscanner.variant.magikarp_jump_gold"
+                "salt", "white_splotched" -> "betterpokedexscanner.entity.variant.rabbit.$key"
+                else -> null
+            }
+            is Axolotl -> when (key) {
+                "cyan", "blue", "brown" -> "color.minecraft.$key"
+                "gold" -> "betterpokedexscanner.variant.magikarp_jump_gold"
+                "leucistic", "wild" -> "betterpokedexscanner.entity.variant.axolotl.$key"
+                else -> null
+            }
+            is Fox -> when (key) {
+                "red" -> "color.minecraft.red"
+                "snow" -> "block.minecraft.snow"
+                else -> null
+            }
+            is MushroomCow -> when (key) {
+                "red", "brown" -> "color.minecraft.$key"
+                else -> null
+            }
+            is Panda -> when (key) {
+                "brown" -> "color.minecraft.brown"
+                "normal" -> "options.difficulty.normal"
+                "lazy", "worried", "playful", "weak", "aggressive" ->
+                    "betterpokedexscanner.entity.variant.panda.$key"
+                else -> null
+            }
+            is Parrot -> when (key) {
+                "blue", "green", "gray" -> "color.minecraft.$key"
+                "red_blue", "yellow_blue" -> null
+                else -> null
+            }
+            is Wolf -> when (key) {
+                "black" -> "color.minecraft.black"
+                "snowy" -> "betterpokedexscanner.variant.snowy_form"
+                "chestnut" -> "betterpokedexscanner.entity.variant.horse.chestnut"
+                "pale", "spotted", "ashen", "rusty", "woods", "striped" ->
+                    "betterpokedexscanner.entity.variant.wolf.$key"
+                else -> null
+            }
+            is Llama -> when (key) {
+                "white", "brown", "gray" -> "color.minecraft.$key"
+                "creamy" -> "betterpokedexscanner.entity.variant.horse.creamy"
+                else -> null
+            }
+            is Shulker -> when (key) {
+                "white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray",
+                "cyan", "purple", "blue", "brown", "green", "red", "black" -> "color.minecraft.$key"
+                else -> null
+            }
+            else -> null
+        }
     }
 
     private fun formatResourcePath(path: String): String {

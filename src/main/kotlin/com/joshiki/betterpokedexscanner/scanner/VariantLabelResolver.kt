@@ -72,10 +72,10 @@ object VariantLabelResolver {
             shiny -> VariantRenderState(
                 primaryDisplays = listOf(
                     VariantDisplay(
-                        headerLabel = "Variant",
-                        headerTranslationKey = null,
+                        headerLabel = null,
+                        headerTranslationKey = "cobblemon.pokedex.variation.variant",
                         label = "Shiny",
-                        labelTranslationKey = null,
+                        labelTranslationKey = "betterpokedexscanner.label.shiny",
                         showShinyIcon = true,
                         needsSeparateShinyTag = false
                     )
@@ -224,7 +224,7 @@ object VariantLabelResolver {
         val matches = mutableListOf<VariantLabelMatch>()
         if (patternParts.any { it != null }) {
             matches += VariantLabelMatch(
-                headerLabel = "Spot Pattern",
+                headerTranslationKey = "betterpokedexscanner.header.spot_pattern",
                 label = patternParts.joinToString("-") { it ?: "0" }
             )
         }
@@ -238,8 +238,15 @@ object VariantLabelResolver {
         }
         if (specialMark != null) {
             matches += VariantLabelMatch(
-                headerLabel = "Special Mark",
-                label = specialMark
+                headerTranslationKey = "betterpokedexscanner.header.special_mark",
+                label = specialMark,
+                labelTranslationKey = when (specialMark) {
+                    "Heart" -> "betterpokedexscanner.label.heart"
+                    "Broken Heart" -> "betterpokedexscanner.label.broken_heart"
+                    "Goatee" -> "betterpokedexscanner.label.goatee"
+                    "Star" -> "betterpokedexscanner.label.star"
+                    else -> null
+                }
             )
         }
 

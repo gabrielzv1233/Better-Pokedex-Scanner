@@ -1,0 +1,32 @@
+entity	betterpokedexscanner.entity.category.ambient	Ambient Creature	May be dynamic; review before deleting
+entity	betterpokedexscanner.entity.category.axolotls	Axolotls	May be dynamic; review before deleting
+entity	betterpokedexscanner.entity.category.creature	Creature	May be dynamic; review before deleting
+entity	betterpokedexscanner.entity.category.misc	Miscellaneous	May be dynamic; review before deleting
+entity	betterpokedexscanner.entity.category.monster	Monster	May be dynamic; review before deleting
+entity	betterpokedexscanner.entity.category.underground_water_creature	Underground Water Creature	May be dynamic; review before deleting
+entity	betterpokedexscanner.entity.category.water_ambient	Water Ambient Creature	May be dynamic; review before deleting
+entity	betterpokedexscanner.entity.category.water_creature	Water Creature	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.light.bright	Bright	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.light.dark	Dark	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.light.dim	Dim	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.moon_phase.0	Full Moon	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.moon_phase.1	Waning Gibbous	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.moon_phase.2	Last Quarter	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.moon_phase.3	Waning Crescent	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.moon_phase.4	New Moon	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.moon_phase.5	Waxing Crescent	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.moon_phase.6	First Quarter	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.moon_phase.7	Waxing Gibbous	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.time.afternoon	Afternoon	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.time.dawn	Dawn	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.time.midnight	Midnight	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.time.morning	Morning	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.time.night	Night	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.time.noon	Noon	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.time.sunrise	Sunrise	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.time.sunset	Sunset	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.weather.clear	Clear	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.weather.rain	Rain	May be dynamic; review before deleting
+environment	betterpokedexscanner.environment.weather.thunder	Thunder	May be dynamic; review before deleting
+header	betterpokedexscanner.header.carrying_nectar	Carrying Nectar	May be dynamic; review before deleting
+header	betterpokedexscanner.header.combat_breed	Combat Breed	May be dynamic; review before deleting

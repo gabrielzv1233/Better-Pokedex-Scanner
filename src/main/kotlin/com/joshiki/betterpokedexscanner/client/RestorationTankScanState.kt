@@ -21,6 +21,7 @@ object RestorationTankScanState {
     var scanKind: PokemonBlockScanKind = PokemonBlockScanKind.RESTORATION_TANK
     var level: Int? = null
     var containerName: String? = null
+    var containerNameComponent: MutableComponent? = null
     var gender: Gender? = null
     var typeLabel: String? = null
     var typeLabelComponent: MutableComponent? = null
@@ -41,6 +42,7 @@ object RestorationTankScanState {
         scanKind = PokemonBlockScanKind.RESTORATION_TANK
         level = null
         containerName = null
+        containerNameComponent = null
         gender = null
         typeLabel = null
         typeLabelComponent = null
@@ -58,6 +60,7 @@ object RestorationTankScanState {
         scanKind: PokemonBlockScanKind,
         level: Int?,
         containerName: String?,
+        containerNameComponent: MutableComponent?,
         gender: Gender?,
         typeLabel: String?,
         typeLabelComponent: MutableComponent?,
@@ -74,6 +77,7 @@ object RestorationTankScanState {
         this.scanKind = scanKind
         this.level = level
         this.containerName = containerName
+        this.containerNameComponent = containerNameComponent
         this.gender = gender
         this.typeLabel = typeLabel
         this.typeLabelComponent = typeLabelComponent

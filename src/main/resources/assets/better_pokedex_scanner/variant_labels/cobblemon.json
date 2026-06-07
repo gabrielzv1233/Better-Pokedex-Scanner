@@ -1,1426 +1,3759 @@
 {
   "groups": [
     {
-      "headerLabel": "Regional Variation",
       "aspectDisplays": {
-        "alolan": { "parts": [ { "text": "Alolan", "color": "DC5A40" } ] },
-        "galarian": { "parts": [ { "text": "Galarian", "color": "AC379E" } ] },
-        "hisuian": { "parts": [ { "text": "Hisuian", "color": "36597B" } ] },
-        "paldean": { "parts": [ { "text": "Paldean", "color": "DCB000" } ] }
+        "alolan": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.alola",
+          "colors": [
+            "DC5A40"
+          ]
+        },
+        "galarian": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.galar",
+          "colors": [
+            "AC379E"
+          ]
+        },
+        "hisuian": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.hisui",
+          "colors": [
+            "36597B"
+          ]
+        },
+        "paldean": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.paldea",
+          "colors": [
+            "DCB000"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.regional_variation"
+    },
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.chimeric_variation",
+      "aspectTranslationKeys": {
+        "chimera-a": "betterpokedexscanner.variant.chimera_a",
+        "chimera-b": "betterpokedexscanner.variant.chimera_b",
+        "chimera-c": "betterpokedexscanner.variant.chimera_c",
+        "chimera-d": "betterpokedexscanner.variant.chimera_d",
+        "chimera-e": "betterpokedexscanner.variant.chimera_e",
+        "chimera-f": "betterpokedexscanner.variant.chimera_f",
+        "chimera-g": "betterpokedexscanner.variant.chimera_g",
+        "chimera-h": "betterpokedexscanner.variant.chimera_h",
+        "chimera-i": "betterpokedexscanner.variant.chimera_i",
+        "chimera-ab": "betterpokedexscanner.variant.chimera_ab",
+        "chimera-ac": "betterpokedexscanner.variant.chimera_ac",
+        "chimera-ad": "betterpokedexscanner.variant.chimera_ad",
+        "chimera-ae": "betterpokedexscanner.variant.chimera_ae",
+        "chimera-af": "betterpokedexscanner.variant.chimera_af",
+        "chimera-ag": "betterpokedexscanner.variant.chimera_ag",
+        "chimera-ah": "betterpokedexscanner.variant.chimera_ah",
+        "chimera-ai": "betterpokedexscanner.variant.chimera_ai",
+        "chimera-bc": "betterpokedexscanner.variant.chimera_bc",
+        "chimera-bd": "betterpokedexscanner.variant.chimera_bd",
+        "chimera-be": "betterpokedexscanner.variant.chimera_be",
+        "chimera-bf": "betterpokedexscanner.variant.chimera_bf",
+        "chimera-bg": "betterpokedexscanner.variant.chimera_bg",
+        "chimera-bh": "betterpokedexscanner.variant.chimera_bh",
+        "chimera-bi": "betterpokedexscanner.variant.chimera_bi",
+        "chimera-cd": "betterpokedexscanner.variant.chimera_cd",
+        "chimera-ce": "betterpokedexscanner.variant.chimera_ce",
+        "chimera-cf": "betterpokedexscanner.variant.chimera_cf",
+        "chimera-cg": "betterpokedexscanner.variant.chimera_cg",
+        "chimera-ch": "betterpokedexscanner.variant.chimera_ch",
+        "chimera-ci": "betterpokedexscanner.variant.chimera_ci",
+        "chimera-de": "betterpokedexscanner.variant.chimera_de",
+        "chimera-df": "betterpokedexscanner.variant.chimera_df",
+        "chimera-dg": "betterpokedexscanner.variant.chimera_dg",
+        "chimera-dh": "betterpokedexscanner.variant.chimera_dh",
+        "chimera-di": "betterpokedexscanner.variant.chimera_di",
+        "chimera-ef": "betterpokedexscanner.variant.chimera_ef",
+        "chimera-eg": "betterpokedexscanner.variant.chimera_eg",
+        "chimera-eh": "betterpokedexscanner.variant.chimera_eh",
+        "chimera-ei": "betterpokedexscanner.variant.chimera_ei",
+        "chimera-fg": "betterpokedexscanner.variant.chimera_fg",
+        "chimera-fh": "betterpokedexscanner.variant.chimera_fh",
+        "chimera-fi": "betterpokedexscanner.variant.chimera_fi",
+        "chimera-gh": "betterpokedexscanner.variant.chimera_gh",
+        "chimera-gi": "betterpokedexscanner.variant.chimera_gi",
+        "chimera-hi": "betterpokedexscanner.variant.chimera_hi",
+        "chimera-abc": "betterpokedexscanner.variant.chimera_abc",
+        "chimera-abd": "betterpokedexscanner.variant.chimera_abd",
+        "chimera-abe": "betterpokedexscanner.variant.chimera_abe",
+        "chimera-abf": "betterpokedexscanner.variant.chimera_abf",
+        "chimera-abg": "betterpokedexscanner.variant.chimera_abg",
+        "chimera-abh": "betterpokedexscanner.variant.chimera_abh",
+        "chimera-abi": "betterpokedexscanner.variant.chimera_abi",
+        "chimera-acd": "betterpokedexscanner.variant.chimera_acd",
+        "chimera-ace": "betterpokedexscanner.variant.chimera_ace",
+        "chimera-acf": "betterpokedexscanner.variant.chimera_acf",
+        "chimera-acg": "betterpokedexscanner.variant.chimera_acg",
+        "chimera-ach": "betterpokedexscanner.variant.chimera_ach",
+        "chimera-aci": "betterpokedexscanner.variant.chimera_aci",
+        "chimera-ade": "betterpokedexscanner.variant.chimera_ade",
+        "chimera-adf": "betterpokedexscanner.variant.chimera_adf",
+        "chimera-adg": "betterpokedexscanner.variant.chimera_adg",
+        "chimera-adh": "betterpokedexscanner.variant.chimera_adh",
+        "chimera-adi": "betterpokedexscanner.variant.chimera_adi",
+        "chimera-aef": "betterpokedexscanner.variant.chimera_aef",
+        "chimera-aeg": "betterpokedexscanner.variant.chimera_aeg",
+        "chimera-aeh": "betterpokedexscanner.variant.chimera_aeh",
+        "chimera-aei": "betterpokedexscanner.variant.chimera_aei",
+        "chimera-afg": "betterpokedexscanner.variant.chimera_afg",
+        "chimera-afh": "betterpokedexscanner.variant.chimera_afh",
+        "chimera-afi": "betterpokedexscanner.variant.chimera_afi",
+        "chimera-agh": "betterpokedexscanner.variant.chimera_agh",
+        "chimera-agi": "betterpokedexscanner.variant.chimera_agi",
+        "chimera-ahi": "betterpokedexscanner.variant.chimera_ahi",
+        "chimera-bcd": "betterpokedexscanner.variant.chimera_bcd",
+        "chimera-bce": "betterpokedexscanner.variant.chimera_bce",
+        "chimera-bcf": "betterpokedexscanner.variant.chimera_bcf",
+        "chimera-bcg": "betterpokedexscanner.variant.chimera_bcg",
+        "chimera-bch": "betterpokedexscanner.variant.chimera_bch",
+        "chimera-bci": "betterpokedexscanner.variant.chimera_bci",
+        "chimera-bde": "betterpokedexscanner.variant.chimera_bde",
+        "chimera-bdf": "betterpokedexscanner.variant.chimera_bdf",
+        "chimera-bdg": "betterpokedexscanner.variant.chimera_bdg",
+        "chimera-bdh": "betterpokedexscanner.variant.chimera_bdh",
+        "chimera-bdi": "betterpokedexscanner.variant.chimera_bdi",
+        "chimera-bef": "betterpokedexscanner.variant.chimera_bef",
+        "chimera-beg": "betterpokedexscanner.variant.chimera_beg",
+        "chimera-beh": "betterpokedexscanner.variant.chimera_beh",
+        "chimera-bei": "betterpokedexscanner.variant.chimera_bei",
+        "chimera-bfg": "betterpokedexscanner.variant.chimera_bfg",
+        "chimera-bfh": "betterpokedexscanner.variant.chimera_bfh",
+        "chimera-bfi": "betterpokedexscanner.variant.chimera_bfi",
+        "chimera-bgh": "betterpokedexscanner.variant.chimera_bgh",
+        "chimera-bgi": "betterpokedexscanner.variant.chimera_bgi",
+        "chimera-bhi": "betterpokedexscanner.variant.chimera_bhi",
+        "chimera-cde": "betterpokedexscanner.variant.chimera_cde",
+        "chimera-cdf": "betterpokedexscanner.variant.chimera_cdf",
+        "chimera-cdg": "betterpokedexscanner.variant.chimera_cdg",
+        "chimera-cdh": "betterpokedexscanner.variant.chimera_cdh",
+        "chimera-cdi": "betterpokedexscanner.variant.chimera_cdi",
+        "chimera-cef": "betterpokedexscanner.variant.chimera_cef",
+        "chimera-ceg": "betterpokedexscanner.variant.chimera_ceg",
+        "chimera-ceh": "betterpokedexscanner.variant.chimera_ceh",
+        "chimera-cei": "betterpokedexscanner.variant.chimera_cei",
+        "chimera-cfg": "betterpokedexscanner.variant.chimera_cfg",
+        "chimera-cfh": "betterpokedexscanner.variant.chimera_cfh",
+        "chimera-cfi": "betterpokedexscanner.variant.chimera_cfi",
+        "chimera-cgh": "betterpokedexscanner.variant.chimera_cgh",
+        "chimera-cgi": "betterpokedexscanner.variant.chimera_cgi",
+        "chimera-chi": "betterpokedexscanner.variant.chimera_chi",
+        "chimera-def": "betterpokedexscanner.variant.chimera_def",
+        "chimera-deg": "betterpokedexscanner.variant.chimera_deg",
+        "chimera-deh": "betterpokedexscanner.variant.chimera_deh",
+        "chimera-dei": "betterpokedexscanner.variant.chimera_dei",
+        "chimera-dfg": "betterpokedexscanner.variant.chimera_dfg",
+        "chimera-dfh": "betterpokedexscanner.variant.chimera_dfh",
+        "chimera-dfi": "betterpokedexscanner.variant.chimera_dfi",
+        "chimera-dgh": "betterpokedexscanner.variant.chimera_dgh",
+        "chimera-dgi": "betterpokedexscanner.variant.chimera_dgi",
+        "chimera-dhi": "betterpokedexscanner.variant.chimera_dhi",
+        "chimera-efg": "betterpokedexscanner.variant.chimera_efg",
+        "chimera-efh": "betterpokedexscanner.variant.chimera_efh",
+        "chimera-efi": "betterpokedexscanner.variant.chimera_efi",
+        "chimera-egh": "betterpokedexscanner.variant.chimera_egh",
+        "chimera-egi": "betterpokedexscanner.variant.chimera_egi",
+        "chimera-ehi": "betterpokedexscanner.variant.chimera_ehi",
+        "chimera-fgh": "betterpokedexscanner.variant.chimera_fgh",
+        "chimera-fgi": "betterpokedexscanner.variant.chimera_fgi",
+        "chimera-fhi": "betterpokedexscanner.variant.chimera_fhi",
+        "chimera-ghi": "betterpokedexscanner.variant.chimera_ghi",
+        "chimera-abcd": "betterpokedexscanner.variant.chimera_abcd",
+        "chimera-abce": "betterpokedexscanner.variant.chimera_abce",
+        "chimera-abcf": "betterpokedexscanner.variant.chimera_abcf",
+        "chimera-abcg": "betterpokedexscanner.variant.chimera_abcg",
+        "chimera-abch": "betterpokedexscanner.variant.chimera_abch",
+        "chimera-abci": "betterpokedexscanner.variant.chimera_abci",
+        "chimera-abde": "betterpokedexscanner.variant.chimera_abde",
+        "chimera-abdf": "betterpokedexscanner.variant.chimera_abdf",
+        "chimera-abdg": "betterpokedexscanner.variant.chimera_abdg",
+        "chimera-abdh": "betterpokedexscanner.variant.chimera_abdh",
+        "chimera-abdi": "betterpokedexscanner.variant.chimera_abdi",
+        "chimera-abef": "betterpokedexscanner.variant.chimera_abef",
+        "chimera-abeg": "betterpokedexscanner.variant.chimera_abeg",
+        "chimera-abeh": "betterpokedexscanner.variant.chimera_abeh",
+        "chimera-abei": "betterpokedexscanner.variant.chimera_abei",
+        "chimera-abfg": "betterpokedexscanner.variant.chimera_abfg",
+        "chimera-abfh": "betterpokedexscanner.variant.chimera_abfh",
+        "chimera-abfi": "betterpokedexscanner.variant.chimera_abfi",
+        "chimera-abgh": "betterpokedexscanner.variant.chimera_abgh",
+        "chimera-abgi": "betterpokedexscanner.variant.chimera_abgi",
+        "chimera-abhi": "betterpokedexscanner.variant.chimera_abhi",
+        "chimera-acde": "betterpokedexscanner.variant.chimera_acde",
+        "chimera-acdf": "betterpokedexscanner.variant.chimera_acdf",
+        "chimera-acdg": "betterpokedexscanner.variant.chimera_acdg",
+        "chimera-acdh": "betterpokedexscanner.variant.chimera_acdh",
+        "chimera-acdi": "betterpokedexscanner.variant.chimera_acdi",
+        "chimera-acef": "betterpokedexscanner.variant.chimera_acef",
+        "chimera-aceg": "betterpokedexscanner.variant.chimera_aceg",
+        "chimera-aceh": "betterpokedexscanner.variant.chimera_aceh",
+        "chimera-acei": "betterpokedexscanner.variant.chimera_acei",
+        "chimera-acfg": "betterpokedexscanner.variant.chimera_acfg",
+        "chimera-acfh": "betterpokedexscanner.variant.chimera_acfh",
+        "chimera-acfi": "betterpokedexscanner.variant.chimera_acfi",
+        "chimera-acgh": "betterpokedexscanner.variant.chimera_acgh",
+        "chimera-acgi": "betterpokedexscanner.variant.chimera_acgi",
+        "chimera-achi": "betterpokedexscanner.variant.chimera_achi",
+        "chimera-adef": "betterpokedexscanner.variant.chimera_adef",
+        "chimera-adeg": "betterpokedexscanner.variant.chimera_adeg",
+        "chimera-adeh": "betterpokedexscanner.variant.chimera_adeh",
+        "chimera-adei": "betterpokedexscanner.variant.chimera_adei",
+        "chimera-adfg": "betterpokedexscanner.variant.chimera_adfg",
+        "chimera-adfh": "betterpokedexscanner.variant.chimera_adfh",
+        "chimera-adfi": "betterpokedexscanner.variant.chimera_adfi",
+        "chimera-adgh": "betterpokedexscanner.variant.chimera_adgh",
+        "chimera-adgi": "betterpokedexscanner.variant.chimera_adgi",
+        "chimera-adhi": "betterpokedexscanner.variant.chimera_adhi",
+        "chimera-aefg": "betterpokedexscanner.variant.chimera_aefg",
+        "chimera-aefh": "betterpokedexscanner.variant.chimera_aefh",
+        "chimera-aefi": "betterpokedexscanner.variant.chimera_aefi",
+        "chimera-aegh": "betterpokedexscanner.variant.chimera_aegh",
+        "chimera-aegi": "betterpokedexscanner.variant.chimera_aegi",
+        "chimera-aehi": "betterpokedexscanner.variant.chimera_aehi",
+        "chimera-afgh": "betterpokedexscanner.variant.chimera_afgh",
+        "chimera-afgi": "betterpokedexscanner.variant.chimera_afgi",
+        "chimera-afhi": "betterpokedexscanner.variant.chimera_afhi",
+        "chimera-aghi": "betterpokedexscanner.variant.chimera_aghi",
+        "chimera-bcde": "betterpokedexscanner.variant.chimera_bcde",
+        "chimera-bcdf": "betterpokedexscanner.variant.chimera_bcdf",
+        "chimera-bcdg": "betterpokedexscanner.variant.chimera_bcdg",
+        "chimera-bcdh": "betterpokedexscanner.variant.chimera_bcdh",
+        "chimera-bcdi": "betterpokedexscanner.variant.chimera_bcdi",
+        "chimera-bcef": "betterpokedexscanner.variant.chimera_bcef",
+        "chimera-bceg": "betterpokedexscanner.variant.chimera_bceg",
+        "chimera-bceh": "betterpokedexscanner.variant.chimera_bceh",
+        "chimera-bcei": "betterpokedexscanner.variant.chimera_bcei",
+        "chimera-bcfg": "betterpokedexscanner.variant.chimera_bcfg",
+        "chimera-bcfh": "betterpokedexscanner.variant.chimera_bcfh",
+        "chimera-bcfi": "betterpokedexscanner.variant.chimera_bcfi",
+        "chimera-bcgh": "betterpokedexscanner.variant.chimera_bcgh",
+        "chimera-bcgi": "betterpokedexscanner.variant.chimera_bcgi",
+        "chimera-bchi": "betterpokedexscanner.variant.chimera_bchi",
+        "chimera-bdef": "betterpokedexscanner.variant.chimera_bdef",
+        "chimera-bdeg": "betterpokedexscanner.variant.chimera_bdeg",
+        "chimera-bdeh": "betterpokedexscanner.variant.chimera_bdeh",
+        "chimera-bdei": "betterpokedexscanner.variant.chimera_bdei",
+        "chimera-bdfg": "betterpokedexscanner.variant.chimera_bdfg",
+        "chimera-bdfh": "betterpokedexscanner.variant.chimera_bdfh",
+        "chimera-bdfi": "betterpokedexscanner.variant.chimera_bdfi",
+        "chimera-bdgh": "betterpokedexscanner.variant.chimera_bdgh",
+        "chimera-bdgi": "betterpokedexscanner.variant.chimera_bdgi",
+        "chimera-bdhi": "betterpokedexscanner.variant.chimera_bdhi",
+        "chimera-befg": "betterpokedexscanner.variant.chimera_befg",
+        "chimera-befh": "betterpokedexscanner.variant.chimera_befh",
+        "chimera-befi": "betterpokedexscanner.variant.chimera_befi",
+        "chimera-begh": "betterpokedexscanner.variant.chimera_begh",
+        "chimera-begi": "betterpokedexscanner.variant.chimera_begi",
+        "chimera-behi": "betterpokedexscanner.variant.chimera_behi",
+        "chimera-bfgh": "betterpokedexscanner.variant.chimera_bfgh",
+        "chimera-bfgi": "betterpokedexscanner.variant.chimera_bfgi",
+        "chimera-bfhi": "betterpokedexscanner.variant.chimera_bfhi",
+        "chimera-bghi": "betterpokedexscanner.variant.chimera_bghi",
+        "chimera-cdef": "betterpokedexscanner.variant.chimera_cdef",
+        "chimera-cdeg": "betterpokedexscanner.variant.chimera_cdeg",
+        "chimera-cdeh": "betterpokedexscanner.variant.chimera_cdeh",
+        "chimera-cdei": "betterpokedexscanner.variant.chimera_cdei",
+        "chimera-cdfg": "betterpokedexscanner.variant.chimera_cdfg",
+        "chimera-cdfh": "betterpokedexscanner.variant.chimera_cdfh",
+        "chimera-cdfi": "betterpokedexscanner.variant.chimera_cdfi",
+        "chimera-cdgh": "betterpokedexscanner.variant.chimera_cdgh",
+        "chimera-cdgi": "betterpokedexscanner.variant.chimera_cdgi",
+        "chimera-cdhi": "betterpokedexscanner.variant.chimera_cdhi",
+        "chimera-cefg": "betterpokedexscanner.variant.chimera_cefg",
+        "chimera-cefh": "betterpokedexscanner.variant.chimera_cefh",
+        "chimera-cefi": "betterpokedexscanner.variant.chimera_cefi",
+        "chimera-cegh": "betterpokedexscanner.variant.chimera_cegh",
+        "chimera-cegi": "betterpokedexscanner.variant.chimera_cegi",
+        "chimera-cehi": "betterpokedexscanner.variant.chimera_cehi",
+        "chimera-cfgh": "betterpokedexscanner.variant.chimera_cfgh",
+        "chimera-cfgi": "betterpokedexscanner.variant.chimera_cfgi",
+        "chimera-cfhi": "betterpokedexscanner.variant.chimera_cfhi",
+        "chimera-cghi": "betterpokedexscanner.variant.chimera_cghi",
+        "chimera-defg": "betterpokedexscanner.variant.chimera_defg",
+        "chimera-defh": "betterpokedexscanner.variant.chimera_defh",
+        "chimera-defi": "betterpokedexscanner.variant.chimera_defi",
+        "chimera-degh": "betterpokedexscanner.variant.chimera_degh",
+        "chimera-degi": "betterpokedexscanner.variant.chimera_degi",
+        "chimera-dehi": "betterpokedexscanner.variant.chimera_dehi",
+        "chimera-dfgh": "betterpokedexscanner.variant.chimera_dfgh",
+        "chimera-dfgi": "betterpokedexscanner.variant.chimera_dfgi",
+        "chimera-dfhi": "betterpokedexscanner.variant.chimera_dfhi",
+        "chimera-dghi": "betterpokedexscanner.variant.chimera_dghi",
+        "chimera-efgh": "betterpokedexscanner.variant.chimera_efgh",
+        "chimera-efgi": "betterpokedexscanner.variant.chimera_efgi",
+        "chimera-efhi": "betterpokedexscanner.variant.chimera_efhi",
+        "chimera-eghi": "betterpokedexscanner.variant.chimera_eghi",
+        "chimera-fghi": "betterpokedexscanner.variant.chimera_fghi",
+        "chimera-abcde": "betterpokedexscanner.variant.chimera_abcde",
+        "chimera-abcdf": "betterpokedexscanner.variant.chimera_abcdf",
+        "chimera-abcdg": "betterpokedexscanner.variant.chimera_abcdg",
+        "chimera-abcdh": "betterpokedexscanner.variant.chimera_abcdh",
+        "chimera-abcdi": "betterpokedexscanner.variant.chimera_abcdi",
+        "chimera-abcef": "betterpokedexscanner.variant.chimera_abcef",
+        "chimera-abceg": "betterpokedexscanner.variant.chimera_abceg",
+        "chimera-abceh": "betterpokedexscanner.variant.chimera_abceh",
+        "chimera-abcei": "betterpokedexscanner.variant.chimera_abcei",
+        "chimera-abcfg": "betterpokedexscanner.variant.chimera_abcfg",
+        "chimera-abcfh": "betterpokedexscanner.variant.chimera_abcfh",
+        "chimera-abcfi": "betterpokedexscanner.variant.chimera_abcfi",
+        "chimera-abcgh": "betterpokedexscanner.variant.chimera_abcgh",
+        "chimera-abcgi": "betterpokedexscanner.variant.chimera_abcgi",
+        "chimera-abchi": "betterpokedexscanner.variant.chimera_abchi",
+        "chimera-abdef": "betterpokedexscanner.variant.chimera_abdef",
+        "chimera-abdeg": "betterpokedexscanner.variant.chimera_abdeg",
+        "chimera-abdeh": "betterpokedexscanner.variant.chimera_abdeh",
+        "chimera-abdei": "betterpokedexscanner.variant.chimera_abdei",
+        "chimera-abdfg": "betterpokedexscanner.variant.chimera_abdfg",
+        "chimera-abdfh": "betterpokedexscanner.variant.chimera_abdfh",
+        "chimera-abdfi": "betterpokedexscanner.variant.chimera_abdfi",
+        "chimera-abdgh": "betterpokedexscanner.variant.chimera_abdgh",
+        "chimera-abdgi": "betterpokedexscanner.variant.chimera_abdgi",
+        "chimera-abdhi": "betterpokedexscanner.variant.chimera_abdhi",
+        "chimera-abefg": "betterpokedexscanner.variant.chimera_abefg",
+        "chimera-abefh": "betterpokedexscanner.variant.chimera_abefh",
+        "chimera-abefi": "betterpokedexscanner.variant.chimera_abefi",
+        "chimera-abegh": "betterpokedexscanner.variant.chimera_abegh",
+        "chimera-abegi": "betterpokedexscanner.variant.chimera_abegi",
+        "chimera-abehi": "betterpokedexscanner.variant.chimera_abehi",
+        "chimera-abfgh": "betterpokedexscanner.variant.chimera_abfgh",
+        "chimera-abfgi": "betterpokedexscanner.variant.chimera_abfgi",
+        "chimera-abfhi": "betterpokedexscanner.variant.chimera_abfhi",
+        "chimera-abghi": "betterpokedexscanner.variant.chimera_abghi",
+        "chimera-acdef": "betterpokedexscanner.variant.chimera_acdef",
+        "chimera-acdeg": "betterpokedexscanner.variant.chimera_acdeg",
+        "chimera-acdeh": "betterpokedexscanner.variant.chimera_acdeh",
+        "chimera-acdei": "betterpokedexscanner.variant.chimera_acdei",
+        "chimera-acdfg": "betterpokedexscanner.variant.chimera_acdfg",
+        "chimera-acdfh": "betterpokedexscanner.variant.chimera_acdfh",
+        "chimera-acdfi": "betterpokedexscanner.variant.chimera_acdfi",
+        "chimera-acdgh": "betterpokedexscanner.variant.chimera_acdgh",
+        "chimera-acdgi": "betterpokedexscanner.variant.chimera_acdgi",
+        "chimera-acdhi": "betterpokedexscanner.variant.chimera_acdhi",
+        "chimera-acefg": "betterpokedexscanner.variant.chimera_acefg",
+        "chimera-acefh": "betterpokedexscanner.variant.chimera_acefh",
+        "chimera-acefi": "betterpokedexscanner.variant.chimera_acefi",
+        "chimera-acegh": "betterpokedexscanner.variant.chimera_acegh",
+        "chimera-acegi": "betterpokedexscanner.variant.chimera_acegi",
+        "chimera-acehi": "betterpokedexscanner.variant.chimera_acehi",
+        "chimera-acfgh": "betterpokedexscanner.variant.chimera_acfgh",
+        "chimera-acfgi": "betterpokedexscanner.variant.chimera_acfgi",
+        "chimera-acfhi": "betterpokedexscanner.variant.chimera_acfhi",
+        "chimera-acghi": "betterpokedexscanner.variant.chimera_acghi",
+        "chimera-adefg": "betterpokedexscanner.variant.chimera_adefg",
+        "chimera-adefh": "betterpokedexscanner.variant.chimera_adefh",
+        "chimera-adefi": "betterpokedexscanner.variant.chimera_adefi",
+        "chimera-adegh": "betterpokedexscanner.variant.chimera_adegh",
+        "chimera-adegi": "betterpokedexscanner.variant.chimera_adegi",
+        "chimera-adehi": "betterpokedexscanner.variant.chimera_adehi",
+        "chimera-adfgh": "betterpokedexscanner.variant.chimera_adfgh",
+        "chimera-adfgi": "betterpokedexscanner.variant.chimera_adfgi",
+        "chimera-adfhi": "betterpokedexscanner.variant.chimera_adfhi",
+        "chimera-adghi": "betterpokedexscanner.variant.chimera_adghi",
+        "chimera-aefgh": "betterpokedexscanner.variant.chimera_aefgh",
+        "chimera-aefgi": "betterpokedexscanner.variant.chimera_aefgi",
+        "chimera-aefhi": "betterpokedexscanner.variant.chimera_aefhi",
+        "chimera-aeghi": "betterpokedexscanner.variant.chimera_aeghi",
+        "chimera-afghi": "betterpokedexscanner.variant.chimera_afghi",
+        "chimera-bcdef": "betterpokedexscanner.variant.chimera_bcdef",
+        "chimera-bcdeg": "betterpokedexscanner.variant.chimera_bcdeg",
+        "chimera-bcdeh": "betterpokedexscanner.variant.chimera_bcdeh",
+        "chimera-bcdei": "betterpokedexscanner.variant.chimera_bcdei",
+        "chimera-bcdfg": "betterpokedexscanner.variant.chimera_bcdfg",
+        "chimera-bcdfh": "betterpokedexscanner.variant.chimera_bcdfh",
+        "chimera-bcdfi": "betterpokedexscanner.variant.chimera_bcdfi",
+        "chimera-bcdgh": "betterpokedexscanner.variant.chimera_bcdgh",
+        "chimera-bcdgi": "betterpokedexscanner.variant.chimera_bcdgi",
+        "chimera-bcdhi": "betterpokedexscanner.variant.chimera_bcdhi",
+        "chimera-bcefg": "betterpokedexscanner.variant.chimera_bcefg",
+        "chimera-bcefh": "betterpokedexscanner.variant.chimera_bcefh",
+        "chimera-bcefi": "betterpokedexscanner.variant.chimera_bcefi",
+        "chimera-bcegh": "betterpokedexscanner.variant.chimera_bcegh",
+        "chimera-bcegi": "betterpokedexscanner.variant.chimera_bcegi",
+        "chimera-bcehi": "betterpokedexscanner.variant.chimera_bcehi",
+        "chimera-bcfgh": "betterpokedexscanner.variant.chimera_bcfgh",
+        "chimera-bcfgi": "betterpokedexscanner.variant.chimera_bcfgi",
+        "chimera-bcfhi": "betterpokedexscanner.variant.chimera_bcfhi",
+        "chimera-bcghi": "betterpokedexscanner.variant.chimera_bcghi",
+        "chimera-bdefg": "betterpokedexscanner.variant.chimera_bdefg",
+        "chimera-bdefh": "betterpokedexscanner.variant.chimera_bdefh",
+        "chimera-bdefi": "betterpokedexscanner.variant.chimera_bdefi",
+        "chimera-bdegh": "betterpokedexscanner.variant.chimera_bdegh",
+        "chimera-bdegi": "betterpokedexscanner.variant.chimera_bdegi",
+        "chimera-bdehi": "betterpokedexscanner.variant.chimera_bdehi",
+        "chimera-bdfgh": "betterpokedexscanner.variant.chimera_bdfgh",
+        "chimera-bdfgi": "betterpokedexscanner.variant.chimera_bdfgi",
+        "chimera-bdfhi": "betterpokedexscanner.variant.chimera_bdfhi",
+        "chimera-bdghi": "betterpokedexscanner.variant.chimera_bdghi",
+        "chimera-befgh": "betterpokedexscanner.variant.chimera_befgh",
+        "chimera-befgi": "betterpokedexscanner.variant.chimera_befgi",
+        "chimera-befhi": "betterpokedexscanner.variant.chimera_befhi",
+        "chimera-beghi": "betterpokedexscanner.variant.chimera_beghi",
+        "chimera-bfghi": "betterpokedexscanner.variant.chimera_bfghi",
+        "chimera-cdefg": "betterpokedexscanner.variant.chimera_cdefg",
+        "chimera-cdefh": "betterpokedexscanner.variant.chimera_cdefh",
+        "chimera-cdefi": "betterpokedexscanner.variant.chimera_cdefi",
+        "chimera-cdegh": "betterpokedexscanner.variant.chimera_cdegh",
+        "chimera-cdegi": "betterpokedexscanner.variant.chimera_cdegi",
+        "chimera-cdehi": "betterpokedexscanner.variant.chimera_cdehi",
+        "chimera-cdfgh": "betterpokedexscanner.variant.chimera_cdfgh",
+        "chimera-cdfgi": "betterpokedexscanner.variant.chimera_cdfgi",
+        "chimera-cdfhi": "betterpokedexscanner.variant.chimera_cdfhi",
+        "chimera-cdghi": "betterpokedexscanner.variant.chimera_cdghi",
+        "chimera-cefgh": "betterpokedexscanner.variant.chimera_cefgh",
+        "chimera-cefgi": "betterpokedexscanner.variant.chimera_cefgi",
+        "chimera-cefhi": "betterpokedexscanner.variant.chimera_cefhi",
+        "chimera-ceghi": "betterpokedexscanner.variant.chimera_ceghi",
+        "chimera-cfghi": "betterpokedexscanner.variant.chimera_cfghi",
+        "chimera-defgh": "betterpokedexscanner.variant.chimera_defgh",
+        "chimera-defgi": "betterpokedexscanner.variant.chimera_defgi",
+        "chimera-defhi": "betterpokedexscanner.variant.chimera_defhi",
+        "chimera-deghi": "betterpokedexscanner.variant.chimera_deghi",
+        "chimera-dfghi": "betterpokedexscanner.variant.chimera_dfghi",
+        "chimera-efghi": "betterpokedexscanner.variant.chimera_efghi",
+        "chimera-abcdef": "betterpokedexscanner.variant.chimera_abcdef",
+        "chimera-abcdeg": "betterpokedexscanner.variant.chimera_abcdeg",
+        "chimera-abcdeh": "betterpokedexscanner.variant.chimera_abcdeh",
+        "chimera-abcdei": "betterpokedexscanner.variant.chimera_abcdei",
+        "chimera-abcdfg": "betterpokedexscanner.variant.chimera_abcdfg",
+        "chimera-abcdfh": "betterpokedexscanner.variant.chimera_abcdfh",
+        "chimera-abcdfi": "betterpokedexscanner.variant.chimera_abcdfi",
+        "chimera-abcdgh": "betterpokedexscanner.variant.chimera_abcdgh",
+        "chimera-abcdgi": "betterpokedexscanner.variant.chimera_abcdgi",
+        "chimera-abcdhi": "betterpokedexscanner.variant.chimera_abcdhi",
+        "chimera-abcefg": "betterpokedexscanner.variant.chimera_abcefg",
+        "chimera-abcefh": "betterpokedexscanner.variant.chimera_abcefh",
+        "chimera-abcefi": "betterpokedexscanner.variant.chimera_abcefi",
+        "chimera-abcegh": "betterpokedexscanner.variant.chimera_abcegh",
+        "chimera-abcegi": "betterpokedexscanner.variant.chimera_abcegi",
+        "chimera-abcehi": "betterpokedexscanner.variant.chimera_abcehi",
+        "chimera-abcfgh": "betterpokedexscanner.variant.chimera_abcfgh",
+        "chimera-abcfgi": "betterpokedexscanner.variant.chimera_abcfgi",
+        "chimera-abcfhi": "betterpokedexscanner.variant.chimera_abcfhi",
+        "chimera-abcghi": "betterpokedexscanner.variant.chimera_abcghi",
+        "chimera-abdefg": "betterpokedexscanner.variant.chimera_abdefg",
+        "chimera-abdefh": "betterpokedexscanner.variant.chimera_abdefh",
+        "chimera-abdefi": "betterpokedexscanner.variant.chimera_abdefi",
+        "chimera-abdegh": "betterpokedexscanner.variant.chimera_abdegh",
+        "chimera-abdegi": "betterpokedexscanner.variant.chimera_abdegi",
+        "chimera-abdehi": "betterpokedexscanner.variant.chimera_abdehi",
+        "chimera-abdfgh": "betterpokedexscanner.variant.chimera_abdfgh",
+        "chimera-abdfgi": "betterpokedexscanner.variant.chimera_abdfgi",
+        "chimera-abdfhi": "betterpokedexscanner.variant.chimera_abdfhi",
+        "chimera-abdghi": "betterpokedexscanner.variant.chimera_abdghi",
+        "chimera-abefgh": "betterpokedexscanner.variant.chimera_abefgh",
+        "chimera-abefgi": "betterpokedexscanner.variant.chimera_abefgi",
+        "chimera-abefhi": "betterpokedexscanner.variant.chimera_abefhi",
+        "chimera-abeghi": "betterpokedexscanner.variant.chimera_abeghi",
+        "chimera-abfghi": "betterpokedexscanner.variant.chimera_abfghi",
+        "chimera-acdefg": "betterpokedexscanner.variant.chimera_acdefg",
+        "chimera-acdefh": "betterpokedexscanner.variant.chimera_acdefh",
+        "chimera-acdefi": "betterpokedexscanner.variant.chimera_acdefi",
+        "chimera-acdegh": "betterpokedexscanner.variant.chimera_acdegh",
+        "chimera-acdegi": "betterpokedexscanner.variant.chimera_acdegi",
+        "chimera-acdehi": "betterpokedexscanner.variant.chimera_acdehi",
+        "chimera-acdfgh": "betterpokedexscanner.variant.chimera_acdfgh",
+        "chimera-acdfgi": "betterpokedexscanner.variant.chimera_acdfgi",
+        "chimera-acdfhi": "betterpokedexscanner.variant.chimera_acdfhi",
+        "chimera-acdghi": "betterpokedexscanner.variant.chimera_acdghi",
+        "chimera-acefgh": "betterpokedexscanner.variant.chimera_acefgh",
+        "chimera-acefgi": "betterpokedexscanner.variant.chimera_acefgi",
+        "chimera-acefhi": "betterpokedexscanner.variant.chimera_acefhi",
+        "chimera-aceghi": "betterpokedexscanner.variant.chimera_aceghi",
+        "chimera-acfghi": "betterpokedexscanner.variant.chimera_acfghi",
+        "chimera-adefgh": "betterpokedexscanner.variant.chimera_adefgh",
+        "chimera-adefgi": "betterpokedexscanner.variant.chimera_adefgi",
+        "chimera-adefhi": "betterpokedexscanner.variant.chimera_adefhi",
+        "chimera-adeghi": "betterpokedexscanner.variant.chimera_adeghi",
+        "chimera-adfghi": "betterpokedexscanner.variant.chimera_adfghi",
+        "chimera-aefghi": "betterpokedexscanner.variant.chimera_aefghi",
+        "chimera-bcdefg": "betterpokedexscanner.variant.chimera_bcdefg",
+        "chimera-bcdefh": "betterpokedexscanner.variant.chimera_bcdefh",
+        "chimera-bcdefi": "betterpokedexscanner.variant.chimera_bcdefi",
+        "chimera-bcdegh": "betterpokedexscanner.variant.chimera_bcdegh",
+        "chimera-bcdegi": "betterpokedexscanner.variant.chimera_bcdegi",
+        "chimera-bcdehi": "betterpokedexscanner.variant.chimera_bcdehi",
+        "chimera-bcdfgh": "betterpokedexscanner.variant.chimera_bcdfgh",
+        "chimera-bcdfgi": "betterpokedexscanner.variant.chimera_bcdfgi",
+        "chimera-bcdfhi": "betterpokedexscanner.variant.chimera_bcdfhi",
+        "chimera-bcdghi": "betterpokedexscanner.variant.chimera_bcdghi",
+        "chimera-bcefgh": "betterpokedexscanner.variant.chimera_bcefgh",
+        "chimera-bcefgi": "betterpokedexscanner.variant.chimera_bcefgi",
+        "chimera-bcefhi": "betterpokedexscanner.variant.chimera_bcefhi",
+        "chimera-bceghi": "betterpokedexscanner.variant.chimera_bceghi",
+        "chimera-bcfghi": "betterpokedexscanner.variant.chimera_bcfghi",
+        "chimera-bdefgh": "betterpokedexscanner.variant.chimera_bdefgh",
+        "chimera-bdefgi": "betterpokedexscanner.variant.chimera_bdefgi",
+        "chimera-bdefhi": "betterpokedexscanner.variant.chimera_bdefhi",
+        "chimera-bdeghi": "betterpokedexscanner.variant.chimera_bdeghi",
+        "chimera-bdfghi": "betterpokedexscanner.variant.chimera_bdfghi",
+        "chimera-befghi": "betterpokedexscanner.variant.chimera_befghi",
+        "chimera-cdefgh": "betterpokedexscanner.variant.chimera_cdefgh",
+        "chimera-cdefgi": "betterpokedexscanner.variant.chimera_cdefgi",
+        "chimera-cdefhi": "betterpokedexscanner.variant.chimera_cdefhi",
+        "chimera-cdeghi": "betterpokedexscanner.variant.chimera_cdeghi",
+        "chimera-cdfghi": "betterpokedexscanner.variant.chimera_cdfghi",
+        "chimera-cefghi": "betterpokedexscanner.variant.chimera_cefghi",
+        "chimera-defghi": "betterpokedexscanner.variant.chimera_defghi",
+        "chimera-abcdefg": "betterpokedexscanner.variant.chimera_abcdefg",
+        "chimera-abcdefh": "betterpokedexscanner.variant.chimera_abcdefh",
+        "chimera-abcdefi": "betterpokedexscanner.variant.chimera_abcdefi",
+        "chimera-abcdegh": "betterpokedexscanner.variant.chimera_abcdegh",
+        "chimera-abcdegi": "betterpokedexscanner.variant.chimera_abcdegi",
+        "chimera-abcdehi": "betterpokedexscanner.variant.chimera_abcdehi",
+        "chimera-abcdfgh": "betterpokedexscanner.variant.chimera_abcdfgh",
+        "chimera-abcdfgi": "betterpokedexscanner.variant.chimera_abcdfgi",
+        "chimera-abcdfhi": "betterpokedexscanner.variant.chimera_abcdfhi",
+        "chimera-abcdghi": "betterpokedexscanner.variant.chimera_abcdghi",
+        "chimera-abcefgh": "betterpokedexscanner.variant.chimera_abcefgh",
+        "chimera-abcefgi": "betterpokedexscanner.variant.chimera_abcefgi",
+        "chimera-abcefhi": "betterpokedexscanner.variant.chimera_abcefhi",
+        "chimera-abceghi": "betterpokedexscanner.variant.chimera_abceghi",
+        "chimera-abcfghi": "betterpokedexscanner.variant.chimera_abcfghi",
+        "chimera-abdefgh": "betterpokedexscanner.variant.chimera_abdefgh",
+        "chimera-abdefgi": "betterpokedexscanner.variant.chimera_abdefgi",
+        "chimera-abdefhi": "betterpokedexscanner.variant.chimera_abdefhi",
+        "chimera-abdeghi": "betterpokedexscanner.variant.chimera_abdeghi",
+        "chimera-abdfghi": "betterpokedexscanner.variant.chimera_abdfghi",
+        "chimera-abefghi": "betterpokedexscanner.variant.chimera_abefghi",
+        "chimera-acdefgh": "betterpokedexscanner.variant.chimera_acdefgh",
+        "chimera-acdefgi": "betterpokedexscanner.variant.chimera_acdefgi",
+        "chimera-acdefhi": "betterpokedexscanner.variant.chimera_acdefhi",
+        "chimera-acdeghi": "betterpokedexscanner.variant.chimera_acdeghi",
+        "chimera-acdfghi": "betterpokedexscanner.variant.chimera_acdfghi",
+        "chimera-acefghi": "betterpokedexscanner.variant.chimera_acefghi",
+        "chimera-adefghi": "betterpokedexscanner.variant.chimera_adefghi",
+        "chimera-bcdefgh": "betterpokedexscanner.variant.chimera_bcdefgh",
+        "chimera-bcdefgi": "betterpokedexscanner.variant.chimera_bcdefgi",
+        "chimera-bcdefhi": "betterpokedexscanner.variant.chimera_bcdefhi",
+        "chimera-bcdeghi": "betterpokedexscanner.variant.chimera_bcdeghi",
+        "chimera-bcdfghi": "betterpokedexscanner.variant.chimera_bcdfghi",
+        "chimera-bcefghi": "betterpokedexscanner.variant.chimera_bcefghi",
+        "chimera-bdefghi": "betterpokedexscanner.variant.chimera_bdefghi",
+        "chimera-cdefghi": "betterpokedexscanner.variant.chimera_cdefghi",
+        "chimera-abcdefgh": "betterpokedexscanner.variant.chimera_abcdefgh",
+        "chimera-abcdefgi": "betterpokedexscanner.variant.chimera_abcdefgi",
+        "chimera-abcdefhi": "betterpokedexscanner.variant.chimera_abcdefhi",
+        "chimera-abcdeghi": "betterpokedexscanner.variant.chimera_abcdeghi",
+        "chimera-abcdfghi": "betterpokedexscanner.variant.chimera_abcdfghi",
+        "chimera-abcefghi": "betterpokedexscanner.variant.chimera_abcefghi",
+        "chimera-abdefghi": "betterpokedexscanner.variant.chimera_abdefghi",
+        "chimera-acdefghi": "betterpokedexscanner.variant.chimera_acdefghi",
+        "chimera-bcdefghi": "betterpokedexscanner.variant.chimera_bcdefghi"
       }
     },
     {
-      "headerLabel": "Chimeric Variation",
-      "aspectLabels": {
-        "chimera-a": "Chimera A",
-        "chimera-b": "Chimera B",
-        "chimera-c": "Chimera C",
-        "chimera-ab": "Chimera AB",
-        "chimera-ac": "Chimera AC",
-        "chimera-bc": "Chimera BC",
-        "chimera-abc": "Chimera ABC"
+      "headerTranslationKey": "betterpokedexscanner.header.chimera_body",
+      "aspectTranslationKeys": {
+        "chimera-body-shiny": "betterpokedexscanner.label.shiny",
+        "chimera-body-mixed": "betterpokedexscanner.variant.chimera_body_mixed",
+        "chimera-body-normal-dominant": "betterpokedexscanner.variant.chimera_body_normal_dominant",
+        "chimera-body-normal": "betterpokedexscanner.variant.chimera_body_normal"
+      }
+    },
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.chimera_sub_body",
+      "aspectTranslationKeys": {
+        "chimera-sub-body-shiny": "betterpokedexscanner.label.shiny",
+        "chimera-sub-body-mixed": "betterpokedexscanner.variant.chimera_sub_body_mixed",
+        "chimera-sub-body-normal-dominant": "betterpokedexscanner.variant.chimera_sub_body_normal_dominant",
+        "chimera-sub-body-normal": "betterpokedexscanner.variant.chimera_sub_body_normal"
       }
     },
     {
       "headerTranslationKey": "betterpokedexscanner.header.flower_color",
-      "species": ["cobblemon:flabebe","cobblemon:floette","cobblemon:florges"],
+      "species": [
+        "cobblemon:flabebe",
+        "cobblemon:floette",
+        "cobblemon:florges"
+      ],
       "aspectDisplays": {
-        "flower-red": { "parts": [ { "text": "Red", "color": "FF0000" }, { "text": " Flower" } ] },
-        "flower-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" }, { "text": " Flower" } ] },
-        "flower-orange": { "parts": [ { "text": "Orange", "color": "F9801D" }, { "text": " Flower" } ] },
-        "flower-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" }, { "text": " Flower" } ] },
-        "flower-blue": { "parts": [ { "text": "Blue", "color": "2980EF" }, { "text": " Flower" } ] },
-        "flower-white": { "parts": [ { "text": "White", "color": "F9FFFE" }, { "text": " Flower" } ] },
+        "flower-red": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.flower-red",
+          "colors": [
+            "FF0000"
+          ]
+        },
+        "flower-pink": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.flower-pink",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "flower-orange": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.flower-orange",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "flower-yellow": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.flower-yellow",
+          "colors": [
+            "FED83D"
+          ]
+        },
+        "flower-blue": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.flower-blue",
+          "colors": [
+            "2980EF"
+          ]
+        },
+        "flower-white": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.flower-white",
+          "colors": [
+            "F9FFFE"
+          ]
+        },
         "flower-eternal": {
-          "parts": [
-            { "text": "E", "color": "1D1D21" },
-            { "text": "te", "color": "B02E26" },
-            { "text": "r", "color": "1D1D21" },
-            { "text": "na", "color": "B02E26" },
-            { "text": "l", "color": "1D1D21" },
-            { "text": " Flower"}
+          "translationKey": "betterpokedexscanner.variant.flower_eternal",
+          "colors": [
+            "1D1D21",
+            "B02E26",
+            "1D1D21",
+            "B02E26",
+            "1D1D21"
           ]
         }
       }
     },
     {
-      "headerLabel": "Pattern",
-      "aspectLabels": {
-        "magikarp-jump-apricot-stripes": "Apricot Stripes",
-        "magikarp-jump-apricot-tiger": "Apricot Tiger",
-        "magikarp-jump-apricot-zebra": "Apricot Zebra",
-        "magikarp-jump-black-forehead": "Black Forehead",
-        "magikarp-jump-black-mask": "Black Mask",
-        "magikarp-jump-blue-raindrops": "Blue Raindrops",
-        "magikarp-jump-blue-saucy": "Saucy Blue",
-        "magikarp-jump-brown-stripes": "Brown Stripes",
-        "magikarp-jump-brown-tiger": "Brown Tiger",
-        "magikarp-jump-brown-zebra": "Brown Zebra",
-        "magikarp-jump-calico-orange-gold": "Calico (Orange & Gold)",
-        "magikarp-jump-calico-orange-white": "Calico (Orange & White)",
-        "magikarp-jump-calico-orange-white-black": "Calico (Orange, White, Black)",
-        "magikarp-jump-calico-white-orange": "Calico (White & Orange)",
-        "magikarp-jump-gray-bubbles": "Gray Bubbles",
-        "magikarp-jump-gray-diamonds": "Gray Diamonds",
-        "magikarp-jump-gray-patches": "Gray Patches",
-        "magikarp-jump-orange-dapples": "Orange Dapples",
-        "magikarp-jump-orange-forehead": "Orange Forehead",
-        "magikarp-jump-orange-mask": "Orange Mask",
-        "magikarp-jump-orange-orca": "Orange Orca",
-        "magikarp-jump-orange-two-tone": "Orange Two-Tone",
-        "magikarp-jump-pink-dapples": "Pink Dapples",
-        "magikarp-jump-pink-orca": "Pink Orca",
-        "magikarp-jump-pink-two-tone": "Pink Two-Tone",
-        "magikarp-jump-purple-bubbles": "Purple Bubbles",
-        "magikarp-jump-purple-diamonds": "Purple Diamonds",
-        "magikarp-jump-purple-patches": "Purple Patches",
-        "magikarp-jump-skelly": "Skelly",
-        "magikarp-jump-violet-raindrops": "Violet Raindrops",
-        "magikarp-jump-violet-saucy": "Saucy Violet",
-        "magikarp-jump-standard": "Standard",
-        "snake-pattern-attack": "Attack",
-        "snake-pattern-dark": "Dark",
-        "snake-pattern-elusive": "Elusive",
-        "snake-pattern-heart": "Heart",
-        "snake-pattern-legacy": "Legacy",
-        "snake-pattern-sound": "Sound",
-        "snake-pattern-speed": "Speed",
-        "snake-pattern-classic": "Classic",
-        "wooper_heart": "Heart-Marked",
-        "redstriped": "Red Striped",
-        "bluestriped": "Blue Striped",
-        "whitestriped": "White Striped",
-        "vivillon-wings-meadow": "Meadow",
-        "vivillon-wings-archipelago": "Archipelago",
-        "vivillon-wings-continental": "Continental",
-        "vivillon-wings-elegant": "Elegant",
-        "vivillon-wings-fancy": "Fancy",
-        "vivillon-wings-garden": "Garden",
-        "vivillon-wings-high-plains": "High Plains",
-        "vivillon-wings-icy-snow": "Icy Snow",
-        "vivillon-wings-jungle": "Jungle",
-        "vivillon-wings-marine": "Marine",
-        "vivillon-wings-modern": "Modern",
-        "vivillon-wings-monsoon": "Monsoon",
-        "vivillon-wings-ocean": "Ocean",
-        "vivillon-wings-poke-ball": "Poké Ball",
-        "vivillon-wings-polar": "Polar",
-        "vivillon-wings-river": "River",
-        "vivillon-wings-sandstorm": "Sandstorm",
-        "vivillon-wings-savanna": "Savanna",
-        "vivillon-wings-sun": "Sun",
-        "vivillon-wings-tundra": "Tundra",
-        "vivillon-wings-inferno": "Inferno",
-        "vivillon-wings-void": "Void",
-        "vivillon-wings-forsaken": "Forsaken"
-      }
-    },
-    
-    {
-      "headerLabel": "Stance",
-      "species": ["cobblemon:aegislash"],
-      "aspectLabels": {
-        "shield-forme": "Shield Forme",
-        "blade-forme": "Blade Forme"
-      }
-    },
-
-    {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:squirtle","cobblemon:wartortle","cobblemon:blastoise"],
       "aspectDisplays": {
-        "cosmetic_item-wise_glasses": { "parts": [ { "text": "Squirtle Squad", "color": "182C6F" } ] },
-        "cosmetic_item-black_glasses": { "parts": [ { "text": "Squirtle Squad Leader", "color": "19182C" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:jigglypuff","cobblemon:alakazam"],
-      "aspectDisplays": {
-        "color-black": { "parts": [ { "text": "Ancient Pokémopolis", "color": "41222F" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:gengar"],
-      "aspectDisplays": {
-        "color-green": { "parts": [ { "text": "Ancient Pokémopolis", "color": "3E5748" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:pichu","cobblemon:pikachu","cobblemon:raichu"],
-      "aspectLabels": {
-        "cosmetic_item-rage_candy_bar": "Original Cap",
-        "cosmetic_item-pewter_crunchies": "Partner Cap",
-        "cosmetic_item-lava_cookie": "Hoenn Cap",
-        "cosmetic_item-old_gateau": "Sinnoh Cap",
-        "cosmetic_item-casteliacone": "Unova Cap",
-        "cosmetic_item-lumiose_galette": "Kalos Cap",
-        "cosmetic_item-big_malasada": "Alola Cap",
-        "cosmetic_item-smoked_tail_curry": "World Cap",
-        "cosmetic_item-compass": "Captain Cap",
-        "cosmetic_item-leather_helmet": "Detective Cap",
-        "cosmetic_item-sinister_tea": "Detective Cap",
-        "cosmetic_item-cocoa_beans": "Detective Cap",
-        "cosmetic_item-shears": "Hair Cut - Sparky"
+        "magikarp-jump-apricot-stripes": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_apricot_stripes",
+          "colors": [
+            "F5B16D"
+          ]
+        },
+        "magikarp-jump-apricot-tiger": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_apricot_tiger",
+          "colors": [
+            "F5B16D"
+          ]
+        },
+        "magikarp-jump-apricot-zebra": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_apricot_zebra",
+          "colors": [
+            "F5B16D"
+          ]
+        },
+        "magikarp-jump-black-forehead": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_black_forehead",
+          "colors": [
+            "1D1D21"
+          ]
+        },
+        "magikarp-jump-black-mask": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_black_mask",
+          "colors": [
+            "1D1D21"
+          ]
+        },
+        "magikarp-jump-blue-raindrops": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_blue_raindrops",
+          "colors": [
+            "2980EF"
+          ]
+        },
+        "magikarp-jump-blue-saucy": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_blue_saucy",
+          "colors": [
+            "2980EF"
+          ]
+        },
+        "magikarp-jump-brown-stripes": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_brown_stripes",
+          "colors": [
+            "835432"
+          ]
+        },
+        "magikarp-jump-brown-tiger": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_brown_tiger",
+          "colors": [
+            "835432"
+          ]
+        },
+        "magikarp-jump-brown-zebra": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_brown_zebra",
+          "colors": [
+            "835432"
+          ]
+        },
+        "magikarp-jump-calico-orange-gold": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_calico_orange_gold",
+          "colors": [
+            "F9801D",
+            "F6D04D"
+          ]
+        },
+        "magikarp-jump-calico-orange-white": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_calico_orange_white",
+          "colors": [
+            "F9801D",
+            "F9FFFE"
+          ]
+        },
+        "magikarp-jump-calico-orange-white-black": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_calico_orange_white_black",
+          "colors": [
+            "F9801D",
+            "F9FFFE",
+            "1D1D21"
+          ]
+        },
+        "magikarp-jump-calico-white-orange": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_calico_white_orange",
+          "colors": [
+            "F9FFFE",
+            "F9801D"
+          ]
+        },
+        "magikarp-jump-gray-bubbles": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_gray_bubbles",
+          "colors": [
+            "9D9D97"
+          ]
+        },
+        "magikarp-jump-gray-diamonds": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_gray_diamonds",
+          "colors": [
+            "9D9D97"
+          ]
+        },
+        "magikarp-jump-gray-patches": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_gray_patches",
+          "colors": [
+            "9D9D97"
+          ]
+        },
+        "magikarp-jump-orange-dapples": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_orange_dapples",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "magikarp-jump-orange-forehead": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_orange_forehead",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "magikarp-jump-orange-mask": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_orange_mask",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "magikarp-jump-orange-orca": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_orange_orca",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "magikarp-jump-orange-two-tone": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_orange_two_tone",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "magikarp-jump-pink-dapples": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_pink_dapples",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "magikarp-jump-pink-orca": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_pink_orca",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "magikarp-jump-pink-two-tone": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_pink_two_tone",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "magikarp-jump-purple-bubbles": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_purple_bubbles",
+          "colors": [
+            "A453AF"
+          ]
+        },
+        "magikarp-jump-purple-diamonds": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_purple_diamonds",
+          "colors": [
+            "A453AF"
+          ]
+        },
+        "magikarp-jump-purple-patches": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_purple_patches",
+          "colors": [
+            "A453AF"
+          ]
+        },
+        "magikarp-jump-skelly": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_skelly",
+          "colors": [
+            "D8D8D8"
+          ]
+        },
+        "magikarp-jump-violet-raindrops": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_violet_raindrops",
+          "colors": [
+            "7E62D6"
+          ]
+        },
+        "magikarp-jump-violet-saucy": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_violet_saucy",
+          "colors": [
+            "7E62D6"
+          ]
+        },
+        "magikarp-jump-standard": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_standard",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "magikarp-jump-gold": {
+          "translationKey": "betterpokedexscanner.variant.magikarp_jump_gold",
+          "colors": [
+            "F6D04D"
+          ]
+        },
+        "vivillon-wings-meadow": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-meadow",
+          "colors": [
+            "E75A9F"
+          ]
+        },
+        "vivillon-wings-archipelago": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-archipelago",
+          "colors": [
+            "E85846"
+          ]
+        },
+        "vivillon-wings-continental": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-continental",
+          "colors": [
+            "F2B52F"
+          ]
+        },
+        "vivillon-wings-elegant": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-elegant",
+          "colors": [
+            "5461B9"
+          ]
+        },
+        "vivillon-wings-fancy": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-fancy",
+          "colors": [
+            "8BC75A"
+          ]
+        },
+        "vivillon-wings-garden": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-garden",
+          "colors": [
+            "2BBF8F"
+          ]
+        },
+        "vivillon-wings-high-plains": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-high-plains",
+          "colors": [
+            "E78B2D"
+          ]
+        },
+        "vivillon-wings-icy-snow": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-icy-snow",
+          "colors": [
+            "E9F3F5"
+          ]
+        },
+        "vivillon-wings-jungle": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-jungle",
+          "colors": [
+            "207F7A"
+          ]
+        },
+        "vivillon-wings-marine": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-marine",
+          "colors": [
+            "20A9E8"
+          ]
+        },
+        "vivillon-wings-modern": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-modern",
+          "colors": [
+            "E41F32"
+          ]
+        },
+        "vivillon-wings-monsoon": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-monsoon",
+          "colors": [
+            "6EA7BF"
+          ]
+        },
+        "vivillon-wings-ocean": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-ocean",
+          "colors": [
+            "FFE85A"
+          ]
+        },
+        "vivillon-wings-poke-ball": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-poke-ball",
+          "colors": [
+            "E41F32"
+          ]
+        },
+        "vivillon-wings-polar": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-polar",
+          "colors": [
+            "236DC4"
+          ]
+        },
+        "vivillon-wings-river": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-river",
+          "colors": [
+            "24A7DC"
+          ]
+        },
+        "vivillon-wings-sandstorm": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-sandstorm",
+          "colors": [
+            "B7AA76"
+          ]
+        },
+        "vivillon-wings-savanna": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-savanna",
+          "colors": [
+            "39BEC8"
+          ]
+        },
+        "vivillon-wings-sun": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-sun",
+          "colors": [
+            "F9D94A"
+          ]
+        },
+        "vivillon-wings-tundra": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-tundra",
+          "colors": [
+            "BFE6F5"
+          ]
+        },
+        "vivillon-wings-inferno": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-inferno",
+          "colors": [
+            "C95A1A"
+          ]
+        },
+        "vivillon-wings-void": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-void",
+          "colors": [
+            "2D174B"
+          ]
+        },
+        "vivillon-wings-forsaken": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.vivillon-wings-forsaken",
+          "colors": [
+            "0B4854"
+          ]
+        },
+        "vivillon-wings-prismatic": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-prismatic",
+          "colors": [
+            "E40303",
+            "FF8C00",
+            "FFED00",
+            "008026",
+            "24408E",
+            "732982"
+          ]
+        },
+        "vivillon-wings-minty": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-minty",
+          "colors": [
+            "078D70",
+            "26CEAA",
+            "FFFFFF",
+            "98E8C1",
+            "3D1A78"
+          ]
+        },
+        "vivillon-wings-tangy": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-tangy",
+          "colors": [
+            "D52D00",
+            "EF7627",
+            "FFFFFF",
+            "D162A4",
+            "A30262"
+          ]
+        },
+        "vivillon-wings-ultraviolet": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-ultraviolet",
+          "colors": [
+            "D60270",
+            "9B4F96",
+            "0038A8"
+          ]
+        },
+        "vivillon-wings-toned": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-toned",
+          "colors": [
+            "FF1B8D",
+            "FFD900",
+            "1BB3FF"
+          ]
+        },
+        "vivillon-wings-twilight": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-twilight",
+          "colors": [
+            "000000",
+            "A3A3A3",
+            "FFFFFF",
+            "800080"
+          ]
+        },
+        "vivillon-wings-pelopon": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-pelopon",
+          "colors": [
+            "3DA542",
+            "A7D379",
+            "FFFFFF",
+            "A9A9A9",
+            "000000"
+          ]
+        },
+        "vivillon-wings-embroidered": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-embroidered",
+          "colors": [
+            "55CDFC",
+            "F7A8B8",
+            "FFFFFF",
+            "F7A8B8",
+            "55CDFC"
+          ]
+        },
+        "vivillon-wings-monarch": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-monarch",
+          "colors": [
+            "FFF430",
+            "FFFFFF",
+            "9C59D1",
+            "000000"
+          ]
+        },
+        "vivillon-wings-whorl": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-whorl",
+          "colors": [
+            "FF75A2",
+            "FFFFFF",
+            "BE18D6",
+            "000000",
+            "333EBD"
+          ]
+        },
+        "vivillon-wings-null": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-null",
+          "colors": [
+            "000000",
+            "B9B9B9",
+            "FFFFFF",
+            "B8F483"
+          ]
+        },
+        "vivillon-wings-ringed": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-ringed",
+          "colors": [
+            "FFD800",
+            "7902AA",
+            "FFD800"
+          ]
+        },
+        "vivillon-wings-duet": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-duet",
+          "colors": [
+            "306FB6",
+            "7EACD8",
+            "DBE6F1",
+            "E492C5",
+            "AF2E5C"
+          ]
+        },
+        "vivillon-wings-duet1": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-duet1",
+          "colors": [
+            "306FB6",
+            "7EACD8",
+            "DBE6F1",
+            "E492C5",
+            "AF2E5C"
+          ]
+        },
+        "vivillon-wings-duet2": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-duet2",
+          "colors": [
+            "306FB6",
+            "7EACD8",
+            "DBE6F1",
+            "E492C5",
+            "AF2E5C"
+          ]
+        },
+        "vivillon-wings-motley": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-motley",
+          "colors": [
+            "FCAC00",
+            "DBE6F1",
+            "CA2D72",
+            "3097DD",
+            "30193B"
+          ]
+        },
+        "vivillon-wings-motley1": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-motley1",
+          "colors": [
+            "FCAC00",
+            "DBE6F1",
+            "CA2D72",
+            "3097DD",
+            "30193B"
+          ]
+        },
+        "vivillon-wings-motley2": {
+          "translationKey": "betterpokedexscanner.aspect.vivillon-wings-motley2",
+          "colors": [
+            "FCAC00",
+            "DBE6F1",
+            "CA2D72",
+            "3097DD",
+            "30193B"
+          ]
+        },
+        "redstriped": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.redstriped",
+          "colors": [
+            "B02E26"
+          ]
+        },
+        "bluestriped": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.bluestriped",
+          "colors": [
+            "2980EF"
+          ]
+        },
+        "whitestriped": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.whitestriped",
+          "colors": [
+            "F9FFFE"
+          ]
+        }
       },
-      "aspectDisplays": {
-        "cosmetic_item-music": { "parts": [
-          { "text": "U", "color": "FFF25E" },
-          { "text": "k", "color": "5EB0CC" },
-          { "text": "u", "color": "B57D8A" },
-          { "text": "l", "color": "5EB0CC" },
-          { "text": "e", "color": "B57D8A" },
-          { "text": "l", "color": "5EB0CC" },
-          { "text": "e", "color": "FFF25E" }
-        ] }
+      "headerTranslationKey": "cobblemon.pokedex.variation.pattern",
+      "aspectTranslationKeys": {
+        "snake-pattern-attack": "cobblemon.ui.pokedex.info.form.snake-pattern-attack",
+        "snake-pattern-dark": "cobblemon.ui.pokedex.info.form.snake-pattern-dark",
+        "snake-pattern-elusive": "cobblemon.ui.pokedex.info.form.snake-pattern-elusive",
+        "snake-pattern-heart": "cobblemon.ui.pokedex.info.form.snake-pattern-heart",
+        "snake-pattern-legacy": "cobblemon.ui.pokedex.info.form.snake-pattern-legacy",
+        "snake-pattern-sound": "cobblemon.ui.pokedex.info.form.snake-pattern-sound",
+        "snake-pattern-speed": "cobblemon.ui.pokedex.info.form.snake-pattern-speed",
+        "snake-pattern-classic": "betterpokedexscanner.variant.snake_pattern_classic"
       }
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:electrode"],
+      "species": [
+        "cobblemon:aegislash"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.stance",
+      "aspectTranslationKeys": {
+        "shield-forme": "betterpokedexscanner.variant.shield_forme",
+        "blade-forme": "betterpokedexscanner.variant.blade_forme"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:squirtle",
+        "cobblemon:wartortle",
+        "cobblemon:blastoise"
+      ],
+      "aspectDisplays": {
+        "cosmetic_item-wise_glasses": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_wise_glasses",
+          "colors": [
+            "182C6F"
+          ]
+        },
+        "cosmetic_item-black_glasses": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_black_glasses",
+          "colors": [
+            "19182C"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
+    },
+    {
+      "species": [
+        "cobblemon:jigglypuff",
+        "cobblemon:alakazam"
+      ],
+      "aspectDisplays": {
+        "color-black": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-black",
+          "colors": [
+            "41222F"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
+    },
+    {
+      "species": [
+        "cobblemon:gengar"
+      ],
+      "aspectDisplays": {
+        "color-green": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-green",
+          "colors": [
+            "3E5748"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
+    },
+    {
+      "species": [
+        "cobblemon:pichu",
+        "cobblemon:pikachu",
+        "cobblemon:raichu"
+      ],
+      "aspectDisplays": {
+        "cosmetic_item-music": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_music",
+          "colors": [
+            "FFF25E",
+            "5EB0CC",
+            "B57D8A",
+            "5EB0CC",
+            "B57D8A",
+            "5EB0CC",
+            "FFF25E"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance",
+      "aspectTranslationKeys": {
+        "cosmetic_item-rage_candy_bar": "betterpokedexscanner.variant.cosmetic_item_rage_candy_bar",
+        "cosmetic_item-pewter_crunchies": "betterpokedexscanner.variant.cosmetic_item_pewter_crunchies",
+        "cosmetic_item-lava_cookie": "betterpokedexscanner.variant.cosmetic_item_lava_cookie",
+        "cosmetic_item-old_gateau": "betterpokedexscanner.variant.cosmetic_item_old_gateau",
+        "cosmetic_item-casteliacone": "betterpokedexscanner.variant.cosmetic_item_casteliacone",
+        "cosmetic_item-lumiose_galette": "betterpokedexscanner.variant.cosmetic_item_lumiose_galette",
+        "cosmetic_item-big_malasada": "betterpokedexscanner.variant.cosmetic_item_big_malasada",
+        "cosmetic_item-smoked_tail_curry": "betterpokedexscanner.variant.cosmetic_item_smoked_tail_curry",
+        "cosmetic_item-compass": "betterpokedexscanner.variant.cosmetic_item_compass",
+        "cosmetic_item-leather_helmet": "betterpokedexscanner.variant.cosmetic_item_leather_helmet",
+        "cosmetic_item-sinister_tea": "betterpokedexscanner.variant.cosmetic_item_sinister_tea",
+        "cosmetic_item-cocoa_beans": "betterpokedexscanner.variant.cosmetic_item_cocoa_beans",
+        "cosmetic_item-shears": "betterpokedexscanner.variant.cosmetic_item_shears"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:electrode"
+      ],
       "aspectDisplays": {
         "color-lime": {
-          "parts": [
-            { "text": "L", "color": "647A22" },
-            { "text": "i", "color": "B6BB2B" },
-            { "text": "m", "color": "48701A" },
-            { "text": "e", "color": "B6BB2B" },
-            { "text": " W", "color": "647A22" },
-            { "text": "a", "color": "B6BB2B" },
-            { "text": "t", "color": "48701A" },
-            { "text": "e", "color": "B6BB2B" },
-            { "text": "r", "color": "647A22" },
-            { "text": "m", "color": "B6BB2B" },
-            { "text": "e", "color": "48701A" },
-            { "text": "l", "color": "B6BB2B" },
-            { "text": "o", "color": "647A22" },
-            { "text": "n", "color": "B6BB2B" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-lime",
+          "colors": [
+            "647A22",
+            "B6BB2B",
+            "48701A",
+            "B6BB2B",
+            "647A22",
+            "B6BB2B",
+            "48701A",
+            "B6BB2B",
+            "647A22",
+            "B6BB2B",
+            "48701A",
+            "B6BB2B",
+            "647A22",
+            "B6BB2B"
           ]
         },
         "color-green": {
-          "parts": [
-            { "text": "Gr", "color": "3A572F" },
-            { "text": "ee", "color": "283E20" },
-            { "text": "n W", "color": "3A572F" },
-            { "text": "at", "color": "283E20" },
-            { "text": "er", "color": "3A572F" },
-            { "text": "me", "color": "283E20" },
-            { "text": "lo", "color": "3A572F" },
-            { "text": "n", "color": "283E20" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-green",
+          "colors": [
+            "3A572F",
+            "283E20",
+            "3A572F",
+            "283E20",
+            "3A572F",
+            "283E20",
+            "3A572F",
+            "283E20"
           ]
         }
-      }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:dragonite"],
+      "species": [
+        "cobblemon:dragonite"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-bundle": { "parts": [ { "text": "Messenger", "color": "43403D" } ] }
-      }
+        "cosmetic_item-bundle": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_bundle",
+          "colors": [
+            "43403D"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:sudowoodo"],
+      "species": [
+        "cobblemon:sudowoodo"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-gold_armor": { "parts": [ { "text": "Golden", "color": "F6D04D" } ] }
-      }
+        "cosmetic_item-gold_armor": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_gold_armor",
+          "colors": [
+            "F6D04D"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:treecko","cobblemon:grovyle","cobblemon:sceptile"],
+      "species": [
+        "cobblemon:treecko",
+        "cobblemon:grovyle",
+        "cobblemon:sceptile"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-stick": { "parts": [ { "text": "Twig", "color": "553F18" } ] }
-      }
+        "cosmetic_item-stick": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_stick",
+          "colors": [
+            "553F18"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:spoink"],
+      "species": [
+        "cobblemon:spoink"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-ender_pearl": { "parts": [ { "text": "Ender Pearl", "color": "0C3A33" } ] }
-      }
+        "cosmetic_item-ender_pearl": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_ender_pearl",
+          "colors": [
+            "0C3A33"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:timburr","cobblemon:komala"],
+      "species": [
+        "cobblemon:timburr",
+        "cobblemon:komala"
+      ],
       "aspectDisplays": {
-        "tree-oak": { "parts": [
-          { "text": "O", "color": "5D482A" },
-          { "text": "a", "color": "B6925E" },
-          { "text": "k", "color": "5D482A" },
-          { "text": " Log" }
-        ]
+        "tree-oak": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-oak",
+          "colors": [
+            "5D482A",
+            "B6925E",
+            "5D482A"
+          ]
         },
-        "tree-spruce": { "parts": [
-          { "text": "Sp", "color": "54391F" },
-          { "text": "ru", "color": "806039" },
-          { "text": "ce", "color": "54391F" },
-          { "text": " Log" }
-        ] },
-        "tree-acacia": { "parts": [
-          { "text": "Ac", "color": "686158" },
-          { "text": "ac", "color": "AB5C31" },
-          { "text": "ia", "color": "686158" },
-          { "text": " Log" }
-        ] },
-        "tree-birch": { "parts": [
-          { "text": "B", "color": "A4A4A4" },
-          { "text": "ir", "color": "D4BF83" },
-          { "text": "ch", "color": "A4A4A4" },
-          { "text": " Log" }
-        ] },
-        "tree-darkoak": { "parts": [
-          { "text": "Da", "color": "49371E" },
-          { "text": "rk O", "color": "482E17" },
-          { "text": "ak", "color": "49371E" },
-          { "text": " Log" }
-        ] },
-        "tree-jungle": { "parts": [
-          { "text": "Ju", "color": "7C5C26" },
-          { "text": "ng", "color": "B68563" },
-          { "text": "le", "color": "7C5C26" },
-          { "text": " Log" }
-        ] },
-        "tree-mangrove": { "parts": [
-          { "text": "Man", "color": "66512F" },
-          { "text": "gro", "color": "763833" },
-          { "text": "ve", "color": "66512F" },
-          { "text": " Log" }
-        ] },
-        "tree-cherry": { "parts": [
-          { "text": "Ch", "color": "560303" },
-          { "text": "er", "color": "E3B3AB" },
-          { "text": "ry", "color": "560303" },
-          { "text": " Log" } ] },
-        "tree-crimson": { "parts": [
-          { "text": "Cr", "color": "560303" },
-          { "text": "ims", "color": "7A3852" },
-          { "text": "on", "color": "560303" },
-          { "text": " Log" } ] },
-        "tree-warped": { "parts": [
-          { "text": "Wa", "color": "442332" },
-          { "text": "rp", "color": "35817F" },
-          { "text": "ed", "color": "442332" },
-          { "text": " Log" } ] },
-        "tree-apricorn": { "parts": [
-          { "text": "Ap", "color": "654E26" },
-          { "text": "ric", "color": "BC924B" },
-          { "text": "orn", "color": "654E26" },
-          { "text": " Log" }
-        ] },
-        "tree-saccharine": { "parts": [
-          { "text": "Sac", "color": "3F292C" },
-          { "text": "char", "color": "44589E" },
-          { "text": "ine", "color": "3F292C" },
-          { "text": " Log" } ] }
-      }
+        "tree-spruce": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-spruce",
+          "colors": [
+            "54391F",
+            "806039",
+            "54391F"
+          ]
+        },
+        "tree-acacia": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-acacia",
+          "colors": [
+            "686158",
+            "AB5C31",
+            "686158"
+          ]
+        },
+        "tree-birch": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-birch",
+          "colors": [
+            "A4A4A4",
+            "D4BF83",
+            "A4A4A4"
+          ]
+        },
+        "tree-darkoak": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-darkoak",
+          "colors": [
+            "49371E",
+            "482E17",
+            "49371E"
+          ]
+        },
+        "tree-jungle": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-jungle",
+          "colors": [
+            "7C5C26",
+            "B68563",
+            "7C5C26"
+          ]
+        },
+        "tree-mangrove": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-mangrove",
+          "colors": [
+            "66512F",
+            "763833",
+            "66512F"
+          ]
+        },
+        "tree-cherry": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-cherry",
+          "colors": [
+            "560303",
+            "E3B3AB",
+            "560303"
+          ]
+        },
+        "tree-crimson": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-crimson",
+          "colors": [
+            "560303",
+            "7A3852",
+            "560303"
+          ]
+        },
+        "tree-warped": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-warped",
+          "colors": [
+            "442332",
+            "35817F",
+            "442332"
+          ]
+        },
+        "tree-apricorn": {
+          "translationKey": "betterpokedexscanner.variant.tree_apricorn",
+          "colors": [
+            "654E26",
+            "BC924B",
+            "654E26"
+          ]
+        },
+        "tree-saccharine": {
+          "translationKey": "betterpokedexscanner.variant.tree_saccharine",
+          "colors": [
+            "3F292C",
+            "44589E",
+            "3F292C"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:gurdurr"],
+      "species": [
+        "cobblemon:gurdurr"
+      ],
       "aspectDisplays": {
-        "metals-copper": { "parts": [ { "text": "Copper", "color": "B87333" }, { "text": " Girder" } ] },
-        "metals-iron": { "parts": [ { "text": "Iron", "color": "D8D8D8" }, { "text": " Girder" } ] },
-        "metals-gold": { "parts": [ { "text": "Gold", "color": "F6D04D" }, { "text": " Girder" } ] },
-        "metals-netherite": { "parts": [ { "text": "Netherite", "color": "5B4B4F" }, { "text": " Girder" } ] }
-      }
+        "metals-copper": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.metals-copper",
+          "colors": [
+            "B87333"
+          ]
+        },
+        "metals-iron": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.metals-iron",
+          "colors": [
+            "D8D8D8"
+          ]
+        },
+        "metals-gold": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.metals-gold",
+          "colors": [
+            "F6D04D"
+          ]
+        },
+        "metals-netherite": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.metals-netherite",
+          "colors": [
+            "5B4B4F"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:conkeldurr"],
+      "species": [
+        "cobblemon:conkeldurr"
+      ],
       "aspectDisplays": {
-        "color-white": { "parts": [ { "text": "White", "color": "F9FFFE" }, { "text": " Concrete" } ] },
-        "color-orange": { "parts": [ { "text": "Orange", "color": "F9801D" }, { "text": " Concrete" } ] },
-        "color-magenta": { "parts": [ { "text": "Magenta", "color": "C74EBD" }, { "text": " Concrete" } ] },
-        "color-light_blue": { "parts": [ { "text": "Light Blue", "color": "3AB3DA" }, { "text": " Concrete" } ] },
-        "color-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" }, { "text": " Concrete" } ] },
-        "color-lime": { "parts": [ { "text": "Lime", "color": "80C71F" }, { "text": " Concrete" } ] },
-        "color-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" }, { "text": " Concrete" } ] },
-        "color-purple": { "parts": [ { "text": "Purple", "color": "8932B8" }, { "text": " Concrete" } ] },
-        "color-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" }, { "text": " Concrete" } ] },
-        "color-brown": { "parts": [ { "text": "Brown", "color": "835432" }, { "text": " Concrete" } ] },
-        "color-green": { "parts": [ { "text": "Green", "color": "5E7C16" }, { "text": " Concrete" } ] },
-        "color-red": { "parts": [ { "text": "Red", "color": "B02E26" }, { "text": " Concrete" } ] },
-        "color-black": { "parts": [ { "text": "Black", "color": "1D1D21" }, { "text": " Concrete" } ] },
-        "color-cyan": { "parts": [ { "text": "Cyan", "color": "169C9C" }, { "text": " Concrete" } ] },
-        "color-gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.gray", "color": "474F52" }, { "text": " Concrete" } ] },
-        "color-light_gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.light_gray", "color": "9D9D97" }, { "text": " Concrete" } ] }
-      }
+        "color-white": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-white",
+          "colors": [
+            "F9FFFE"
+          ]
+        },
+        "color-orange": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-orange",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "color-magenta": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-magenta",
+          "colors": [
+            "C74EBD"
+          ]
+        },
+        "color-light_blue": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-light_blue",
+          "colors": [
+            "3AB3DA"
+          ]
+        },
+        "color-yellow": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-yellow",
+          "colors": [
+            "FED83D"
+          ]
+        },
+        "color-lime": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-lime",
+          "colors": [
+            "80C71F"
+          ]
+        },
+        "color-pink": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-pink",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "color-purple": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-purple",
+          "colors": [
+            "8932B8"
+          ]
+        },
+        "color-blue": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-blue",
+          "colors": [
+            "3C44AA"
+          ]
+        },
+        "color-brown": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-brown",
+          "colors": [
+            "835432"
+          ]
+        },
+        "color-green": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-green",
+          "colors": [
+            "5E7C16"
+          ]
+        },
+        "color-red": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-red",
+          "colors": [
+            "B02E26"
+          ]
+        },
+        "color-black": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-black",
+          "colors": [
+            "1D1D21"
+          ]
+        },
+        "color-cyan": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-cyan",
+          "colors": [
+            "169C9C"
+          ]
+        },
+        "color-gray": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-gray",
+          "colors": [
+            "474F52"
+          ]
+        },
+        "color-light_gray": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-light_gray",
+          "colors": [
+            "9D9D97"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:sandile","cobblemon:krokorok","cobblemon:krookodile"],
+      "species": [
+        "cobblemon:sandile",
+        "cobblemon:krokorok",
+        "cobblemon:krookodile"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-black_glasses": { "parts": [
-          { "text": "Red", "color": "8D212F" },
-          { "text": "Sunglasses", "color": "183E4D" }
-        ] }
-      }
+        "cosmetic_item-black_glasses": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_black_glasses",
+          "colors": [
+            "8D212F",
+            "183E4D"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:braixen","cobblemon:delphox"],
+      "species": [
+        "cobblemon:braixen",
+        "cobblemon:delphox"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-silk_scarf": { "parts": [
-          { "text": "Ribboned", "color": "821A1E" },
-          { "text": " Stick", "color": "634E3A" }
-        ] }
-      }
+        "cosmetic_item-silk_scarf": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_silk_scarf",
+          "colors": [
+            "821A1E",
+            "634E3A"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:hawlucha"],
+      "species": [
+        "cobblemon:hawlucha"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-leaves": { "parts": [ { "text": "Leaf Mask", "color": "0C9339" } ] }
-      }
+        "cosmetic_item-leaves": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_leaves",
+          "colors": [
+            "0C9339"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:tinkatink","cobblemon:tinkatuff","cobblemon:tinkaton"],
+      "species": [
+        "cobblemon:tinkatink",
+        "cobblemon:tinkatuff",
+        "cobblemon:tinkaton"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-music": { "parts": [
-          { "text": "Mic", "color": "B35791" },
-          { "text": "roph", "color": "8C7E9E" },
-          { "text": "one", "color": "B35791" },
-          { "text": " Ha", "color": "B35791" },
-          { "text": "mm", "color": "8C7E9E" },
-          { "text": "er", "color": "B35791" }
-        ] }
-      }
+        "cosmetic_item-music": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_music",
+          "colors": [
+            "B35791",
+            "8C7E9E",
+            "B35791",
+            "B35791",
+            "8C7E9E",
+            "B35791"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:sneasler"],
+      "species": [
+        "cobblemon:sneasler"
+      ],
       "aspectDisplays": {
-        "cosmetic_item-composter": { "parts": [ { "text": "Thatch Basket", "color": "EDD789" } ] }
-      }
+        "cosmetic_item-composter": {
+          "translationKey": "betterpokedexscanner.variant.cosmetic_item_composter",
+          "colors": [
+            "EDD789"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:zarude"],
+      "species": [
+        "cobblemon:zarude"
+      ],
       "aspectDisplays": {
-        "dada-cape": { "parts": [ { "text": "251 Cape", "color": "D189C8" } ] }
-      }
+        "dada-cape": {
+          "translationKey": "betterpokedexscanner.variant.dada_cape",
+          "colors": [
+            "D189C8"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
     },
-
     {
-      "headerLabel": "Cosmetic Appearance",
-      "species": ["cobblemon:gimmighoul","cobblemon:gholdengo"],
+      "species": [
+        "cobblemon:gimmighoul",
+        "cobblemon:gholdengo"
+      ],
       "aspectDisplays": {
         "minecraft": {
-          "parts": [
-            { "text": "Mi", "color": "383228" },
-            { "text": "necra", "color": "8A5A19" },
-            { "text": "ft", "color": "9F9FA0" },
-            { "text": " Che", "color": "8A5A19" },
-            { "text": "st", "color": "383228" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.minecraft",
+          "colors": [
+            "383228",
+            "8A5A19",
+            "9F9FA0",
+            "8A5A19",
+            "383228"
           ]
         },
         "red-gilded-chest": {
-          "parts": [
-            { "text": "Re", "color": "B49C4A" },
-            { "text": "d Gil", "color": "B14040" },
-            { "text": "de", "color": "A3ABC6" },
-            { "text": "d Che", "color": "B14040" },
-            { "text": "st", "color": "B49C4A" }
+          "translationKey": "betterpokedexscanner.variant.red_gilded_chest",
+          "colors": [
+            "B49C4A",
+            "B14040",
+            "A3ABC6",
+            "B14040",
+            "B49C4A"
           ]
         },
         "yellow-gilded-chest": {
-          "parts": [
-            { "text": "Yel", "color": "B49C4A" },
-            { "text": "low Gi", "color": "C89530" },
-            { "text": "ld", "color": "A3ABC6" },
-            { "text": "ed Ch", "color": "C89530" },
-            { "text": "est", "color": "B49C4A" }
+          "translationKey": "betterpokedexscanner.variant.yellow_gilded_chest",
+          "colors": [
+            "B49C4A",
+            "C89530",
+            "A3ABC6",
+            "C89530",
+            "B49C4A"
           ]
         },
         "green-gilded-chest": {
-          "parts": [
-            { "text": "Gre", "color": "B49C4A" },
-            { "text": "en Gi", "color": "4E8F1A" },
-            { "text": "ld", "color": "A3ABC6" },
-            { "text": "ed Ch", "color": "4E8F1A" },
-            { "text": "est", "color": "B49C4A" }
+          "translationKey": "betterpokedexscanner.variant.green_gilded_chest",
+          "colors": [
+            "B49C4A",
+            "4E8F1A",
+            "A3ABC6",
+            "4E8F1A",
+            "B49C4A"
           ]
         },
         "blue-gilded-chest": {
-          "parts": [
-            { "text": "Blu", "color": "B49C4A" },
-            { "text": "e Gi", "color": "0B539F" },
-            { "text": "lde", "color": "A3ABC6" },
-            { "text": "d Ch", "color": "0B539F" },
-            { "text": "est", "color": "B49C4A" }
+          "translationKey": "betterpokedexscanner.variant.blue_gilded_chest",
+          "colors": [
+            "B49C4A",
+            "0B539F",
+            "A3ABC6",
+            "0B539F",
+            "B49C4A"
           ]
         },
         "pink-gilded-chest": {
-          "parts": [
-            { "text": "Pi", "color": "B49C4A" },
-            { "text": "nk Gi", "color": "CB80AC" },
-            { "text": "lde", "color": "A3ABC6" },
-            { "text": "d Che", "color": "CB80AC" },
-            { "text": "st", "color": "B49C4A" }
+          "translationKey": "betterpokedexscanner.variant.pink_gilded_chest",
+          "colors": [
+            "B49C4A",
+            "CB80AC",
+            "A3ABC6",
+            "CB80AC",
+            "B49C4A"
           ]
         },
         "black-gilded-chest": {
-          "parts": [
-            { "text": "Bla", "color": "B49C4A" },
-            { "text": "ck Gi", "color": "3B4356" },
-            { "text": "ld", "color": "A3ABC6" },
-            { "text": "ed Ch", "color": "3B4356" },
-            { "text": "est", "color": "B49C4A" }
+          "translationKey": "betterpokedexscanner.variant.black_gilded_chest",
+          "colors": [
+            "B49C4A",
+            "3B4356",
+            "A3ABC6",
+            "3B4356",
+            "B49C4A"
           ]
         },
         "white-gilded-chest": {
-          "parts": [
-            { "text": "Whi", "color": "B49C4A" },
-            { "text": "te Gi", "color": "AFA9AF" },
-            { "text": "ld", "color": "A3ABC6" },
-            { "text": "ed Ch", "color": "AFA9AF" },
-            { "text": "est", "color": "B49C4A" }
+          "translationKey": "betterpokedexscanner.variant.white_gilded_chest",
+          "colors": [
+            "B49C4A",
+            "AFA9AF",
+            "A3ABC6",
+            "AFA9AF",
+            "B49C4A"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cosmetic_appearance"
+    },
+    {
+      "aspectDisplays": {
+        "valencian": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.valencian",
+          "colors": [
+            "9D272C"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.regional_appearance",
+      "aspectTranslationKeys": {
+        "west-sea": "betterpokedexscanner.variant.west_sea",
+        "east-sea": "betterpokedexscanner.variant.east_sea"
+      }
+    },
+    {
+      "aspectDisplays": {
+        "mooshtank-red": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.mooshtank-red",
+          "colors": [
+            "B02E26"
+          ]
+        },
+        "mooshtank-brown": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.mooshtank-brown",
+          "colors": [
+            "835432"
+          ]
+        },
+        "combat-breed": {
+          "translationKey": "betterpokedexscanner.variant.combat_breed",
+          "colors": [
+            "FFAC59"
+          ]
+        },
+        "blaze-breed": {
+          "translationKey": "betterpokedexscanner.variant.blaze_breed",
+          "colors": [
+            "EF7374"
+          ]
+        },
+        "aqua-breed": {
+          "translationKey": "betterpokedexscanner.variant.aqua_breed",
+          "colors": [
+            "2980EF"
+          ]
+        }
+      },
+      "headerTranslationKey": "cobblemon.pokedex.variation.breed"
+    },
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.eye_color",
+      "species": [
+        "cobblemon:gyarados"
+      ],
+      "aspectDisplays": {
+        "gyarados-eye-color-purple": {
+          "translationKey": "betterpokedexscanner.variant.gyarados_eye_color_purple",
+          "colors": [
+            "A453AF"
+          ]
+        },
+        "gyarados-eye-color-red": {
+          "translationKey": "betterpokedexscanner.variant.gyarados_eye_color_red",
+          "colors": [
+            "5D252F"
           ]
         }
       }
     },
-
     {
-      "headerLabel": "Regional Appearance",
-      "aspectDisplays": {
-        "valencian": { "parts": [ { "text": "Valencian", "color": "9D272C" } ] }
-      },
-      "aspectLabels": {
-        "west-sea": "West Sea",
-        "east-sea": "East Sea"
+      "species": [
+        "cobblemon:unown"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.character",
+      "aspectTranslationKeys": {
+        "character-a": "betterpokedexscanner.variant.character_a",
+        "character-b": "betterpokedexscanner.variant.character_b",
+        "character-c": "betterpokedexscanner.variant.character_c",
+        "character-d": "betterpokedexscanner.variant.character_d",
+        "character-e": "betterpokedexscanner.variant.character_e",
+        "character-f": "betterpokedexscanner.variant.character_f",
+        "character-g": "betterpokedexscanner.variant.character_g",
+        "character-h": "betterpokedexscanner.variant.character_h",
+        "character-i": "betterpokedexscanner.variant.character_i",
+        "character-j": "betterpokedexscanner.variant.character_j",
+        "character-k": "betterpokedexscanner.variant.character_k",
+        "character-l": "betterpokedexscanner.variant.character_l",
+        "character-m": "betterpokedexscanner.variant.character_m",
+        "character-n": "betterpokedexscanner.variant.character_n",
+        "character-o": "betterpokedexscanner.variant.character_o",
+        "character-p": "betterpokedexscanner.variant.character_p",
+        "character-q": "betterpokedexscanner.variant.character_q",
+        "character-r": "betterpokedexscanner.variant.character_r",
+        "character-s": "betterpokedexscanner.variant.character_s",
+        "character-t": "betterpokedexscanner.variant.character_t",
+        "character-u": "betterpokedexscanner.variant.character_u",
+        "character-v": "betterpokedexscanner.variant.character_v",
+        "character-w": "betterpokedexscanner.variant.character_w",
+        "character-x": "betterpokedexscanner.variant.character_x",
+        "character-y": "betterpokedexscanner.variant.character_y",
+        "character-z": "betterpokedexscanner.variant.character_z",
+        "character-!": "betterpokedexscanner.variant.character",
+        "character-?": "betterpokedexscanner.variant.character"
       }
     },
-
-    {
-      "headerLabel": "Breed",
-      "aspectDisplays": {
-        "mooshtank-red": { "parts": [ { "text": "Red", "color": "B02E26" }, { "text": " Mooshtank" } ] },
-        "mooshtank-brown": { "parts": [ { "text": "Brown", "color": "835432" }, { "text": " Mooshtank" } ] },
-        "combat-breed": { "parts": [ { "text": "Combat", "color": "FFAC59" } ] },
-        "blaze-breed": { "parts": [ { "text": "Blaze", "color": "EF7374" } ] },
-        "aqua-breed": { "parts": [ { "text": "Aqua", "color": "2980EF" } ] }
-      }
-    },
-
-    {
-      "headerTranslationKey": "betterpokedexscanner.header.eye_color",
-      "species": ["cobblemon:gyarados"],
-      "aspectDisplays": {
-        "gyarados-eye-color-purple": { "parts": [ { "text": "Purple", "color": "A453AF" } ] },
-        "gyarados-eye-color-red": { "parts": [ { "text": "Red", "color": "5D252F" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Character",
-      "species": ["cobblemon:unown"],
-      "aspectLabels": {
-        "character-a": "A",
-        "character-b": "B",
-        "character-c": "C",
-        "character-d": "D",
-        "character-e": "E",
-        "character-f": "F",
-        "character-g": "G",
-        "character-h": "H",
-        "character-i": "I",
-        "character-j": "J",
-        "character-k": "K",
-        "character-l": "L",
-        "character-m": "M",
-        "character-n": "N",
-        "character-o": "O",
-        "character-p": "P",
-        "character-q": "Q",
-        "character-r": "R",
-        "character-s": "S",
-        "character-t": "T",
-        "character-u": "U",
-        "character-v": "V",
-        "character-w": "W",
-        "character-x": "X",
-        "character-y": "Y",
-        "character-z": "Z",
-        "character-!": "!",
-        "character-?": "?"
-      }
-    },
-
     {
       "headerTranslationKey": "betterpokedexscanner.header.signature_paint_color",
-      "species": ["cobblemon:smeargle"],
+      "species": [
+        "cobblemon:smeargle"
+      ],
       "aspectDisplays": {
-        "rainbow-light_blue": { "parts": [ { "text": "Light Blue", "color": "3AB3DA" } ] },
-        "rainbow-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" } ] },
-        "rainbow-magenta": { "parts": [ { "text": "Magenta", "color": "C74EBD" } ] },
-        "rainbow-purple": { "parts": [ { "text": "Purple", "color": "8932B8" } ] },
-        "rainbow-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
-        "rainbow-cyan": { "parts": [ { "text": "Cyan", "color": "169C9C" } ] },
-        "rainbow-green": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
-        "rainbow-lime": { "parts": [ { "text": "Lime", "color": "80C71F" } ] },
-        "rainbow-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
-        "rainbow-orange": { "parts": [ { "text": "Orange", "color": "F9801D" } ] },
-        "rainbow-red": { "parts": [ { "text": "Red", "color": "B02E26" } ] }
+        "rainbow-light_blue": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_light_blue",
+          "colors": [
+            "3AB3DA"
+          ]
+        },
+        "rainbow-pink": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_pink",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "rainbow-magenta": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_magenta",
+          "colors": [
+            "C74EBD"
+          ]
+        },
+        "rainbow-purple": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_purple",
+          "colors": [
+            "8932B8"
+          ]
+        },
+        "rainbow-blue": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_blue",
+          "colors": [
+            "3C44AA"
+          ]
+        },
+        "rainbow-cyan": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_cyan",
+          "colors": [
+            "169C9C"
+          ]
+        },
+        "rainbow-green": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_green",
+          "colors": [
+            "5E7C16"
+          ]
+        },
+        "rainbow-lime": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_lime",
+          "colors": [
+            "80C71F"
+          ]
+        },
+        "rainbow-yellow": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_yellow",
+          "colors": [
+            "FED83D"
+          ]
+        },
+        "rainbow-orange": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_orange",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "rainbow-red": {
+          "translationKey": "betterpokedexscanner.variant.rainbow_red",
+          "colors": [
+            "B02E26"
+          ]
+        }
       }
     },
-
     {
       "headerTranslationKey": "betterpokedexscanner.header.cosmetic_paint_color",
-      "species": ["cobblemon:smeargle"],
+      "species": [
+        "cobblemon:smeargle"
+      ],
       "aspectDisplays": {
-        "color-light_blue": { "parts": [ { "text": "Light Blue", "color": "3AB3DA" } ] },
-        "color-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" } ] },
-        "color-magenta": { "parts": [ { "text": "Magenta", "color": "C74EBD" } ] },
-        "color-purple": { "parts": [ { "text": "Purple", "color": "8932B8" } ] },
-        "color-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
-        "color-cyan": { "parts": [ { "text": "Cyan", "color": "169C9C" } ] },
-        "color-green": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
-        "color-lime": { "parts": [ { "text": "Lime", "color": "80C71F" } ] },
-        "color-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
-        "color-orange": { "parts": [ { "text": "Orange", "color": "F9801D" } ] },
-        "color-red": { "parts": [ { "text": "Red", "color": "B02E26" } ] },
-        "color-black": { "parts": [ { "text": "Black", "color": "1D1D21" } ] },
-        "color-brown": { "parts": [ { "text": "Brown", "color": "835432" } ] },
-        "color-white": { "parts": [ { "text": "White", "color": "F9FFFE" } ] },
-        "color-light_gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.light_gray", "color": "9D9D97" } ] },
-        "color-gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.gray", "color": "474F52" } ] }
+        "color-light_blue": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-light_blue",
+          "colors": [
+            "3AB3DA"
+          ]
+        },
+        "color-pink": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-pink",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "color-magenta": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-magenta",
+          "colors": [
+            "C74EBD"
+          ]
+        },
+        "color-purple": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-purple",
+          "colors": [
+            "8932B8"
+          ]
+        },
+        "color-blue": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-blue",
+          "colors": [
+            "3C44AA"
+          ]
+        },
+        "color-cyan": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-cyan",
+          "colors": [
+            "169C9C"
+          ]
+        },
+        "color-green": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-green",
+          "colors": [
+            "5E7C16"
+          ]
+        },
+        "color-lime": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-lime",
+          "colors": [
+            "80C71F"
+          ]
+        },
+        "color-yellow": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-yellow",
+          "colors": [
+            "FED83D"
+          ]
+        },
+        "color-orange": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-orange",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "color-red": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-red",
+          "colors": [
+            "B02E26"
+          ]
+        },
+        "color-black": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-black",
+          "colors": [
+            "1D1D21"
+          ]
+        },
+        "color-brown": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-brown",
+          "colors": [
+            "835432"
+          ]
+        },
+        "color-white": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-white",
+          "colors": [
+            "F9FFFE"
+          ]
+        },
+        "color-light_gray": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-light_gray",
+          "colors": [
+            "9D9D97"
+          ]
+        },
+        "color-gray": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-gray",
+          "colors": [
+            "474F52"
+          ]
+        }
       }
     },
-
     {
-      "headerLabel": "Unique Form",
-      "aspectLabels": {
-        "whiscash_nero": "Nero",
-        "bond": "Battle Bond",
-        "bloodmoon": "Bloodmoon"
+      "headerTranslationKey": "betterpokedexscanner.header.unique_form",
+      "aspectTranslationKeys": {
+        "whiscash_nero": "betterpokedexscanner.variant.whiscash_nero",
+        "bond": "betterpokedexscanner.variant.bond",
+        "bloodmoon": "betterpokedexscanner.variant.bloodmoon"
       },
-      "formLabels": {
-        "dada": "Dada"
+      "formTranslationKeys": {
+        "dada": "betterpokedexscanner.variant.dada"
       }
     },
-
     {
-      "headerLabel": "Model",
-      "species": ["cobblemon:magearna"],
+      "species": [
+        "cobblemon:magearna"
+      ],
       "aspectDisplays": {
-        "original-color": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.original_color", "color": "FA583F" } ] }
+        "original-color": {
+          "parts": [
+            {
+              "translationKey": "betterpokedexscanner.aspectLabel.original_color",
+              "color": "FA583F"
+            }
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.model"
+    },
+    {
+      "species": [
+        "cobblemon:clauncher",
+        "cobblemon:clawitzer"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.chirality",
+      "aspectTranslationKeys": {
+        "claw-left": "betterpokedexscanner.variant.claw_left",
+        "claw-right": "betterpokedexscanner.variant.claw_right"
       }
     },
-
     {
-      "headerLabel": "Chirality",
-      "species": ["cobblemon:clauncher","cobblemon:clawitzer"],
-      "aspectLabels": {
-        "claw-left": "Left Clawed",
-        "claw-right": "Right Clawed"
-      }
-    },
-
-    {
-      "headerLabel": "Shell Flora",
-      "species": ["cobblemon:torterra"],
+      "species": [
+        "cobblemon:torterra"
+      ],
       "aspectDisplays": {
-        "tree-cherry": { "parts": [
-          { "text": "Ch", "color": "560303" },
-          { "text": "er", "color": "E3B3AB" },
-          { "text": "ry", "color": "560303" },
-          { "text": " Tree" } ] },
-        "tree-birch": { "parts": [
-          { "text": "B", "color": "A4A4A4" },
-          { "text": "ir", "color": "D4BF83" },
-          { "text": "ch", "color": "A4A4A4" },
-          { "text": " Tree" } ] },
-        "tree-darkoak": { "parts": [
-          { "text": "Da", "color": "49371E" },
-          { "text": "rk O", "color": "482E17" },
-          { "text": "ak", "color": "49371E" },
-          { "text": " Tree" } ] },
-        "tree-oak": { "parts": [
-          { "text": "O", "color": "5D482A" },
-          { "text": "a", "color": "B6925E" },
-          { "text": "k", "color": "5D482A" },
-          { "text": " Tree" } ] },
-        "tree-spruce": { "parts": [
-          { "text": "Sp", "color": "54391F" },
-          { "text": "ru", "color": "806039" },
-          { "text": "ce", "color": "54391F" },
-          { "text": " Tree" } ] },
-        "tree-jungle": { "parts": [
-          { "text": "Ju", "color": "7C5C26" },
-          { "text": "ng", "color": "B68563" },
-          { "text": "le", "color": "7C5C26" },
-          { "text": " Tree" } ] },
-        "tree-swamp": { "parts": [
-          { "text": "Sw", "color": "6B745A" },
-          { "text": "amp", "color": "9E9677" },
-          { "text": "ed", "color": "6B745A" },
-          { "text": " Tree" } ] },
-        "tree-acacia": { "parts": [
-          { "text": "Ac", "color": "686158" },
-          { "text": "ac", "color": "AB5C31" },
-          { "text": "ia", "color": "686158" },
-          { "text": " Tree" } ] },
-        "tree-azalea": { "parts": [ { "text": "Azalea", "color": "B88BC0" }, { "text": " Tree" } ] },
-        "tree-mangrove": { "parts": [
-          { "text": "Man", "color": "66512F" },
-          { "text": "gro", "color": "763833" },
-          { "text": "ve", "color": "66512F" },
-          { "text": " Tree" } ] },
-        "tree-none": { "parts": [ { "text": "Sinnohan", "color": "9072A3" }, { "text": " Tree" } ] }
+        "tree-cherry": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-cherry",
+          "colors": [
+            "560303",
+            "E3B3AB",
+            "560303"
+          ]
+        },
+        "tree-birch": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-birch",
+          "colors": [
+            "A4A4A4",
+            "D4BF83",
+            "A4A4A4"
+          ]
+        },
+        "tree-darkoak": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-darkoak",
+          "colors": [
+            "49371E",
+            "482E17",
+            "49371E"
+          ]
+        },
+        "tree-oak": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-oak",
+          "colors": [
+            "5D482A",
+            "B6925E",
+            "5D482A"
+          ]
+        },
+        "tree-spruce": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-spruce",
+          "colors": [
+            "54391F",
+            "806039",
+            "54391F"
+          ]
+        },
+        "tree-jungle": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-jungle",
+          "colors": [
+            "7C5C26",
+            "B68563",
+            "7C5C26"
+          ]
+        },
+        "tree-swamp": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-swamp",
+          "colors": [
+            "6B745A",
+            "9E9677",
+            "6B745A"
+          ]
+        },
+        "tree-acacia": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-acacia",
+          "colors": [
+            "686158",
+            "AB5C31",
+            "686158"
+          ]
+        },
+        "tree-azalea": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-azalea",
+          "colors": [
+            "B88BC0"
+          ]
+        },
+        "tree-mangrove": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.tree-mangrove",
+          "colors": [
+            "66512F",
+            "763833",
+            "66512F"
+          ]
+        },
+        "tree-none": {
+          "translationKey": "betterpokedexscanner.variant.tree_none",
+          "colors": [
+            "9072A3"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.shell_flora"
+    },
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.unique_behaviour",
+      "aspectTranslationKeys": {
+        "roaming": "cobblemon.ui.pokedex.info.form.roaming",
+        "has_nectar": "betterpokedexscanner.variant.has_nectar",
+        "gulping-form": "betterpokedexscanner.variant.gulping_form",
+        "gorging-form": "betterpokedexscanner.variant.gorging_form"
       }
     },
-
     {
-      "headerLabel": "Unique Behaviour",
-      "aspectLabels": {
-        "has_nectar": "Carrying Nectar",
-        "gulping-form": "Gulping Form",
-        "gorging-form": "Gorging Form",
-        "roaming": "Roaming"
-      }
-    },
-
-    {
-      "headerLabel": "Appliance",
-      "species": ["cobblemon:rotom"],
-      "baseFormLabel": "Light Bulb",
+      "species": [
+        "cobblemon:rotom"
+      ],
       "aspectDisplays": {
-        "heat-appliance": { "parts": [ { "text": "Microwave Oven", "color": "EF7374" } ] },
-        "wash-appliance": { "parts": [ { "text": "Washing Machine", "color": "2980EF" } ] },
-        "frost-appliance": { "parts": [ { "text": "Fridge-Freezer", "color": "81DFF7" } ] },
-        "fan-appliance": { "parts": [ { "text": "Electric Fan", "color": "ADD2F5" } ] },
-        "mow-appliance": { "parts": [ { "text": "Lawn Mower", "color": "82C274" } ] }
-      }
+        "heat-appliance": {
+          "translationKey": "betterpokedexscanner.variant.heat_appliance",
+          "colors": [
+            "EF7374"
+          ]
+        },
+        "wash-appliance": {
+          "translationKey": "betterpokedexscanner.variant.wash_appliance",
+          "colors": [
+            "2980EF"
+          ]
+        },
+        "frost-appliance": {
+          "translationKey": "betterpokedexscanner.variant.frost_appliance",
+          "colors": [
+            "81DFF7"
+          ]
+        },
+        "fan-appliance": {
+          "translationKey": "betterpokedexscanner.variant.fan_appliance",
+          "colors": [
+            "ADD2F5"
+          ]
+        },
+        "mow-appliance": {
+          "translationKey": "betterpokedexscanner.variant.mow_appliance",
+          "colors": [
+            "82C274"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.appliance",
+      "baseFormTranslationKey": "betterpokedexscanner.variant.light_bulb"
     },
     {
-      "headerLabel": "Seasonal Appearance",
-      "species": ["cobblemon:deerling","cobblemon:sawsbuck"],
+      "species": [
+        "cobblemon:deerling",
+        "cobblemon:sawsbuck"
+      ],
       "aspectDisplays": {
-        "autumn": { "parts": [ { "text": "Autumn", "color": "F89058" } ] },
-        "summer": { "parts": [ { "text": "Summer", "color": "78D0F8" } ] },
-        "winter": { "parts": [ { "text": "Winter", "color": "F0D8F8" } ] },
-        "spring": { "parts": [ { "text": "Spring", "color": "B0F858" } ] }
-      }
+        "autumn": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.autumn",
+          "colors": [
+            "F89058"
+          ]
+        },
+        "summer": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.summer",
+          "colors": [
+            "78D0F8"
+          ]
+        },
+        "winter": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.winter",
+          "colors": [
+            "F0D8F8"
+          ]
+        },
+        "spring": {
+          "translationKey": "betterpokedexscanner.variant.spring",
+          "colors": [
+            "B0F858"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.seasonal_appearance"
     },
-
     {
-      "headerLabel": "Fur Style",
-      "species": ["cobblemon:furfrou"],
+      "species": [
+        "cobblemon:furfrou"
+      ],
       "aspectDisplays": {
-        "natural-trim": { "parts": [ { "text": "Natural", "color": "F9FFFE" } ] },
-        "heart-trim": { "parts": [ { "text": "Heart Trim", "color": "F38BAA" }, { "text": " Trim" } ] },
-        "star-trim": { "parts": [ { "text": "Star Trim", "color": "3AB3DA" }, { "text": " Trim" } ] },
-        "diamond-trim": { "parts": [ { "text": "Diamond Trim", "color": "F9801D" }, { "text": " Trim" } ] },
-        "debutante-trim": { "parts": [ { "text": "Debutante Trim", "color": "FED83D" }, { "text": " Trim" } ] },
-        "matron-trim": { "parts": [ { "text": "Matron Trim", "color": "C74EBD" }, { "text": " Trim" } ] },
-        "dandy-trim": { "parts": [ { "text": "Dandy Trim", "color": "80C71F" }, { "text": " Trim" } ] },
-        "la_reine-trim": { "parts": [ { "text": "La Reine Trim", "color": "169C9C" }, { "text": " Trim" } ] },
-        "kabuki-trim": { "parts": [ { "text": "Kabuki Trim", "color": "B02E26" }, { "text": " Trim" } ] },
-        "pharaoh-trim": { "parts": [ { "text": "Pharaoh Trim", "color": "3C44AA" }, { "text": " Trim" } ] },
-        "cinnamon-trim": { "parts": [ { "text": "Cinnamon Trim", "color": "835432" }, { "text": " Trim" } ] },
-        "crusader-trim": { "parts": [ { "text": "Crusader Trim", "color": "9D9D97" }, { "text": " Trim" } ] },
-        "lavender-trim": { "parts": [ { "text": "Lavender Trim", "color": "8932B8" }, { "text": " Trim" } ] },
-        "matcha-trim": { "parts": [ { "text": "Matcha Trim", "color": "5E7C16" }, { "text": " Trim" } ] },
-        "mourner-trim": { "parts": [ { "text": "Mourner Trim", "color": "1D1D21" }, { "text": " Trim" } ] },
-        "rocker-trim": { "parts": [ { "text": "Rocker Trim", "color": "474F52" }, { "text": " Trim" } ] }
-      }
+        "natural-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou",
+          "colors": [
+            "F9FFFE"
+          ]
+        },
+        "heart-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-heart",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "star-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-star",
+          "colors": [
+            "3AB3DA"
+          ]
+        },
+        "diamond-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-diamond",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "debutante-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-debutante",
+          "colors": [
+            "FED83D"
+          ]
+        },
+        "matron-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-matron",
+          "colors": [
+            "C74EBD"
+          ]
+        },
+        "dandy-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-dandy",
+          "colors": [
+            "80C71F"
+          ]
+        },
+        "la_reine-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-lareine",
+          "colors": [
+            "169C9C"
+          ]
+        },
+        "kabuki-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-kabuki",
+          "colors": [
+            "B02E26"
+          ]
+        },
+        "pharaoh-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-pharaoh",
+          "colors": [
+            "3C44AA"
+          ]
+        },
+        "cinnamon-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-cinnamon",
+          "colors": [
+            "835432"
+          ]
+        },
+        "crusader-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-crusader",
+          "colors": [
+            "9D9D97"
+          ]
+        },
+        "lavender-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-lavender",
+          "colors": [
+            "8932B8"
+          ]
+        },
+        "matcha-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-matcha",
+          "colors": [
+            "5E7C16"
+          ]
+        },
+        "mourner-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-mourner",
+          "colors": [
+            "1D1D21"
+          ]
+        },
+        "rocker-trim": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.furfrou-rocker",
+          "colors": [
+            "474F52"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.fur_style"
     },
-
     {
-      "headerLabel": "Variety",
-      "aspectLabels": {
-        "pumpkin-size-small": "Small",
-        "pumpkin-size-large": "Large",
-        "pumpkin-size-super": "Super",
-        "pumpkin-size-average":"Medium"
+      "headerTranslationKey": "betterpokedexscanner.header.variety",
+      "aspectTranslationKeys": {
+        "pumpkin-size-small": "betterpokedexscanner.variant.pumpkin_size_small",
+        "pumpkin-size-large": "betterpokedexscanner.variant.pumpkin_size_large",
+        "pumpkin-size-super": "betterpokedexscanner.variant.pumpkin_size_super",
+        "pumpkin-size-average": "betterpokedexscanner.variant.pumpkin_size_average"
       }
     },
-
     {
       "headerTranslationKey": "betterpokedexscanner.header.wool_color",
-      "species": ["cobblemon:wooloo","cobblemon:dubwool"],
+      "species": [
+        "cobblemon:wooloo",
+        "cobblemon:dubwool"
+      ],
       "aspectDisplays": {
-        "color-black": { "parts": [ { "text": "Black", "color": "1D1D21" } ] },
-        "color-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
-        "color-brown": { "parts": [ { "text": "Brown", "color": "835432" } ] },
-        "color-cyan": { "parts": [ { "text": "Cyan", "color": "169C9C" } ] },
-        "color-green": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
-        "color-light_blue": { "parts": [ { "text": "Light Blue", "color": "3AB3DA" } ] },
-        "color-lime": { "parts": [ { "text": "Lime", "color": "80C71F" } ] },
-        "color-magenta": { "parts": [ { "text": "Magenta", "color": "C74EBD" } ] },
-        "color-orange": { "parts": [ { "text": "Orange", "color": "F9801D" } ] },
-        "color-pink": { "parts": [ { "text": "Pink", "color": "F38BAA" } ] },
-        "color-purple": { "parts": [ { "text": "Purple", "color": "8932B8" } ] },
-        "color-red": { "parts": [ { "text": "Red", "color": "B02E26" } ] },
-        "color-white": { "parts": [ { "text": "White", "color": "F9FFFE" } ] },
-        "color-white shiny": { "parts": [ { "text": "White", "color": "F9FFFE" } ] },
-        "color-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
-        "color-gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.gray", "color": "474F52" } ] },
-        "color-light_gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.light_gray", "color": "9D9D97" } ] }
+        "color-black": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-black",
+          "colors": [
+            "1D1D21"
+          ]
+        },
+        "color-blue": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-blue",
+          "colors": [
+            "3C44AA"
+          ]
+        },
+        "color-brown": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-brown",
+          "colors": [
+            "835432"
+          ]
+        },
+        "color-cyan": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-cyan",
+          "colors": [
+            "169C9C"
+          ]
+        },
+        "color-green": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-green",
+          "colors": [
+            "5E7C16"
+          ]
+        },
+        "color-light_blue": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-light_blue",
+          "colors": [
+            "3AB3DA"
+          ]
+        },
+        "color-lime": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-lime",
+          "colors": [
+            "80C71F"
+          ]
+        },
+        "color-magenta": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-magenta",
+          "colors": [
+            "C74EBD"
+          ]
+        },
+        "color-orange": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-orange",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "color-pink": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-pink",
+          "colors": [
+            "F38BAA"
+          ]
+        },
+        "color-purple": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-purple",
+          "colors": [
+            "8932B8"
+          ]
+        },
+        "color-red": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-red",
+          "colors": [
+            "B02E26"
+          ]
+        },
+        "color-white": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-white",
+          "colors": [
+            "F9FFFE"
+          ]
+        },
+        "color-white shiny": {
+          "translationKey": "betterpokedexscanner.variant.color_white_shiny",
+          "colors": [
+            "F9FFFE"
+          ]
+        },
+        "color-yellow": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-yellow",
+          "colors": [
+            "FED83D"
+          ]
+        },
+        "color-gray": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-gray",
+          "colors": [
+            "474F52"
+          ]
+        },
+        "color-light_gray": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.color-light_gray",
+          "colors": [
+            "9D9D97"
+          ]
+        }
       }
     },
-
     {
-      "headerLabel": "Authenticity",
-      "species": ["cobblemon:sinistea","cobblemon:polteageist","cobblemon:poltchageist","cobblemon:sinistcha"],
-      "aspectLabels": {
-        "antique": "Antique",
-        "phony": "Phony",
-        "masterpiece": "Masterpiece",
-        "unremarkable": "Unremarkable",
-        "artisan": "Artisan",
-        "counterfeit": "Counterfeit"
+      "species": [
+        "cobblemon:sinistea",
+        "cobblemon:polteageist",
+        "cobblemon:poltchageist",
+        "cobblemon:sinistcha"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.authenticity",
+      "aspectTranslationKeys": {
+        "antique": "betterpokedexscanner.variant.antique",
+        "phony": "betterpokedexscanner.variant.phony",
+        "masterpiece": "betterpokedexscanner.variant.masterpiece",
+        "unremarkable": "betterpokedexscanner.variant.unremarkable",
+        "artisan": "betterpokedexscanner.variant.artisan",
+        "counterfeit": "betterpokedexscanner.variant.counterfeit"
       }
     },
-
     {
-      "headerLabel": "Decoration",
-      "species": ["cobblemon:alcremie"],
+      "species": [
+        "cobblemon:alcremie"
+      ],
       "aspectDisplays": {
-        "decoration-strawberry": { "parts": [ { "text": "Strawberry", "color": "DD5668" }, { "text": " Sweet" } ] },
-        "decoration-berry": { "parts": [ { "text": "Berry", "color": "2E4D93" }, { "text": " Sweet" } ] },
-        "decoration-clover": { "parts": [ { "text": "Clover", "color": "5C8B28" }, { "text": " Sweet" } ] },
-        "decoration-flower": { "parts": [ { "text": "Flower", "color": "EC893A" }, { "text": " Sweet" } ] },
-        "decoration-love": { "parts": [ { "text": "Love", "color": "FA9FBB" }, { "text": " Sweet" } ] },
-        "decoration-ribbon": { "parts": [ { "text": "Ribbon", "color": "994EC4" }, { "text": " Sweet" } ] },
-        "decoration-star": { "parts": [ { "text": "Star", "color": "FAD91D" }, { "text": " Sweet" } ] }
-      }
+        "decoration-strawberry": {
+          "translationKey": "betterpokedexscanner.variant.decoration_strawberry",
+          "colors": [
+            "DD5668"
+          ]
+        },
+        "decoration-berry": {
+          "translationKey": "betterpokedexscanner.variant.decoration_berry",
+          "colors": [
+            "2E4D93"
+          ]
+        },
+        "decoration-clover": {
+          "translationKey": "betterpokedexscanner.variant.decoration_clover",
+          "colors": [
+            "5C8B28"
+          ]
+        },
+        "decoration-flower": {
+          "translationKey": "betterpokedexscanner.variant.decoration_flower",
+          "colors": [
+            "EC893A"
+          ]
+        },
+        "decoration-love": {
+          "translationKey": "betterpokedexscanner.variant.decoration_love",
+          "colors": [
+            "FA9FBB"
+          ]
+        },
+        "decoration-ribbon": {
+          "translationKey": "betterpokedexscanner.variant.decoration_ribbon",
+          "colors": [
+            "994EC4"
+          ]
+        },
+        "decoration-star": {
+          "translationKey": "betterpokedexscanner.variant.decoration_star",
+          "colors": [
+            "FAD91D"
+          ]
+        }
+      },
+      "headerTranslationKey": "cobblemon.pokedex.variation.decoration"
     },
-
     {
-      "headerLabel": "Cream",
-      "species": ["cobblemon:alcremie"],
+      "species": [
+        "cobblemon:alcremie"
+      ],
       "aspectDisplays": {
         "cream-vanilla": {
-          "parts": [
-            { "text": "Van", "color": "F9F9DE" },
-            { "text": "i", "color": "FBD5DA" },
-            { "text": "lla C", "color": "F9F9DE" },
-            { "text": "r", "color": "FBD5DA" },
-            { "text": "eam", "color": "F9F9DE" }
+          "translationKey": "betterpokedexscanner.variant.cream_vanilla",
+          "colors": [
+            "F9F9DE",
+            "FBD5DA",
+            "F9F9DE",
+            "FBD5DA",
+            "F9F9DE"
           ]
         },
         "cream-caramel_swirl": {
-          "parts": [
-            { "text": "Ca", "color": "FFFFFF" },
-            { "text": "ra", "color": "FBF4C1" },
-            { "text": "m", "color": "DEA986" },
-            { "text": "el", "color": "FBF4C1" },
-            { "text": " S", "color": "DEA986" },
-            { "text": "wi", "color": "FBF4C1" },
-            { "text": "rl", "color": "FFFFFF" }
+          "translationKey": "betterpokedexscanner.variant.cream_caramel_swirl",
+          "colors": [
+            "FFFFFF",
+            "FBF4C1",
+            "DEA986",
+            "FBF4C1",
+            "DEA986",
+            "FBF4C1",
+            "FFFFFF"
           ]
         },
         "cream-ruby": {
-          "parts": [
-            { "text": "Rub", "color": "F0D1DC" },
-            { "text": "y", "color": "F8959C" },
-            { "text": " Cr", "color": "F0D1DC" },
-            { "text": "e", "color": "F8959C" },
-            { "text": "am", "color": "F0D1DC" }
+          "translationKey": "betterpokedexscanner.variant.cream_ruby",
+          "colors": [
+            "F0D1DC",
+            "F8959C",
+            "F0D1DC",
+            "F8959C",
+            "F0D1DC"
           ]
         },
         "cream-matcha": {
-          "parts": [
-            { "text": "Mat", "color": "D4E1B4" },
-            { "text": "c", "color": "93AB50" },
-            { "text": "ha Cr", "color": "D4E1B4" },
-            { "text": "e", "color": "93AB50" },
-            { "text": "am", "color": "D4E1B4" }
+          "translationKey": "betterpokedexscanner.variant.cream_matcha",
+          "colors": [
+            "D4E1B4",
+            "93AB50",
+            "D4E1B4",
+            "93AB50",
+            "D4E1B4"
           ]
         },
         "cream-mint": {
-          "parts": [
-            { "text": "Mi", "color": "FFFFFF" },
-            { "text": "nt", "color": "B0D3EB" },
-            { "text": " C", "color": "9AB0DD" },
-            { "text": "re", "color": "B0D3EB" },
-            { "text": "am", "color": "FFFFFF" }
+          "translationKey": "betterpokedexscanner.variant.cream_mint",
+          "colors": [
+            "FFFFFF",
+            "B0D3EB",
+            "9AB0DD",
+            "B0D3EB",
+            "FFFFFF"
           ]
         },
         "cream-lemon": {
-          "parts": [
-            { "text": "Le", "color": "FFFFFF" },
-            { "text": "mo", "color": "E7E36E" },
-            { "text": "n C", "color": "D6D15E" },
-            { "text": "re", "color": "E7E36E" },
-            { "text": "am", "color": "FFFFFF" }
+          "translationKey": "betterpokedexscanner.variant.cream_lemon",
+          "colors": [
+            "FFFFFF",
+            "E7E36E",
+            "D6D15E",
+            "E7E36E",
+            "FFFFFF"
           ]
         },
         "cream-salted": {
-          "parts": [
-            { "text": "Sal", "color": "DAD7DB" },
-            { "text": "t", "color": "BCBEDC" },
-            { "text": "ed Cr", "color": "DAD7DB" },
-            { "text": "e", "color": "BCBEDC" },
-            { "text": "am", "color": "DAD7DB" }
+          "translationKey": "betterpokedexscanner.variant.cream_salted",
+          "colors": [
+            "DAD7DB",
+            "BCBEDC",
+            "DAD7DB",
+            "BCBEDC",
+            "DAD7DB"
           ]
         },
         "cream-ruby_swirl": {
-          "parts": [
-            { "text": "Ru", "color": "D1B6C0" },
-            { "text": "by", "color": "E6E7DF" },
-            { "text": " S", "color": "D1B6C0" },
-            { "text": "wi", "color": "E6E7DF" },
-            { "text": "rl", "color": "D1B6C0" }
+          "translationKey": "betterpokedexscanner.variant.cream_ruby_swirl",
+          "colors": [
+            "D1B6C0",
+            "E6E7DF",
+            "D1B6C0",
+            "E6E7DF",
+            "D1B6C0"
           ]
         },
         "cream-rainbow_swirl": {
-          "parts": [
-            { "text": "Ra", "color": "D7BBC5" },
-            { "text": "inb", "color": "F4F0CB" },
-            { "text": "ow S", "color": "FBF5B6" },
-            { "text": "wi", "color": "F4F0CB" },
-            { "text": "rl", "color": "C6E3FA" }
+          "translationKey": "betterpokedexscanner.variant.cream_rainbow_swirl",
+          "colors": [
+            "D7BBC5",
+            "F4F0CB",
+            "FBF5B6",
+            "F4F0CB",
+            "C6E3FA"
           ]
         }
-      }
+      },
+      "headerTranslationKey": "cobblemon.pokedex.variation.cream"
     },
-
     {
       "headerTranslationKey": "betterpokedexscanner.header.plumage_color",
-      "species": ["cobblemon:squawkabilly"],
+      "species": [
+        "cobblemon:squawkabilly"
+      ],
       "aspectDisplays": {
-        "squawkabilly-color-blue": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
-        "squawkabilly-color-green": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
-        "squawkabilly-color-yellow": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
-        "squawkabilly-color-gray": { "parts": [ { "translationKey": "betterpokedexscanner.aspectLabel.gray", "color": "474F52" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Regional Bias",
-      "aspectDisplays": {
-        "region-bias-alola": { "parts": [ { "text": "Alolan", "color": "DC5A40" } ] },
-        "region-bias-galar": { "parts": [ { "text": "Galarian", "color": "AC379E" } ] },
-        "region-bias-hisui": { "parts": [ { "text": "Hisuian", "color": "36597B" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Cocoon Silk",
-      "species": ["cobblemon:wurmple"],
-      "aspectDisplays": {
-        "silcoon-cocoon": { "parts": [ { "text": "Silcoon", "color": "E6E4D7" } ] },
-        "cascoon-cocoon": { "parts": [ { "text": "Cascoon", "color": "DDBFCD" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Forecast Form",
-      "species": ["cobblemon:castform","cobblemon:cherrim"],
-      "aspectDisplays": {
-        "normal-form": { "parts": [ { "text": "Normal", "color": "C1C2C1" } ] },
-        "sunny-form": { "parts": [ { "text": "Sunny", "color": "FFE88F" } ] },
-        "rainy-form": { "parts": [ { "text": "Rainy", "color": "85B2FD" } ] },
-        "snowy-form": { "parts": [ { "text": "Snowy", "color": "A5DFEC" } ] },
-        "overcast-form": { "parts": [ { "text": "Overcast", "color": "C1C2C1" } ] },
-        "sunshine-form": { "parts": [ { "text": "Sunshine", "color": "FFE88F" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Morphology",
-      "species": ["cobblemon:deoxys","cobblemon:palafin"],
-      "aspectDisplays": {
-        "normal-forme": { "parts": [
-          { "text": "Normal", "color": "C1C2C1" },
-          { "text": " Forme" }
-        ] },
-        "attack-forme": { "parts": [
-          { "text": "Attack", "color": "F5DE69" },
-          { "text": " Forme" }
-        ] },
-        "defense-forme": { "parts": [
-          { "text": "Defense", "color": "F09A65"},
-          { "text": " Forme" }
-        ] },
-        "speed-forme": { "parts": [
-          { "text": "Speed", "color": "E46CCA" },
-          { "text": " Forme" }
-        ] }
-      }
-    },
-
-    {
-      "headerLabel": "Multitype",
-      "species": ["cobblemon:arceus"],
-      "aspectDisplays": {
-        "fighting-plate": { "parts": [ { "text": "Fighting", "color": "FFAC59" }, { "text": " Plate" } ] },
-        "flying-plate": { "parts": [ { "text": "Flying", "color": "ADD2F5" }, { "text": " Plate" } ] },
-        "poison-plate": { "parts": [ { "text": "Poison", "color": "B884DD" }, { "text": " Plate" } ] },
-        "ground-plate": { "parts": [ { "text": "Ground", "color": "B88E6F" }, { "text": " Plate" } ] },
-        "rock-plate": { "parts": [ { "text": "Rock", "color": "AFA981" }, { "text": " Plate" } ] },
-        "bug-plate": { "parts": [ { "text": "Bug", "color": "B8C26A" }, { "text": " Plate" } ] },
-        "ghost-plate": { "parts": [ { "text": "Ghost", "color": "A284A2" }, { "text": " Plate" } ] },
-        "steel-plate": { "parts": [ { "text": "Steel", "color": "98C2D1" }, { "text": " Plate" } ] },
-        "fire-plate": { "parts": [ { "text": "Fire", "color": "EF7374" }, { "text": " Plate" } ] },
-        "water-plate": { "parts": [ { "text": "Water", "color": "2980EF" }, { "text": " Plate" } ] },
-        "grass-plate": { "parts": [ { "text": "Grass", "color": "82C274" }, { "text": " Plate" } ] },
-        "electric-plate": { "parts": [ { "text": "Electric", "color": "FCD659" }, { "text": " Plate" } ] },
-        "psychic-plate": { "parts": [ { "text": "Psychic", "color": "F584A8" }, { "text": " Plate" } ] },
-        "ice-plate": { "parts": [ { "text": "Ice", "color": "81DFF7" }, { "text": " Plate" } ] },
-        "dragon-plate": { "parts": [ { "text": "Dragon", "color": "8D98EC" }, { "text": " Plate" } ] },
-        "dark-plate": { "parts": [ { "text": "Dark", "color": "998B8C" }, { "text": " Plate" } ] },
-        "fairy-plate": { "parts": [ { "text": "Fairy", "color": "F5A2F5" }, { "text": " Plate" } ] },
-        "normal-plate": { "parts": [ { "text": "Normal", "color": "C1C2C1" }, { "text": " Plate" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Cloak Material",
-      "species": ["cobblemon:burmy","cobblemon:wormadam","cobblemon:mothim"],
-      "aspectDisplays": {
-        "sandy-cloak": { "parts": [ { "text": "Sandy", "color": "D0C284" } ] },
-        "plant-cloak": { "parts": [ { "text": "Plant", "color": "639643" } ] },
-        "trash-cloak": { "parts": [ { "text": "Trash", "color": "F59AB1" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Techno Drive",
-      "species": ["cobblemon:genesect"],
-      "aspectDisplays": {
-        "water-drive": { "parts": [ { "text": "Douse", "color": "2980EF" }, { "text": " Drive" } ] },
-        "electric-drive": { "parts": [ { "text": "Shock", "color": "FCD659" }, { "text": " Drive" } ] },
-        "fire-drive": { "parts": [ { "text": "Burn", "color": "EF7374" }, { "text": " Drive" } ] },
-        "ice-drive": { "parts": [ { "text": "Chill", "color": "81DFF7" }, { "text": " Drive" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Fusion Aspects",
-      "aspectDisplays": {
-        "white-fusion": { "parts": [ { "text": "Reshiram", "color": "E1E1E1" } ] },
-        "black-fusion": { "parts": [ { "text": "Zekrom", "color": "444444" } ] },
-        "dusk-fusion": { "parts": [ { "text": "Solgaleo", "color": "F1912B" } ] },
-        "dawn-fusion": { "parts": [ { "text": "Lunala", "color": "5599CA" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Hunger Level",
-      "species": ["cobblemon:morpeko"],
-      "aspectDisplays": {
-        "full_belly-mode": { "parts": [ { "text": "Full Belly", "color": "FDFAAF" } ] },
-        "hangry-mode": { "parts": [ { "text": "Hangry", "color": "805493" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Lifeforce Radiance",
-      "species": ["cobblemon:xerneas"],
-      "aspectDisplays": {
-        "neutral-mode": { "parts": [ { "text": "Neutral", "color": "BBE0E1" } ] },
-        "active-mode": {
-          "parts": [
-            { "text": "Ac", "color": "55A5B9" },
-            { "text": "t", "color": "BC8CB4" },
-            { "text": "i", "color": "E84B46" },
-            { "text": "ve", "color": "EB8730" }
+        "squawkabilly-color-blue": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.squawkabilly-color-blue",
+          "colors": [
+            "3C44AA"
+          ]
+        },
+        "squawkabilly-color-green": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.squawkabilly-color-green",
+          "colors": [
+            "5E7C16"
+          ]
+        },
+        "squawkabilly-color-yellow": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.squawkabilly-color-yellow",
+          "colors": [
+            "FED83D"
+          ]
+        },
+        "squawkabilly-color-gray": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.squawkabilly-color-gray",
+          "colors": [
+            "474F52"
           ]
         }
       }
     },
-
     {
-      "headerLabel": "Daruma State",
-      "species": ["cobblemon:darmanitan"],
-      "aspectLabels": {
-        "zen-mode": "Zen Mode",
-        "standard-mode": "Standard Mode"
-      }
-    },
-
-    {
-      "headerLabel": "Cellular Construction",
-      "species": ["cobblemon:zygarde"],
-      "aspectLabels": {
-        "10-percent": "10% Complete",
-        "50-percent": "50% Complete",
-        "power-construct": "Power Construct",
-        "complete-percent": "Complete"
-      }
-    },
-
-    {
-      "headerLabel": "Schooling State",
-      "species": ["cobblemon:wishiwashi"],
-      "aspectLabels": {
-        "solo-form": "Solo",
-        "school-form": "Schooling"
-      }
-    },
-
-    {
-      "headerLabel": "Ice Face status",
-      "species": ["cobblemon:eiscue"],
       "aspectDisplays": {
-        "ice_face": { "parts": [ { "text": "Ice", "color": "81DFF7" } ] },
-        "noice_face": { "parts": [ { "text": "Noice", "color": "81DFF7" } ] }
+        "region-bias-alola": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.region-bias-alola",
+          "colors": [
+            "DC5A40"
+          ]
+        },
+        "region-bias-galar": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.region-bias-galar",
+          "colors": [
+            "AC379E"
+          ]
+        },
+        "region-bias-hisui": {
+          "translationKey": "cobblemon.ui.pokedex.info.form.region-bias-hisui",
+          "colors": [
+            "36597B"
+          ]
+        }
+      },
+      "headerTranslationKey": "cobblemon.pokedex.variation.region_bias"
+    },
+    {
+      "species": [
+        "cobblemon:wurmple"
+      ],
+      "aspectDisplays": {
+        "silcoon-cocoon": {
+          "translationKey": "betterpokedexscanner.variant.silcoon_cocoon",
+          "colors": [
+            "E6E4D7"
+          ]
+        },
+        "cascoon-cocoon": {
+          "translationKey": "betterpokedexscanner.variant.cascoon_cocoon",
+          "colors": [
+            "DDBFCD"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cocoon_silk"
+    },
+    {
+      "species": [
+        "cobblemon:castform",
+        "cobblemon:cherrim"
+      ],
+      "aspectDisplays": {
+        "normal-form": {
+          "translationKey": "betterpokedexscanner.variant.normal_form",
+          "colors": [
+            "C1C2C1"
+          ]
+        },
+        "sunny-form": {
+          "translationKey": "betterpokedexscanner.variant.sunny_form",
+          "colors": [
+            "FFE88F"
+          ]
+        },
+        "rainy-form": {
+          "translationKey": "betterpokedexscanner.variant.rainy_form",
+          "colors": [
+            "85B2FD"
+          ]
+        },
+        "snowy-form": {
+          "translationKey": "betterpokedexscanner.variant.snowy_form",
+          "colors": [
+            "A5DFEC"
+          ]
+        },
+        "overcast-form": {
+          "translationKey": "betterpokedexscanner.variant.overcast_form",
+          "colors": [
+            "C1C2C1"
+          ]
+        },
+        "sunshine-form": {
+          "translationKey": "betterpokedexscanner.variant.sunshine_form",
+          "colors": [
+            "FFE88F"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.forecast_form"
+    },
+    {
+      "species": [
+        "cobblemon:deoxys",
+        "cobblemon:palafin"
+      ],
+      "aspectDisplays": {
+        "normal-forme": {
+          "translationKey": "betterpokedexscanner.variant.normal_forme",
+          "colors": [
+            "C1C2C1"
+          ]
+        },
+        "attack-forme": {
+          "translationKey": "betterpokedexscanner.variant.attack_forme",
+          "colors": [
+            "F5DE69"
+          ]
+        },
+        "defense-forme": {
+          "translationKey": "betterpokedexscanner.variant.defense_forme",
+          "colors": [
+            "F09A65"
+          ]
+        },
+        "speed-forme": {
+          "translationKey": "betterpokedexscanner.variant.speed_forme",
+          "colors": [
+            "E46CCA"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.morphology"
+    },
+    {
+      "species": [
+        "cobblemon:arceus"
+      ],
+      "aspectDisplays": {
+        "fighting-plate": {
+          "translationKey": "betterpokedexscanner.variant.fighting_plate",
+          "colors": [
+            "FFAC59"
+          ]
+        },
+        "flying-plate": {
+          "translationKey": "betterpokedexscanner.variant.flying_plate",
+          "colors": [
+            "ADD2F5"
+          ]
+        },
+        "poison-plate": {
+          "translationKey": "betterpokedexscanner.variant.poison_plate",
+          "colors": [
+            "B884DD"
+          ]
+        },
+        "ground-plate": {
+          "translationKey": "betterpokedexscanner.variant.ground_plate",
+          "colors": [
+            "B88E6F"
+          ]
+        },
+        "rock-plate": {
+          "translationKey": "betterpokedexscanner.variant.rock_plate",
+          "colors": [
+            "AFA981"
+          ]
+        },
+        "bug-plate": {
+          "translationKey": "betterpokedexscanner.variant.bug_plate",
+          "colors": [
+            "B8C26A"
+          ]
+        },
+        "ghost-plate": {
+          "translationKey": "betterpokedexscanner.variant.ghost_plate",
+          "colors": [
+            "A284A2"
+          ]
+        },
+        "steel-plate": {
+          "translationKey": "betterpokedexscanner.variant.steel_plate",
+          "colors": [
+            "98C2D1"
+          ]
+        },
+        "fire-plate": {
+          "translationKey": "betterpokedexscanner.variant.fire_plate",
+          "colors": [
+            "EF7374"
+          ]
+        },
+        "water-plate": {
+          "translationKey": "betterpokedexscanner.variant.water_plate",
+          "colors": [
+            "2980EF"
+          ]
+        },
+        "grass-plate": {
+          "translationKey": "betterpokedexscanner.variant.grass_plate",
+          "colors": [
+            "82C274"
+          ]
+        },
+        "electric-plate": {
+          "translationKey": "betterpokedexscanner.variant.electric_plate",
+          "colors": [
+            "FCD659"
+          ]
+        },
+        "psychic-plate": {
+          "translationKey": "betterpokedexscanner.variant.psychic_plate",
+          "colors": [
+            "F584A8"
+          ]
+        },
+        "ice-plate": {
+          "translationKey": "betterpokedexscanner.variant.ice_plate",
+          "colors": [
+            "81DFF7"
+          ]
+        },
+        "dragon-plate": {
+          "translationKey": "betterpokedexscanner.variant.dragon_plate",
+          "colors": [
+            "8D98EC"
+          ]
+        },
+        "dark-plate": {
+          "translationKey": "betterpokedexscanner.variant.dark_plate",
+          "colors": [
+            "998B8C"
+          ]
+        },
+        "fairy-plate": {
+          "translationKey": "betterpokedexscanner.variant.fairy_plate",
+          "colors": [
+            "F5A2F5"
+          ]
+        },
+        "normal-plate": {
+          "translationKey": "betterpokedexscanner.variant.normal_plate",
+          "colors": [
+            "C1C2C1"
+          ]
+        }
+      },
+      "headerTranslationKey": "cobblemon.ability.multitype"
+    },
+    {
+      "species": [
+        "cobblemon:burmy",
+        "cobblemon:wormadam",
+        "cobblemon:mothim"
+      ],
+      "aspectDisplays": {
+        "sandy-cloak": {
+          "translationKey": "betterpokedexscanner.variant.sandy_cloak",
+          "colors": [
+            "D0C284"
+          ]
+        },
+        "plant-cloak": {
+          "translationKey": "betterpokedexscanner.variant.plant_cloak",
+          "colors": [
+            "639643"
+          ]
+        },
+        "trash-cloak": {
+          "translationKey": "betterpokedexscanner.variant.trash_cloak",
+          "colors": [
+            "F59AB1"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.cloak_material"
+    },
+    {
+      "species": [
+        "cobblemon:genesect"
+      ],
+      "aspectDisplays": {
+        "water-drive": {
+          "translationKey": "betterpokedexscanner.variant.water_drive",
+          "colors": [
+            "2980EF"
+          ]
+        },
+        "electric-drive": {
+          "translationKey": "betterpokedexscanner.variant.electric_drive",
+          "colors": [
+            "FCD659"
+          ]
+        },
+        "fire-drive": {
+          "translationKey": "betterpokedexscanner.variant.fire_drive",
+          "colors": [
+            "EF7374"
+          ]
+        },
+        "ice-drive": {
+          "translationKey": "betterpokedexscanner.variant.ice_drive",
+          "colors": [
+            "81DFF7"
+          ]
+        }
+      },
+      "headerTranslationKey": "cobblemon.ability.technodrive"
+    },
+    {
+      "aspectDisplays": {
+        "white-fusion": {
+          "translationKey": "betterpokedexscanner.variant.white_fusion",
+          "colors": [
+            "E1E1E1"
+          ]
+        },
+        "black-fusion": {
+          "translationKey": "betterpokedexscanner.variant.black_fusion",
+          "colors": [
+            "444444"
+          ]
+        },
+        "dusk-fusion": {
+          "translationKey": "betterpokedexscanner.variant.dusk_fusion",
+          "colors": [
+            "F1912B"
+          ]
+        },
+        "dawn-fusion": {
+          "translationKey": "betterpokedexscanner.variant.dawn_fusion",
+          "colors": [
+            "5599CA"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.fusion_aspects"
+    },
+    {
+      "species": [
+        "cobblemon:morpeko"
+      ],
+      "aspectDisplays": {
+        "full_belly-mode": {
+          "translationKey": "betterpokedexscanner.variant.full_belly_mode",
+          "colors": [
+            "FDFAAF"
+          ]
+        },
+        "hangry-mode": {
+          "translationKey": "betterpokedexscanner.variant.hangry_mode",
+          "colors": [
+            "805493"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.hunger_level"
+    },
+    {
+      "species": [
+        "cobblemon:xerneas"
+      ],
+      "aspectDisplays": {
+        "neutral-mode": {
+          "translationKey": "betterpokedexscanner.variant.neutral_mode",
+          "colors": [
+            "BBE0E1"
+          ]
+        },
+        "active-mode": {
+          "translationKey": "betterpokedexscanner.variant.active_mode",
+          "colors": [
+            "55A5B9",
+            "BC8CB4",
+            "E84B46",
+            "EB8730"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.lifeforce_radiance"
+    },
+    {
+      "species": [
+        "cobblemon:darmanitan"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.daruma_state",
+      "aspectTranslationKeys": {
+        "zen-mode": "betterpokedexscanner.variant.zen_mode",
+        "standard-mode": "betterpokedexscanner.variant.standard_mode"
       }
     },
-
     {
-      "headerLabel": "Family Composition",
-      "species": ["cobblemon:maushold","cobblemon:tandemaus"],
-      "aspectLabels": {
-        "maushold-family-three": "Family of Three",
-        "maushold-family-four": "Family of Four"
+      "species": [
+        "cobblemon:zygarde"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.cellular_construction",
+      "aspectTranslationKeys": {
+        "10-percent": "betterpokedexscanner.variant.10_percent",
+        "50-percent": "betterpokedexscanner.variant.50_percent",
+        "power-construct": "betterpokedexscanner.variant.power_construct",
+        "complete-percent": "betterpokedexscanner.variant.complete_percent"
       }
     },
-
     {
-      "headerLabel": "Netherite Coating",
-      "species": ["cobblemon:gholdengo"],
+      "species": [
+        "cobblemon:wishiwashi"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.schooling_state",
+      "aspectTranslationKeys": {
+        "solo-form": "betterpokedexscanner.variant.solo_form",
+        "school-form": "betterpokedexscanner.variant.school_form"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:eiscue"
+      ],
+      "aspectDisplays": {
+        "ice_face": {
+          "translationKey": "betterpokedexscanner.variant.ice_face",
+          "colors": [
+            "81DFF7"
+          ]
+        },
+        "noice_face": {
+          "translationKey": "betterpokedexscanner.variant.noice_face",
+          "colors": [
+            "81DFF7"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.ice_face_status"
+    },
+    {
+      "species": [
+        "cobblemon:maushold",
+        "cobblemon:tandemaus"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.family_composition",
+      "aspectTranslationKeys": {
+        "maushold-family-four": "cobblemon.ui.pokedex.info.form.maushold-family-four",
+        "maushold-family-three": "betterpokedexscanner.variant.maushold_family_three"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:gholdengo"
+      ],
       "aspectDisplays": {
         "netherite-coating-stage1": {
-          "parts": [
-            { "text": "1", "color": "5B4B4F" },
-            { "text": "2.5 Percent", "color": "F6D04D" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.netherite-coating-stage1",
+          "colors": [
+            "5B4B4F",
+            "F6D04D"
           ]
         },
         "netherite-coating-stage2": {
-          "parts": [
-            { "text": "25", "color": "5B4B4F" },
-            { "text": " Percent", "color": "F6D04D" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.netherite-coating-stage2",
+          "colors": [
+            "5B4B4F",
+            "F6D04D"
           ]
         },
         "netherite-coating-stage3": {
-          "parts": [
-            { "text": "37.5", "color": "5B4B4F" },
-            { "text": " Percent", "color": "F6D04D" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.netherite-coating-stage3",
+          "colors": [
+            "5B4B4F",
+            "F6D04D"
           ]
         },
         "netherite-coating-stage4": {
-          "parts": [
-            { "text": "50 Pe", "color": "5B4B4F" },
-            { "text": "rcent", "color": "F6D04D" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.netherite-coating-stage4",
+          "colors": [
+            "5B4B4F",
+            "F6D04D"
           ]
         },
         "netherite-coating-stage5": {
-          "parts": [
-            { "text": "62.5 Pe", "color": "5B4B4F" },
-            { "text": "rcent", "color": "F6D04D" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.netherite-coating-stage5",
+          "colors": [
+            "5B4B4F",
+            "F6D04D"
           ]
         },
         "netherite-coating-stage6": {
-          "parts": [
-            { "text": "75 Perc", "color": "5B4B4F" },
-            { "text": "ent", "color": "F6D04D" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.netherite-coating-stage6",
+          "colors": [
+            "5B4B4F",
+            "F6D04D"
           ]
         },
         "netherite-coating-stage7": {
-          "parts": [
-            { "text": "87.5 Perce", "color": "5B4B4F" },
-            { "text": "nt", "color": "F6D04D" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.netherite-coating-stage7",
+          "colors": [
+            "5B4B4F",
+            "F6D04D"
           ]
         },
         "netherite-coating-full": {
-          "parts": [
-            { "text": "Complete", "color": "5B4B4F" }
+          "translationKey": "cobblemon.ui.pokedex.info.form.netherite-coating-full",
+          "colors": [
+            "5B4B4F"
+          ]
+        }
+      },
+      "headerTranslationKey": "cobblemon.pokedex.variation.netherite_coating"
+    },
+    {
+      "species": [
+        "cobblemon:mimikyu"
+      ],
+      "headerTranslationKey": "cobblemon.ability.disguise",
+      "aspectTranslationKeys": {
+        "disguised-form": "betterpokedexscanner.variant.disguised_form",
+        "busted-form": "betterpokedexscanner.variant.busted_form"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:ogerpon"
+      ],
+      "aspectDisplays": {
+        "teal-mask": {
+          "translationKey": "betterpokedexscanner.variant.teal_mask",
+          "colors": [
+            "46B744"
+          ]
+        },
+        "wellspring-mask": {
+          "translationKey": "betterpokedexscanner.variant.wellspring_mask",
+          "colors": [
+            "25C7E8"
+          ]
+        },
+        "hearthflame-mask": {
+          "translationKey": "betterpokedexscanner.variant.hearthflame_mask",
+          "colors": [
+            "B31609"
+          ]
+        },
+        "cornerstone-mask": {
+          "translationKey": "betterpokedexscanner.variant.cornerstone_mask",
+          "colors": [
+            "4C5051"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.mask"
+    },
+    {
+      "headerTranslationKey": "betterpokedexscanner.header.core_color",
+      "species": [
+        "cobblemon:minior"
+      ],
+      "aspectDisplays": {
+        "red-core": {
+          "translationKey": "betterpokedexscanner.variant.red_core",
+          "colors": [
+            "B02E26"
+          ]
+        },
+        "orange-core": {
+          "translationKey": "betterpokedexscanner.variant.orange_core",
+          "colors": [
+            "F9801D"
+          ]
+        },
+        "yellow-core": {
+          "translationKey": "betterpokedexscanner.variant.yellow_core",
+          "colors": [
+            "FED83D"
+          ]
+        },
+        "green-core": {
+          "translationKey": "betterpokedexscanner.variant.green_core",
+          "colors": [
+            "5E7C16"
+          ]
+        },
+        "blue-core": {
+          "translationKey": "betterpokedexscanner.variant.blue_core",
+          "colors": [
+            "3C44AA"
+          ]
+        },
+        "indigo-core": {
+          "translationKey": "betterpokedexscanner.variant.indigo_core",
+          "colors": [
+            "6D5DD3"
+          ]
+        },
+        "violet-core": {
+          "translationKey": "betterpokedexscanner.variant.violet_core",
+          "colors": [
+            "A453AF"
           ]
         }
       }
     },
-
     {
-      "headerLabel": "Disguise",
-      "species": ["cobblemon:mimikyu"],
-      "aspectLabels": {
-        "disguised-form": "Disguised",
-        "busted-form": "Busted"
+      "species": [
+        "cobblemon:minior"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.shields",
+      "aspectTranslationKeys": {
+        "core-form": "betterpokedexscanner.variant.core_form",
+        "meteor-form": "betterpokedexscanner.variant.meteor_form"
       }
     },
-
     {
-      "headerLabel": "Mask",
-      "species": ["cobblemon:ogerpon"],
+      "species": [
+        "cobblemon:oricorio"
+      ],
       "aspectDisplays": {
-        "teal-mask": { "parts": [ { "text": "Teal", "color": "46B744" }, { "text": " Mask" } ] },
-        "wellspring-mask": { "parts": [ { "text": "Wellspring", "color": "25C7E8" }, { "text": " Mask" } ] },
-        "hearthflame-mask": { "parts": [ { "text": "Hearthflame", "color": "B31609" }, { "text": " Mask" } ] },
-        "cornerstone-mask": { "parts": [ { "text": "Cornerstone", "color": "4C5051" }, { "text": " Mask" } ] }
-      }
+        "baile-style": {
+          "translationKey": "betterpokedexscanner.variant.baile_style",
+          "colors": [
+            "DD5958"
+          ]
+        },
+        "pom_pom-style": {
+          "translationKey": "betterpokedexscanner.variant.pom_pom_style",
+          "colors": [
+            "FEFAA3"
+          ]
+        },
+        "pa'u-style": {
+          "translationKey": "betterpokedexscanner.variant.pa_u_style",
+          "colors": [
+            "D07C93"
+          ]
+        },
+        "sensu-style": {
+          "translationKey": "betterpokedexscanner.variant.sensu_style",
+          "colors": [
+            "878BC5"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.dance_style"
     },
-
     {
-      "headerTranslationKey": "betterpokedexscanner.header.core_color",
-      "species": ["cobblemon:minior"],
+      "species": [
+        "cobblemon:silvally"
+      ],
       "aspectDisplays": {
-        "red-core": { "parts": [ { "text": "Red", "color": "B02E26" } ] },
-        "orange-core": { "parts": [ { "text": "Orange", "color": "F9801D" } ] },
-        "yellow-core": { "parts": [ { "text": "Yellow", "color": "FED83D" } ] },
-        "green-core": { "parts": [ { "text": "Green", "color": "5E7C16" } ] },
-        "blue-core": { "parts": [ { "text": "Blue", "color": "3C44AA" } ] },
-        "indigo-core": { "parts": [ { "text": "Indigo", "color": "6D5DD3" } ] },
-        "violet-core": { "parts": [ { "text": "Violet", "color": "A453AF" } ] }
-      }
+        "fighting-memory": {
+          "translationKey": "betterpokedexscanner.variant.fighting_memory",
+          "colors": [
+            "FFAC59"
+          ]
+        },
+        "flying-memory": {
+          "translationKey": "betterpokedexscanner.variant.flying_memory",
+          "colors": [
+            "ADD2F5"
+          ]
+        },
+        "poison-memory": {
+          "translationKey": "betterpokedexscanner.variant.poison_memory",
+          "colors": [
+            "B884DD"
+          ]
+        },
+        "ground-memory": {
+          "translationKey": "betterpokedexscanner.variant.ground_memory",
+          "colors": [
+            "B88E6F"
+          ]
+        },
+        "rock-memory": {
+          "translationKey": "betterpokedexscanner.variant.rock_memory",
+          "colors": [
+            "AFA981"
+          ]
+        },
+        "bug-memory": {
+          "translationKey": "betterpokedexscanner.variant.bug_memory",
+          "colors": [
+            "B8C26A"
+          ]
+        },
+        "ghost-memory": {
+          "translationKey": "betterpokedexscanner.variant.ghost_memory",
+          "colors": [
+            "A284A2"
+          ]
+        },
+        "steel-memory": {
+          "translationKey": "betterpokedexscanner.variant.steel_memory",
+          "colors": [
+            "98C2D1"
+          ]
+        },
+        "fire-memory": {
+          "translationKey": "betterpokedexscanner.variant.fire_memory",
+          "colors": [
+            "EF7374"
+          ]
+        },
+        "water-memory": {
+          "translationKey": "betterpokedexscanner.variant.water_memory",
+          "colors": [
+            "2980EF"
+          ]
+        },
+        "grass-memory": {
+          "translationKey": "betterpokedexscanner.variant.grass_memory",
+          "colors": [
+            "82C274"
+          ]
+        },
+        "electric-memory": {
+          "translationKey": "betterpokedexscanner.variant.electric_memory",
+          "colors": [
+            "FCD659"
+          ]
+        },
+        "psychic-memory": {
+          "translationKey": "betterpokedexscanner.variant.psychic_memory",
+          "colors": [
+            "F584A8"
+          ]
+        },
+        "ice-memory": {
+          "translationKey": "betterpokedexscanner.variant.ice_memory",
+          "colors": [
+            "81DFF7"
+          ]
+        },
+        "dragon-memory": {
+          "translationKey": "betterpokedexscanner.variant.dragon_memory",
+          "colors": [
+            "8D98EC"
+          ]
+        },
+        "dark-memory": {
+          "translationKey": "betterpokedexscanner.variant.dark_memory",
+          "colors": [
+            "998B8C"
+          ]
+        },
+        "fairy-memory": {
+          "translationKey": "betterpokedexscanner.variant.fairy_memory",
+          "colors": [
+            "F5A2F5"
+          ]
+        },
+        "normal-memory": {
+          "translationKey": "betterpokedexscanner.variant.normal_memory",
+          "colors": [
+            "C1C2C1"
+          ]
+        }
+      },
+      "headerTranslationKey": "cobblemon.ability.rkssystem"
     },
-
     {
-      "headerLabel": "Shields",
-      "species": ["cobblemon:minior"],
-      "aspectLabels": {
-        "core-form": "Down",
-        "meteor-form": "Up"
-      }
-    },
-
-    {
-      "headerLabel": "Dance Style",
-      "species": ["cobblemon:oricorio"],
+      "species": [
+        "cobblemon:urshifu"
+      ],
       "aspectDisplays": {
-        "baile-style": { "parts": [ { "text": "Baile", "color": "DD5958" } ] },
-        "pom_pom-style": { "parts": [ { "text": "Pom-Pom", "color": "FEFAA3" } ] },
-        "pa'u-style": { "parts": [ { "text": "Pa'u", "color": "D07C93" } ] },
-        "sensu-style": { "parts": [ { "text": "Sensu", "color": "878BC5" } ] }
+        "single_strike-style": {
+          "translationKey": "betterpokedexscanner.variant.single_strike_style",
+          "colors": [
+            "998B8C"
+          ]
+        },
+        "rapid_strike-style": {
+          "translationKey": "betterpokedexscanner.variant.rapid_strike_style",
+          "colors": [
+            "74ACF5"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.wushu_style"
+    },
+    {
+      "species": [
+        "cobblemon:zamazenta",
+        "cobblemon:zacian"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.heroic_epithet",
+      "baseFormTranslationKey": "betterpokedexscanner.variant.battleworn_hero"
+    },
+    {
+      "species": [
+        "cobblemon:zacian"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.regalia_state",
+      "aspectTranslationKeys": {
+        "hero": "betterpokedexscanner.variant.hero",
+        "crowned": "betterpokedexscanner.variant.crowned"
       }
     },
-
     {
-      "headerLabel": "RKS System",
-      "species": ["cobblemon:silvally"],
+      "species": [
+        "cobblemon:zamazenta"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.regalia_state",
+      "aspectTranslationKeys": {
+        "hero": "betterpokedexscanner.variant.hero",
+        "crowned": "betterpokedexscanner.variant.crowned"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:calyrex"
+      ],
       "aspectDisplays": {
-        "fighting-memory": { "parts": [ { "text": "Fighting", "color": "FFAC59" }, { "text": " Memory" } ] },
-        "flying-memory": { "parts": [ { "text": "Flying", "color": "ADD2F5" }, { "text": " Memory" } ] },
-        "poison-memory": { "parts": [ { "text": "Poison", "color": "B884DD" }, { "text": " Memory" } ] },
-        "ground-memory": { "parts": [ { "text": "Ground", "color": "B88E6F" }, { "text": " Memory" } ] },
-        "rock-memory": { "parts": [ { "text": "Rock", "color": "AFA981" }, { "text": " Memory" } ] },
-        "bug-memory": { "parts": [ { "text": "Bug", "color": "B8C26A" }, { "text": " Memory" } ] },
-        "ghost-memory": { "parts": [ { "text": "Ghost", "color": "A284A2" }, { "text": " Memory" } ] },
-        "steel-memory": { "parts": [ { "text": "Steel", "color": "98C2D1" }, { "text": " Memory" } ] },
-        "fire-memory": { "parts": [ { "text": "Fire", "color": "EF7374" }, { "text": " Memory" } ] },
-        "water-memory": { "parts": [ { "text": "Water", "color": "2980EF" }, { "text": " Memory" } ] },
-        "grass-memory": { "parts": [ { "text": "Grass", "color": "82C274" }, { "text": " Memory" } ] },
-        "electric-memory": { "parts": [ { "text": "Electric", "color": "FCD659" }, { "text": " Memory" } ] },
-        "psychic-memory": { "parts": [ { "text": "Psychic", "color": "F584A8" }, { "text": " Memory" } ] },
-        "ice-memory": { "parts": [ { "text": "Ice", "color": "81DFF7" }, { "text": " Memory" } ] },
-        "dragon-memory": { "parts": [ { "text": "Dragon", "color": "8D98EC" }, { "text": " Memory" } ] },
-        "dark-memory": { "parts": [ { "text": "Dark", "color": "998B8C" }, { "text": " Memory" } ] },
-        "fairy-memory": { "parts": [ { "text": "Fairy", "color": "F5A2F5" }, { "text": " Memory" } ] },
-        "normal-memory": { "parts": [ { "text": "Normal", "color": "C1C2C1" }, { "text": " Memory" } ] }
-      }
+        "ice-rider": {
+          "translationKey": "cobblemon.species.glastrier.name",
+          "colors": [
+            "81DFF7"
+          ]
+        },
+        "shadow-rider": {
+          "translationKey": "cobblemon.species.spectrier.name",
+          "colors": [
+            "A284A2"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.kings_steed"
     },
-
     {
-      "headerLabel": "Wushu Style",
-      "species": ["cobblemon:urshifu"],
+      "species": [
+        "cobblemon:tatsugiri"
+      ],
       "aspectDisplays": {
-        "single_strike-style": { "parts": [ { "text": "Single Strike", "color": "998B8C" } ] },
-        "rapid_strike-style": { "parts": [ { "text": "Rapid Strike", "color": "74ACF5" } ] }
+        "tatsugiri-texture-curly": {
+          "translationKey": "betterpokedexscanner.variant.tatsugiri_texture_curly",
+          "colors": [
+            "F3B082"
+          ]
+        },
+        "tatsugiri-texture-droopy": {
+          "translationKey": "betterpokedexscanner.variant.tatsugiri_texture_droopy",
+          "colors": [
+            "E3567F"
+          ]
+        },
+        "tatsugiri-texture-stretchy": {
+          "translationKey": "betterpokedexscanner.variant.tatsugiri_texture_stretchy",
+          "colors": [
+            "EFE052"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.presentation"
+    },
+    {
+      "species": [
+        "cobblemon:dudunsparce"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.body_segmentation",
+      "aspectTranslationKeys": {
+        "two-segment-form": "betterpokedexscanner.variant.two_segment_form",
+        "three-segment-form": "betterpokedexscanner.variant.three_segment_form"
       }
     },
-
     {
-      "headerLabel": "Heroic Epithet",
-      "species": ["cobblemon:zamazenta","cobblemon:zacian"],
-      "baseFormLabel": "Battleworn Hero"
-    },
-
-    {
-      "headerLabel": "Regalia State",
-      "species": ["cobblemon:zacian"],
-      "aspectLabels": {
-        "hero": "Uncrowned",
-        "crowned": "Crowned Sword"
+      "species": [
+        "cobblemon:dialga",
+        "cobblemon:palkia",
+        "cobblemon:giratina"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.creation_state",
+      "aspectTranslationKeys": {
+        "altered-forme": "betterpokedexscanner.variant.altered_forme",
+        "origin-forme": "betterpokedexscanner.variant.origin_forme"
       }
     },
-
     {
-      "headerLabel": "Regalia State",
-      "species": ["cobblemon:zamazenta"],
-      "aspectLabels": {
-        "hero": "Uncrowned",
-        "crowned": "Crowned Shield"
+      "species": [
+        "cobblemon:shaymin"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.habitat",
+      "aspectTranslationKeys": {
+        "land-forme": "betterpokedexscanner.variant.land_forme",
+        "sky-forme": "betterpokedexscanner.variant.sky_forme"
       }
     },
-
     {
-      "headerLabel": "King's Steed",
-      "species": ["cobblemon:calyrex"],
+      "species": [
+        "cobblemon:keldeo"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.resolve",
+      "aspectTranslationKeys": {
+        "ordinary-form": "betterpokedexscanner.variant.ordinary_form",
+        "resolute-form": "betterpokedexscanner.variant.resolute_form"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:tornadus",
+        "cobblemon:thundurus",
+        "cobblemon:landorus",
+        "cobblemon:enamorus"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.embodiment",
+      "aspectTranslationKeys": {
+        "incarnate-forme": "betterpokedexscanner.variant.incarnate_forme",
+        "therian-forme": "betterpokedexscanner.variant.therian_forme"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:meloetta"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.performance_style",
+      "aspectTranslationKeys": {
+        "aria-forme": "betterpokedexscanner.variant.aria_forme",
+        "pirouette-forme": "betterpokedexscanner.variant.pirouette_forme"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:hoopa"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.confinement",
+      "aspectTranslationKeys": {
+        "confined": "betterpokedexscanner.variant.confined",
+        "unbound": "betterpokedexscanner.variant.unbound"
+      }
+    },
+    {
+      "species": [
+        "cobblemon:lycanroc"
+      ],
       "aspectDisplays": {
-        "ice-rider": { "parts": [ { "text": "Glastrier", "color": "81DFF7" } ] },
-        "shadow-rider": { "parts": [ { "text": "Spectrier", "color": "A284A2" } ] }
-      }
+        "midday-form": {
+          "translationKey": "betterpokedexscanner.variant.midday_form",
+          "colors": [
+            "D5E9FF"
+          ]
+        },
+        "midnight-form": {
+          "translationKey": "betterpokedexscanner.variant.midnight_form",
+          "colors": [
+            "A79ACD"
+          ]
+        },
+        "dusk-form": {
+          "translationKey": "betterpokedexscanner.variant.dusk_form",
+          "colors": [
+            "F0C0A7"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.chronotype"
     },
-
     {
-      "headerLabel": "Presentation",
-      "species": ["cobblemon:tatsugiri"],
+      "species": [
+        "cobblemon:rockruff"
+      ],
       "aspectDisplays": {
-        "tatsugiri-texture-curly": { "parts": [ { "text": "Curly", "color": "F3B082" } ] },
-        "tatsugiri-texture-droopy": { "parts": [ { "text": "Droopy", "color": "E3567F" } ] },
-        "tatsugiri-texture-stretchy": { "parts": [ { "text": "Stretchy", "color": "EFE052" } ] }
-      }
+        "dusk-form": {
+          "translationKey": "betterpokedexscanner.variant.dusk_form",
+          "colors": [
+            "F0C0A7"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.unique_form"
     },
-
     {
-      "headerLabel": "Body Segmentation",
-      "species": ["cobblemon:dudunsparce"],
-      "aspectLabels": {
-        "two-segment-form": "Two Segment",
-        "three-segment-form": "Three Segment"
-      }
-    },
-
-    {
-      "headerLabel": "Creation State",
-      "species": ["cobblemon:dialga","cobblemon:palkia","cobblemon:giratina"],
-      "aspectLabels": {
-        "altered-forme": "Altered",
-        "origin-forme": "Origin"
-      }
-    },
-
-    {
-      "headerLabel": "Habitat",
-      "species": ["cobblemon:shaymin"],
-      "aspectLabels": {
-        "land-forme": "Land",
-        "sky-forme": "Sky"
-      }
-    },
-
-    {
-      "headerLabel": "Resolve",
-      "species": ["cobblemon:keldeo"],
-      "aspectLabels": {
-        "ordinary-form": "Ordinary",
-        "resolute-form": "Resolute"
-      }
-    },
-
-    {
-      "headerLabel": "Embodiment",
-      "species": ["cobblemon:tornadus","cobblemon:thundurus","cobblemon:landorus","cobblemon:enamorus"],
-      "aspectLabels": {
-        "incarnate-forme": "Incarnate",
-        "therian-forme": "Therian"
-      }
-    },
-
-    {
-      "headerLabel": "Performance Style",
-      "species": ["cobblemon:meloetta"],
-      "aspectLabels": {
-        "aria-forme": "Aria",
-        "pirouette-forme": "Pirouette"
-      }
-    },
-
-    {
-      "headerLabel": "Confinement",
-      "species": ["cobblemon:hoopa"],
-      "aspectLabels": {
-        "confined": "Confined",
-        "unbound": "Unbound"
-      }
-    },
-
-    {
-      "headerLabel": "Chronotype",
-      "species": ["cobblemon:lycanroc"],
+      "species": [
+        "cobblemon:necrozma"
+      ],
+      "baseFormDisplay": {
+        "translationKey": "betterpokedexscanner.variant.depleted",
+        "colors": [
+          "2E2C2F"
+        ]
+      },
       "aspectDisplays": {
-        "midday-form": { "parts": [ { "text": "Midday", "color": "D5E9FF" } ] },
-        "midnight-form": { "parts": [ { "text": "Midnight", "color": "A79ACD" } ] },
-        "dusk-form": { "parts": [ { "text": "Dusk", "color": "F0C0A7" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Unique Form",
-      "species": ["cobblemon:rockruff"],
-      "aspectDisplays": {
-        "dusk-form": { "parts": [ { "text": "Own Tempo", "color": "F0C0A7" } ] }
-      }
-    },
-
-    {
-      "headerLabel": "Prismatic Aura",
-      "species": ["cobblemon:necrozma"],
-      "baseFormDisplay":
-        { "parts": [ { "text": "Depleted", "color": "2E2C2F" } ] }
-      ,
-      "aspectDisplays": {
-        "ultra-fusion": { "parts": [ { "text": "Ultra", "color": "F1D069" } ] }
+        "ultra-fusion": {
+          "translationKey": "betterpokedexscanner.variant.ultra_fusion",
+          "colors": [
+            "F1D069"
+          ]
+        }
       },
       "formDisplays": {
-        "Dusk-Mane": { "parts": [ { "text": "Restored", "color": "FCFBA7" } ] },
-        "Dawn-Wings": { "parts": [ { "text": "Restored", "color": "96FEFF" } ] }
-      }
+        "Dusk-Mane": {
+          "translationKey": "betterpokedexscanner.variant.dusk_mane",
+          "colors": [
+            "FCFBA7"
+          ]
+        },
+        "Dawn-Wings": {
+          "translationKey": "betterpokedexscanner.variant.dawn_wings",
+          "colors": [
+            "96FEFF"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.prismatic_aura"
     },
-
     {
-      "headerLabel": "Temperament",
-      "species": ["cobblemon:toxtricity"],
+      "species": [
+        "cobblemon:toxtricity"
+      ],
       "aspectDisplays": {
-        "low_key-form": { "parts": [ { "text": "Low Key", "color": "DBF9FC" } ] },
-        "amped-form": { "parts": [ { "text": "Amped", "color": "FFFF62" } ] }
+        "low_key-form": {
+          "translationKey": "betterpokedexscanner.variant.low_key_form",
+          "colors": [
+            "DBF9FC"
+          ]
+        },
+        "amped-form": {
+          "translationKey": "betterpokedexscanner.variant.amped_form",
+          "colors": [
+            "FFFF62"
+          ]
+        }
+      },
+      "headerTranslationKey": "betterpokedexscanner.header.temperament"
+    },
+    {
+      "species": [
+        "cobblemon:palafin"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.guise",
+      "aspectTranslationKeys": {
+        "hero-form": "betterpokedexscanner.variant.hero_form",
+        "zero-form": "betterpokedexscanner.variant.zero_form"
       }
     },
-
     {
-      "headerLabel": "Guise",
-      "species": ["cobblemon:palafin"],
-      "aspectLabels": {
-        "hero-form": "Hero Form",
-        "zero-form": "Zero Form"
+      "headerTranslationKey": "betterpokedexscanner.header.battle_form",
+      "aspectTranslationKeys": {
+        "mega": "betterpokedexscanner.variant.mega",
+        "gmax": "betterpokedexscanner.variant.gmax",
+        "mega_x": "betterpokedexscanner.variant.mega_x",
+        "mega_y": "betterpokedexscanner.variant.mega_y",
+        "mega_z": "betterpokedexscanner.variant.mega_z",
+        "primal": "betterpokedexscanner.variant.primal",
+        "Ash": "betterpokedexscanner.variant.ash",
+        "eternamax": "betterpokedexscanner.variant.eternamax",
+        "embody-aspect": "betterpokedexscanner.variant.embody_aspect",
+        "terastal-form": "betterpokedexscanner.variant.terastal_form",
+        "stellar-form": "betterpokedexscanner.variant.stellar_form"
       }
     },
-
     {
-      "headerLabel": "Battle Form",
-      "aspectLabels": {
-        "mega": "Mega Evolution",
-        "gmax": "Gigantamax Form",
-        "mega_x": "Mega Evolution X",
-        "mega_y": "Mega Evolution Y",
-        "mega_z": "Mega Evolution Z",
-        "primal": "Primal Reversion",
-        "Ash": "Bond Phenomenon",
-        "eternamax": "Eternamax Form",
-        "embody-aspect": "Embodied Aspect",
-        "terastal-form": "Terastal Form",
-        "stellar-form": "Stellar Form"
+      "species": [
+        "cobblemon:wooloo",
+        "cobblemon:dubwool",
+        "cobblemon:mareep"
+      ],
+      "headerTranslationKey": "betterpokedexscanner.header.wool_status",
+      "aspectTranslationKeys": {
+        "sheared": "betterpokedexscanner.variant.sheared"
       }
     },
-
     {
-      "headerLabel": "Wool Status",
-      "species": ["cobblemon:wooloo","cobblemon:dubwool","cobblemon:mareep"],
-      "aspectLabels": {
-        "sheared": "Sheared"
-      }
-    },
-
-    {
-      "headerLabel": "Lineage",
-      "aspectLabels": {
-        "clone": "Clone"
+      "headerTranslationKey": "betterpokedexscanner.header.lineage",
+      "aspectTranslationKeys": {
+        "clone": "betterpokedexscanner.variant.clone"
       }
     }
-
-
   ]
 }

@@ -4,6 +4,11 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
 object PokemonTypeLabelFormatter {
+    data class TypeToken(
+        val displayName: Component,
+        val colourKey: String
+    )
+
     private val typeColours =
         mapOf(
             "bug" to 0x91A119,
@@ -29,39 +34,51 @@ object PokemonTypeLabelFormatter {
         )
 
     fun buildTypeComponent(typeLabels: List<String>): MutableComponent {
-        if (typeLabels.isEmpty()) {
-            return colouredToken("Unknown", "unknown")
-                .append(defaultToken(" Type"))
-        }
+        return buildTypeTokenComponent(typeLabels.map { TypeToken(Component.literal(it), it) })
+    }
 
-        val component = buildTypeNamesComponent(typeLabels)
-        component.append(defaultToken(" Type"))
-        return component
+    fun buildTypeTokenComponent(typeTokens: List<TypeToken>): MutableComponent {
+        if (typeTokens.isEmpty()) return buildUnknownTypeComponent()
+
+        return Component.translatable("cobblemon.type.suffix", buildTypeTokenNamesComponent(typeTokens))
+            .withStyle { style -> style.withBold(true) }
+    }
+
+    fun buildTypeComponentFromTypes(types: Iterable<*>): MutableComponent {
+        return buildTypeTokenComponent(toTypeTokens(types))
     }
 
     fun buildTypeNamesComponent(typeLabels: List<String>): MutableComponent {
-        if (typeLabels.isEmpty()) {
-            return colouredToken("Unknown", "unknown")
-        }
+        return buildTypeTokenNamesComponent(typeLabels.map { TypeToken(Component.literal(it), it) })
+    }
+
+    fun buildTypeTokenNamesComponent(typeTokens: List<TypeToken>): MutableComponent {
+        if (typeTokens.isEmpty()) return colouredToken(Component.translatable("betterpokedexscanner.label.unknown"), "unknown")
 
         val component = Component.empty()
-        typeLabels.forEachIndexed { index, label ->
+        typeTokens.forEachIndexed { index, token ->
             if (index > 0) {
                 component.append(defaultToken("/"))
             }
-            component.append(colouredToken(label, label))
+            component.append(colouredToken(token.displayName, token.colourKey))
         }
         return component
     }
 
     fun buildUnknownTypeComponent(): MutableComponent {
-        return colouredToken("Unknown", "unknown")
-            .append(defaultToken(" Type"))
+        return Component.translatable(
+            "cobblemon.type.suffix",
+            colouredToken(Component.translatable("betterpokedexscanner.label.unknown"), "unknown")
+        ).withStyle { style -> style.withBold(true) }
     }
 
     private fun colouredToken(text: String, typeKey: String): MutableComponent {
+        return colouredToken(Component.literal(text), typeKey)
+    }
+
+    private fun colouredToken(component: Component, typeKey: String): MutableComponent {
         val colour = typeColours[typeKey.trim().lowercase()]
-        return Component.literal(text).withStyle { style ->
+        return component.copy().withStyle { style ->
             val base = style.withBold(true)
             if (colour != null) base.withColor(colour) else base
         }
@@ -69,5 +86,36 @@ object PokemonTypeLabelFormatter {
 
     private fun defaultToken(text: String): MutableComponent {
         return Component.literal(text).withStyle { style -> style.withBold(true) }
+    }
+
+    private fun toTypeTokens(types: Iterable<*>): List<TypeToken> {
+        return types.mapNotNull { typeObj ->
+            typeObj ?: return@mapNotNull null
+            val displayName = typeObj.javaClass.methods
+                .firstOrNull { it.name == "getDisplayName" && it.parameterCount == 0 }
+                ?.invoke(typeObj) as? Component
+                ?: Component.literal(resolveTypeKey(typeObj))
+
+            TypeToken(displayName, resolveTypeKey(typeObj))
+        }
+    }
+
+    private fun resolveTypeKey(typeObj: Any): String {
+        val directName = typeObj.javaClass.methods
+            .firstOrNull { it.name == "getName" && it.parameterCount == 0 }
+            ?.invoke(typeObj)
+            ?.toString()
+            ?.takeIf { it.isNotBlank() }
+        if (directName != null) return directName
+
+        val identifier = typeObj.javaClass.methods
+            .firstOrNull { it.name == "getIdentifier" && it.parameterCount == 0 }
+            ?.invoke(typeObj)
+            ?.toString()
+            ?.substringAfterLast(':')
+            ?.takeIf { it.isNotBlank() }
+        if (identifier != null) return identifier
+
+        return typeObj.toString().substringAfterLast('.').substringAfterLast(':')
     }
 }

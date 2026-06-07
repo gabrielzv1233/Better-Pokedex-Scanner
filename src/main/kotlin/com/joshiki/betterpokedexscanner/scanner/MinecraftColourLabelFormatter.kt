@@ -139,9 +139,25 @@ object MinecraftColourLabelFormatter {
         }
     }
 
+    fun buildComponent(label: Component, colourKey: String): MutableComponent {
+        val colour = colourMap[normalizeKey(colourKey)]
+        return label.copy().withStyle { style ->
+            val base = style.withBold(true)
+            if (colour != null) base.withColor(colour) else base
+        }
+    }
+
+    fun buildSplitComponent(label: Component, colourKeys: List<String>): MutableComponent {
+        return buildSplitLabelComponent(label.string, colourKeys)
+    }
+
     fun buildDyeComponent(dyeColor: DyeColor): MutableComponent {
         val label = formatName(dyeColor.name)
-        return buildLiteralComponent(label, dyeColor.name)
+        val colour = colourMap[normalizeKey(dyeColor.name)]
+        return Component.translatable("color.minecraft.${dyeColor.name.lowercase()}").withStyle { style ->
+            val base = style.withBold(true)
+            if (colour != null) base.withColor(colour) else base
+        }
     }
 
     fun buildNamedComponent(colourKey: String): MutableComponent {
@@ -161,6 +177,11 @@ object MinecraftColourLabelFormatter {
         return Component.empty()
             .append(buildLiteralComponent(materialLabel, colourKey))
             .append(Component.literal(itemLabel).withStyle { style -> style.withBold(true) })
+    }
+
+    fun buildVanillaMaterialComponent(label: Component, itemPath: String): MutableComponent? {
+        val colourKey = vanillaItemMaterials[normalizeKey(itemPath)] ?: return null
+        return buildComponent(label, colourKey)
     }
 
     fun buildSplitLabelComponent(label: String, colourKeys: List<String>): MutableComponent {

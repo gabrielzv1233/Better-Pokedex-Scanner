@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.pokemon.Gender
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
 import net.minecraft.world.level.block.BeehiveBlock
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity
 import net.minecraft.world.phys.BlockHitResult
@@ -28,6 +29,12 @@ data class BeehiveScanSnapshot(
 
     val rareIndividualDisplays: List<VariantDisplay>
         get() = buildRareIndividualDisplays()
+
+    fun isInhabitantsFrame(index: Int): Boolean {
+        val display = frameDisplays.getOrNull(index)?.firstOrNull() ?: return false
+        return display.headerTranslationKey == INHABITANTS_HEADER_KEY ||
+            display.headerLabel == "Inhabitants"
+    }
 
     fun withServerDetails(payload: BeehiveDetailsResponsePayload): BeehiveScanSnapshot {
         return copy(
@@ -58,6 +65,12 @@ data class BeehiveScanSnapshot(
             occupantCount >= maxOccupants -> "Full"
             else -> "$occupantCount / $maxOccupants"
         }
+        val occupancyTranslationKey = when {
+            occupantCount == null || maxOccupants == null -> "betterpokedexscanner.label.reading"
+            occupantCount <= 0 -> "betterpokedexscanner.label.empty"
+            occupantCount >= maxOccupants -> "betterpokedexscanner.label.full"
+            else -> null
+        }
 
         val occupancyColour = when {
             occupantCount == null || maxOccupants == null -> 0xD1D5DB
@@ -71,8 +84,13 @@ data class BeehiveScanSnapshot(
                 if (combeeCount > 0) {
                     add(
                         VariantDisplay(
-                            headerLabel = "Inhabitants",
+                            headerTranslationKey = INHABITANTS_HEADER_KEY,
                             label = "Combee x$combeeCount",
+                            labelComponent = Component.translatable(
+                                "betterpokedexscanner.label.entity_count",
+                                speciesNameComponent("cobblemon:combee"),
+                                combeeCount
+                            ).withStyle { style -> style.withBold(true) },
                             colour = 0xF7D774
                         )
                     )
@@ -81,8 +99,13 @@ data class BeehiveScanSnapshot(
                 if (beeCount > 0) {
                     add(
                         VariantDisplay(
-                            headerLabel = "Inhabitants",
+                            headerTranslationKey = INHABITANTS_HEADER_KEY,
                             label = "Bee x$beeCount",
+                            labelComponent = Component.translatable(
+                                "betterpokedexscanner.label.entity_count",
+                                Component.translatable("entity.minecraft.bee"),
+                                beeCount
+                            ).withStyle { style -> style.withBold(true) },
                             colour = 0xFFF4BF
                         )
                     )
@@ -91,8 +114,13 @@ data class BeehiveScanSnapshot(
                 if (unknownCount > 0) {
                     add(
                         VariantDisplay(
-                            headerLabel = "Inhabitants",
+                            headerTranslationKey = INHABITANTS_HEADER_KEY,
                             label = "Unknown x$unknownCount",
+                            labelComponent = Component.translatable(
+                                "betterpokedexscanner.label.entity_count",
+                                Component.translatable("betterpokedexscanner.label.unknown"),
+                                unknownCount
+                            ).withStyle { style -> style.withBold(true) },
                             colour = 0xD1D5DB
                         )
                     )
@@ -104,8 +132,9 @@ data class BeehiveScanSnapshot(
             if (sedated) {
                 add(
                     VariantDisplay(
-                        headerLabel = "Condition",
+                        headerTranslationKey = "betterpokedexscanner.header.entity.condition",
                         label = "Sedated",
+                        labelTranslationKey = "betterpokedexscanner.label.sedated",
                         colour = 0x9FE8B8
                     )
                 )
@@ -113,11 +142,16 @@ data class BeehiveScanSnapshot(
 
             add(
                 VariantDisplay(
-                    headerLabel = "Flowers",
+                    headerTranslationKey = "betterpokedexscanner.header.beehive.flowers",
                     label = when (hasSavedFlowerPos) {
                         true -> "Flowers Nearby"
                         false -> "No Flowers Nearby"
                         null -> "Reading..."
+                    },
+                    labelTranslationKey = when (hasSavedFlowerPos) {
+                        true -> "betterpokedexscanner.label.flowers_nearby"
+                        false -> "betterpokedexscanner.label.no_flowers_nearby"
+                        null -> "betterpokedexscanner.label.reading"
                     },
                     colour = when (hasSavedFlowerPos) {
                         true -> 0xA7F3D0
@@ -132,7 +166,7 @@ data class BeehiveScanSnapshot(
             add(
                 listOf(
                     VariantDisplay(
-                        headerLabel = "Honey Level",
+                        headerTranslationKey = "betterpokedexscanner.header.beehive.honey_level",
                         label = "$honeyPercent%",
                         colour = honeyColour
                     )
@@ -141,8 +175,9 @@ data class BeehiveScanSnapshot(
             add(
                 listOf(
                     VariantDisplay(
-                        headerLabel = "Occupancy",
+                        headerTranslationKey = "betterpokedexscanner.header.beehive.occupancy",
                         label = occupancyLabel,
+                        labelTranslationKey = occupancyTranslationKey,
                         colour = occupancyColour
                     )
                 )
@@ -156,6 +191,7 @@ data class BeehiveScanSnapshot(
                         VariantDisplay(
                             headerLabel = blockLabel,
                             label = "Stable",
+                            labelTranslationKey = "betterpokedexscanner.label.stable",
                             colour = 0xFFFFFF
                         )
                     )
@@ -171,8 +207,12 @@ data class BeehiveScanSnapshot(
             shinyRareSpeciesId?.let { speciesId ->
                 add(
                     VariantDisplay(
-                        headerLabel = "Rare Individual Detected",
+                        headerTranslationKey = "betterpokedexscanner.header.beehive.rare_individual",
                         label = "Shiny ${formatSpeciesName(speciesId)}",
+                        labelComponent = Component.translatable(
+                            "betterpokedexscanner.label.shiny_species",
+                            speciesNameComponent(speciesId)
+                        ).withStyle { style -> style.withBold(true) },
                         showShinyIcon = true,
                         colour = 0xFFFFFF
                     )
@@ -182,8 +222,12 @@ data class BeehiveScanSnapshot(
             femaleRareSpeciesId?.let { speciesId ->
                 add(
                     VariantDisplay(
-                        headerLabel = "Rare Individual Detected",
+                        headerTranslationKey = "betterpokedexscanner.header.beehive.rare_individual",
                         label = "Female ${formatSpeciesName(speciesId)}",
+                        labelComponent = Component.translatable(
+                            "betterpokedexscanner.label.female_species",
+                            speciesNameComponent(speciesId)
+                        ).withStyle { style -> style.withBold(true) },
                         genderIcon = Gender.FEMALE,
                         colour = 0xFFFFFF
                     )
@@ -200,6 +244,15 @@ data class BeehiveScanSnapshot(
             .joinToString(" ") { part ->
                 part.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
             }
+    }
+
+    private fun speciesNameComponent(speciesId: String): Component {
+        val speciesPath = speciesId.substringAfter(':')
+        return Component.translatable("cobblemon.species.$speciesPath.name")
+    }
+
+    private companion object {
+        const val INHABITANTS_HEADER_KEY = "betterpokedexscanner.header.beehive.inhabitants"
     }
 }
 

@@ -1,6 +1,8 @@
 package com.joshiki.betterpokedexscanner.scanner
 
 import com.joshiki.betterpokedexscanner.client.RestorationTankScanState
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
 data class PokemonBlockScanSnapshot(
@@ -64,13 +66,14 @@ object PokemonBlockScanPresentation {
 
         val speciesDisplays = listOf(
             VariantDisplay(
-                headerLabel =
+                headerTranslationKey =
                     if (RestorationTankScanState.scanKind == PokemonBlockScanKind.OCCUPIED_BALL) {
-                        "Contained Pokemon"
+                        "betterpokedexscanner.header.occupied_ball.subject"
                     } else {
-                        "Restoration Subject"
+                        "betterpokedexscanner.header.restoration_subject"
                     },
                 label = resolveSpeciesDisplayName(speciesId),
+                labelComponent = resolveSpeciesDisplayComponent(speciesId),
                 showCaughtIcon = typeVisible,
                 genderIcon = RestorationTankScanState.gender,
                 trailingGenderIcon = true
@@ -82,7 +85,7 @@ object PokemonBlockScanPresentation {
                 listOf(
                     VariantDisplay(
                         label = RestorationTankScanState.typeLabel ?: buildTypeLabel(speciesId),
-                        labelComponent = RestorationTankScanState.typeLabelComponent
+                        labelComponent = RestorationTankScanState.typeLabelComponent ?: buildTypeLabelComponent(speciesId)
                     )
                 )
             } else {
@@ -113,7 +116,8 @@ object PokemonBlockScanPresentation {
                                 anchorDisplayIndex = 0,
                                 displays = listOf(
                                     VariantDisplay(
-                                        label = ballName
+                                        label = ballName,
+                                        labelComponent = RestorationTankScanState.containerNameComponent
                                     )
                                 )
                             )
@@ -187,8 +191,9 @@ object PokemonBlockScanPresentation {
                 RestorationTankScanState.shiny == true -> VariantRenderState(
                     primaryDisplays = listOf(
                         VariantDisplay(
-                            headerLabel = "Variant",
+                            headerTranslationKey = "cobblemon.pokedex.variation.variant",
                             label = "Shiny",
+                            labelTranslationKey = "betterpokedexscanner.label.shiny",
                             showShinyIcon = true
                         )
                     ),
@@ -206,19 +211,25 @@ object PokemonBlockScanPresentation {
                 if (progress >= 100) {
                     listOf(
                         VariantDisplay(
-                            headerLabel = "Restoration Progress",
+                            headerTranslationKey = "betterpokedexscanner.header.restoration_progress",
                             label = "Complete",
+                            labelTranslationKey = "betterpokedexscanner.label.complete",
                             colour = interpolateCyanToGreen(progress)
                         )
                     )
                 } else {
                     listOf(
                         VariantDisplay(
-                            headerLabel = "Development State",
-                            label = if (progress < 50) "Embryonic" else "Fetal"
+                            headerTranslationKey = "betterpokedexscanner.header.development_state",
+                            label = if (progress < 50) "Embryonic" else "Fetal",
+                            labelTranslationKey = if (progress < 50) {
+                                "betterpokedexscanner.label.embryonic"
+                            } else {
+                                "betterpokedexscanner.label.fetal"
+                            }
                         ),
                         VariantDisplay(
-                            headerLabel = "Restoration Progress",
+                            headerTranslationKey = "betterpokedexscanner.header.restoration_progress",
                             label = "$progress%",
                             colour = interpolateCyanToGreen(progress)
                         )
@@ -235,46 +246,48 @@ object PokemonBlockScanPresentation {
     }
 
     private fun resolveSpeciesDisplayName(speciesId: ResourceLocation): String {
+        return resolveSpeciesDisplayComponent(speciesId)?.string ?: formatSpeciesIdName(speciesId)
+    }
+
+    private fun resolveSpeciesDisplayComponent(speciesId: ResourceLocation): MutableComponent? {
         return try {
             val speciesClass = Class.forName("com.cobblemon.mod.common.api.pokemon.PokemonSpecies")
             val species = speciesClass.methods
                 .firstOrNull { it.name == "getByIdentifier" && it.parameterCount == 1 }
-                ?.invoke(null, speciesId)
+                ?.invoke(null, speciesId) ?: return null
 
             val translatedName = species?.javaClass?.methods
                 ?.firstOrNull { it.name == "getTranslatedName" && it.parameterCount == 0 }
-                ?.invoke(species) as? net.minecraft.network.chat.Component
+                ?.invoke(species) as? Component
 
-            translatedName?.string ?: formatSpeciesIdName(speciesId)
+            translatedName?.copy()?.withStyle { it.withBold(true) }
         } catch (_: Exception) {
-            formatSpeciesIdName(speciesId)
+            null
         }
     }
 
     private fun buildTypeLabel(speciesId: ResourceLocation): String {
+        return buildTypeLabelComponent(speciesId).string
+    }
+
+    private fun buildTypeLabelComponent(speciesId: ResourceLocation): MutableComponent {
         return try {
             val speciesClass = Class.forName("com.cobblemon.mod.common.api.pokemon.PokemonSpecies")
             val species = speciesClass.methods
                 .firstOrNull { it.name == "getByIdentifier" && it.parameterCount == 1 }
-                ?.invoke(null, speciesId) ?: return "Unknown Type"
+                ?.invoke(null, speciesId) ?: return PokemonTypeLabelFormatter.buildUnknownTypeComponent()
 
             val standardForm = species.javaClass.methods
                 .firstOrNull { it.name == "getStandardForm" && it.parameterCount == 0 }
-                ?.invoke(species) ?: return "Unknown Type"
+                ?.invoke(species) ?: return PokemonTypeLabelFormatter.buildUnknownTypeComponent()
 
             val types = standardForm.javaClass.methods
                 .firstOrNull { it.name == "getTypes" && it.parameterCount == 0 }
-                ?.invoke(standardForm) as? Iterable<*> ?: return "Unknown Type"
+                ?.invoke(standardForm) as? Iterable<*> ?: return PokemonTypeLabelFormatter.buildUnknownTypeComponent()
 
-            val labels = types.mapNotNull { typeObj ->
-                (typeObj?.javaClass?.methods
-                    ?.firstOrNull { it.name == "getDisplayName" && it.parameterCount == 0 }
-                    ?.invoke(typeObj) as? net.minecraft.network.chat.Component)?.string
-            }
-
-            if (labels.isEmpty()) "Unknown Type" else "${labels.joinToString("/")} Type"
+            PokemonTypeLabelFormatter.buildTypeComponentFromTypes(types)
         } catch (_: Exception) {
-            "Unknown Type"
+            PokemonTypeLabelFormatter.buildUnknownTypeComponent()
         }
     }
 

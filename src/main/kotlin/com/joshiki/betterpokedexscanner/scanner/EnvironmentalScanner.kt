@@ -74,7 +74,10 @@ object EnvironmentalScanner {
             level.isRaining -> "Rain"
             else -> "Clear"
         }
-        val weatherLabelComponent = buildColoredLiteralComponent(weatherLabel, weatherColours[weatherLabel])
+        val weatherLabelComponent = buildColoredTranslatedComponent(
+            "betterpokedexscanner.environment.weather.${weatherLabel.lowercase()}",
+            weatherColours[weatherLabel]
+        )
         val terrainDisplays = resolveTerrainDisplays(player, pos)
         val canSeeSky = level.canSeeSky(pos)
         val skyLight = level.getBrightness(net.minecraft.world.level.LightLayer.SKY, pos)
@@ -139,6 +142,7 @@ object EnvironmentalScanner {
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.environment.sky_light",
                         label = formatLightLabel(skyLight),
+                        labelComponent = buildLightLabelComponent(skyLight),
                         colour = resolveLightColour(skyLight)
                     )
                 )
@@ -146,6 +150,7 @@ object EnvironmentalScanner {
                     VariantDisplay(
                         headerTranslationKey = "betterpokedexscanner.header.environment.block_light",
                         label = formatLightLabel(blockLight),
+                        labelComponent = buildLightLabelComponent(blockLight),
                         colour = resolveLightColour(blockLight)
                     )
                 )
@@ -214,7 +219,7 @@ object EnvironmentalScanner {
     private fun buildTimeLabelComponent(timeBand: String, timeText: String): Component {
         val bandColour = timeBandColours[timeBand]
         val bandComponent =
-            Component.literal(timeBand).withStyle { style ->
+            Component.translatable("betterpokedexscanner.environment.time.${timeBand.lowercase()}").withStyle { style ->
                 val base = style.withBold(true)
                 if (bandColour != null) base.withColor(bandColour) else base
             }
@@ -260,6 +265,17 @@ object EnvironmentalScanner {
 
     private fun formatLightLabel(lightLevel: Int): String {
         return "${resolveLightDescriptor(lightLevel)} ($lightLevel)"
+    }
+
+    private fun buildLightLabelComponent(lightLevel: Int): Component {
+        return Component.empty()
+            .append(
+                buildColoredTranslatedComponent(
+                    "betterpokedexscanner.environment.light.${resolveLightDescriptor(lightLevel).lowercase()}",
+                    resolveLightColour(lightLevel)
+                )
+            )
+            .append(Component.literal(" ($lightLevel)").withStyle { style -> style.withBold(true) })
     }
 
     private fun resolveLightDescriptor(lightLevel: Int): String {

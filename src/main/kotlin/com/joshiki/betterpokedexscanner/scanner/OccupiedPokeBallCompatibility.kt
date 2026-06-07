@@ -3,13 +3,15 @@ package com.joshiki.betterpokedexscanner.scanner
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 data class OccupiedPokeBallPokemonData(
     val blockPos: BlockPos,
     val pokemon: Pokemon,
-    val ballDisplayName: String
+    val ballDisplayName: String,
+    val ballDisplayNameComponent: Component
 )
 
 object OccupiedPokeBallCompatibility {
@@ -70,7 +72,8 @@ object OccupiedPokeBallCompatibility {
         return OccupiedPokeBallPokemonData(
             blockPos = blockPos,
             pokemon = pokemon,
-            ballDisplayName = ballStack.item.description.string
+            ballDisplayName = ballStack.item.description.string,
+            ballDisplayNameComponent = ballStack.item.description
         )
     }
 }

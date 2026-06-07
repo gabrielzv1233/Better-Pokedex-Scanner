@@ -513,9 +513,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                                 } else {
                                     List(4) { displayIndex ->
                                         if (
-                                            snapshot.frameDisplays.getOrNull(displayIndex)
-                                                ?.firstOrNull()
-                                                ?.headerLabel == "Inhabitants"
+                                            snapshot.isInhabitantsFrame(displayIndex)
                                         ) {
                                             snapshot.rareIndividualDisplays.size
                                         } else {
@@ -582,6 +580,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                         scanKind = tankScan.scanKind,
                         level = tankScan.level,
                         containerName = tankScan.containerName,
+                        containerNameComponent = tankScan.containerNameComponent,
                         gender = tankScan.gender,
                         typeLabel = tankScan.typeLabel,
                         typeLabelComponent = tankScan.typeLabelComponent,
