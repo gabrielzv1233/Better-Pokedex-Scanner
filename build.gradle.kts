@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.joshiki" // TODO: You might want to change it to your group
-version = "1.0.0"
+version = "1.1.0"
 
 architectury {
     platformSetupLoomIde()
