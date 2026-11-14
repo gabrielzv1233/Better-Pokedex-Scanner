@@ -421,7 +421,7 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                 isPokemonInFocusOwned =
                     CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(
                         resolvedPokemon.getApparentSpecies().resourceIdentifier
-                    ) == PokedexEntryProgress.CAUGHT
+                    ) == PokedexEntryProgress.OWNED
 
                 val hasSlowpokeTailDisplay = focusedSpeciesId == "cobblemon:slowpoke"
                 val hasPrimaryDisplay =
@@ -549,9 +549,9 @@ abstract class PokedexUsageContextMixin : VariantCycleAccess {
                     when {
                         !tankScan.validSpecies -> false
                         blockNewInformation != null -> blockNewInformation != PokedexLearnedInformation.NONE
-                        else -> knownKnowledge == PokedexEntryProgress.NONE
+                        else -> knownKnowledge == PokedexEntryProgress.UNREGISTERED
                     }
-                val canShowTankTyping = knownKnowledge == PokedexEntryProgress.CAUGHT
+                val canShowTankTyping = knownKnowledge == PokedexEntryProgress.OWNED
 
                 if (isNewTankTarget) {
                     resetFocusedPokemonState()

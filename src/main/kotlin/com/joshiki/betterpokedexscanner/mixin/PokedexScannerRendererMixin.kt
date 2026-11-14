@@ -1599,7 +1599,7 @@ abstract class PokedexScannerRendererMixin {
     private fun isTankTypingVisible(): Boolean {
         val speciesId = RestorationTankScanState.speciesId ?: return false
         return CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(speciesId) ==
-            com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress.CAUGHT
+            com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress.OWNED
     }
 
     private fun buildTankPrimaryRenderState(): VariantRenderState {
